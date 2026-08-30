@@ -275,13 +275,14 @@
 
     <div class="relay-section">
       <h3>Cloud Relay</h3>
-      <p style="font-size:10px;color:rgba(255,255,255,0.4);margin:0 0 6px;text-align:center;">Enter the license key from your purchase confirmation</p>
+      <p style="font-size:10px;color:rgba(255,255,255,0.4);margin:0 0 6px;text-align:center;line-height:1.45;">Enter the license key from your purchase confirmation.<br>Each key works on one computer and one phone at a time.</p>
       <input type="text" id="relayKey" placeholder="XDECK-XXXX-XXXX-XXXX-XXXX" spellcheck="false">
       <button class="relay-btn connect" id="relayConnectBtn">Connect</button>
       <div class="relay-status">
         <span class="dot disconnected" id="relayDot"></span>
         <span id="relayStatusText">Disconnected</span>
       </div>
+      <div id="relayError" style="display:none;font-size:10px;color:#fca5a5;margin-top:6px;text-align:center;line-height:1.45;"></div>
     </div>
 
     <div class="status">
@@ -334,6 +335,12 @@
     document.getElementById('minimizeBtn').addEventListener('click', function() { window.xdeck.minimizeWindow(); });
     document.getElementById('closeBtn').addEventListener('click', function() { window.xdeck.closeWindow(); });
 
+    function showRelayError(message) {
+      var el = document.getElementById('relayError');
+      el.textContent = message || '';
+      el.style.display = message ? 'block' : 'none';
+    }
+
     async function loadRelayStatus() {
       try {
         const res = await fetch('http://localhost:8787/relay/status');
@@ -347,14 +354,14 @@
           text.textContent = 'Connected';
           btn.textContent = 'Disconnect';
           btn.className = 'relay-btn disconnect';
-          if (data.licenseKey) input.value = data.licenseKey;
         } else {
           dot.className = 'dot disconnected';
-          text.textContent = 'Disconnected';
+          text.textContent = data.authFailed ? 'Key rejected' : 'Disconnected';
           btn.textContent = 'Connect';
           btn.className = 'relay-btn connect';
-          if (data.licenseKey) input.value = data.licenseKey;
         }
+        if (data.licenseKey && input.value.trim() === '') input.value = data.licenseKey;
+        showRelayError(data.error);
       } catch(e) {}
     }
 
@@ -362,22 +369,35 @@
       const btn = document.getElementById('relayConnectBtn');
       const input = document.getElementById('relayKey');
       const key = input.value.trim();
-      if (!key) { input.focus(); return; }
-      btn.textContent = 'Connecting...';
+      const disconnecting = btn.classList.contains('disconnect');
+      if (!disconnecting && !key) {
+        showRelayError('Enter the license key from your purchase confirmation.');
+        input.focus();
+        return;
+      }
+      btn.textContent = disconnecting ? 'Disconnecting...' : 'Connecting...';
       btn.disabled = true;
+      showRelayError('');
       try {
-        if (btn.classList.contains('disconnect')) {
+        if (disconnecting) {
           await fetch('http://localhost:8787/relay/disconnect', { method: 'POST' });
         } else {
-          await fetch('http://localhost:8787/relay/connect', {
+          const res = await fetch('http://localhost:8787/relay/connect', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ key })
           });
+          if (!res.ok) {
+            const data = await res.json().catch(function() { return {}; });
+            showRelayError(data.error || 'Could not start Cloud Relay.');
+          }
         }
       } catch(e) {}
       btn.disabled = false;
+      // The relay answers in well under a second; check twice so a rejected key
+      // reports its reason instead of just flipping back to "Disconnected".
       setTimeout(loadRelayStatus, 1000);
+      setTimeout(loadRelayStatus, 3000);
     });
 
     loadRelayStatus();

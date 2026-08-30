@@ -1,6 +1,12 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import type { Page, Button, Background, GridConfig, LayoutPreference } from '@shared/protocol';
-import { store } from '../state/store';
+import {
+  compressImageToDataUrl,
+  ICON_MAX_PX,
+  ICON_QUALITY,
+  BACKGROUND_MAX_PX,
+  BACKGROUND_QUALITY,
+} from '../utils/image';
 
 interface SettingsPanelProps {
   page: Page;
@@ -14,7 +20,6 @@ interface SettingsPanelProps {
   onUpdateLayout: (layout: LayoutPreference) => void;
   onPreviewBackground?: (background: Background | null) => void;
   onPreviewGrid?: (grid: GridConfig | null) => void;
-  uploadFileViaRelay?: (dir: string, filename: string, data: string) => Promise<string | null>;
   onClose: () => void;
 }
 
@@ -56,7 +61,6 @@ export function SettingsPanel({
   onUpdateLayout,
   onPreviewBackground,
   onPreviewGrid,
-  uploadFileViaRelay,
   onClose,
 }: SettingsPanelProps) {
   const [tab, setTab] = useState<'buttons' | 'grid' | 'background' | 'layout'>(
@@ -86,53 +90,38 @@ export function SettingsPanel({
   const [gridForm, setGridForm] = useState(page.grid);
   const [bgForm, setBgForm] = useState(page.background);
   const [layoutForm, setLayoutForm] = useState(layoutPreference);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
-  useEffect(() => { setGridForm(page.grid); }, [page.grid]);
-  useEffect(() => { setBgForm(page.background); }, [page.background]);
-  useEffect(() => { setLayoutForm(layoutPreference); }, [layoutPreference]);
+  // Seed the forms from the page once, and again only if the panel is reused for a
+  // different page. Re-seeding whenever page.grid/background change would discard
+  // the user's in-progress choice every time the desktop echoes a config_sync.
+  const seededPageId = useRef(page.id);
+  useEffect(() => {
+    if (seededPageId.current === page.id) return;
+    seededPageId.current = page.id;
+    setGridForm(page.grid);
+    setBgForm(page.background);
+  }, [page.id, page.grid, page.background]);
 
-  const uploadFile = useCallback(async (file: File, dir: string): Promise<string | null> => {
-    const conn = await store.getConnection();
-    if (!conn) return null;
-
-    if (conn.mode === 'relay' && uploadFileViaRelay) {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = async () => {
-          const base64 = (reader.result as string).split(',')[1];
-          const path = await uploadFileViaRelay(dir, file.name, base64);
-          resolve(path);
-        };
-        reader.onerror = () => resolve(null);
-        reader.readAsDataURL(file);
-      });
-    }
-
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const isSecure = location.protocol === 'https:';
-      const baseUrl = isSecure
-        ? `${location.protocol}//${location.host}`
-        : `http://${conn.ip}:${conn.port}`;
-      const res = await fetch(`${baseUrl}/upload?dir=${dir}`, {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
-      return `${baseUrl}${data.path}`;
-    } catch (err) {
-      console.error('Upload failed:', err);
+  const uploadFile = useCallback(async (file: File, kind: 'icon' | 'background'): Promise<string | null> => {
+    setUploadError(null);
+    const { dataUrl, error } = await compressImageToDataUrl(
+      file,
+      kind === 'icon' ? ICON_MAX_PX : BACKGROUND_MAX_PX,
+      kind === 'icon' ? ICON_QUALITY : BACKGROUND_QUALITY,
+    );
+    if (error || !dataUrl) {
+      setUploadError(error || 'Could not use that image');
       return null;
     }
-  }, [uploadFileViaRelay]);
+    return dataUrl;
+  }, []);
 
   const handleIconUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    const url = await uploadFile(file, 'icons');
+    const url = await uploadFile(file, 'icon');
     if (url) setButtonForm((prev) => ({ ...prev, icon: url }));
     setUploading(false);
     e.target.value = '';
@@ -142,7 +131,7 @@ export function SettingsPanel({
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    const url = await uploadFile(file, 'backgrounds');
+    const url = await uploadFile(file, 'background');
     if (url) setBgForm({ type: 'image', value: url });
     setUploading(false);
     e.target.value = '';
@@ -282,6 +271,7 @@ export function SettingsPanel({
               </div>
               <input ref={iconInputRef} type="file" accept="image/*" onChange={handleIconUpload} className="hidden" />
               <input ref={iconCameraRef} type="file" accept="image/*" capture="environment" onChange={handleIconUpload} className="hidden" />
+              {uploadError && <p className="text-xs text-red-400">{uploadError}</p>}
 
               {/* Icon size toggle */}
               <div>
@@ -600,6 +590,7 @@ export function SettingsPanel({
                     </div>
                     <input ref={bgInputRef} type="file" accept="image/*" onChange={handleBgUpload} className="hidden" />
                     <input ref={bgCameraRef} type="file" accept="image/*" capture="environment" onChange={handleBgUpload} className="hidden" />
+                    {uploadError && <p className="text-xs text-red-400 mt-2">{uploadError}</p>}
                   </div>
 
                   {/* Preset gradients */}

@@ -8,11 +8,15 @@ interface ConnectionIndicatorProps {
 }
 
 export function ConnectionIndicator({ state }: ConnectionIndicatorProps) {
-  const config = {
+  const config: Record<ConnectionState, { color: string; text: string; pulse: boolean }> = {
     connected: { color: 'bg-green-500', text: 'Connected', pulse: true },
     connecting: { color: 'bg-yellow-500', text: 'Connecting...', pulse: true },
+    // Relay is reachable but the desktop isn't in the session — the distinction
+    // matters, because nothing can be saved in this state.
+    waiting: { color: 'bg-amber-500', text: 'Desktop offline', pulse: true },
     reconnecting: { color: 'bg-orange-500', text: 'Reconnecting...', pulse: true },
     disconnected: { color: 'bg-red-500', text: 'Disconnected', pulse: false },
+    error: { color: 'bg-red-500', text: 'Connection error', pulse: false },
   };
 
   const { color, text, pulse } = config[state];

@@ -72,7 +72,8 @@ export type WSMessage =
   | GridUpdateMessage
   | LayoutUpdateMessage
   | FileUploadMessage
-  | FileUploadResultMessage;
+  | FileUploadResultMessage
+  | ConfigRequestMessage;
 
 export interface TriggerMessage {
   type: 'trigger';
@@ -83,6 +84,11 @@ export interface ConfigSyncMessage {
   type: 'config_sync';
   pages: Page[];
   layoutPreference: LayoutPreference;
+}
+
+/** Phone → desktop: "send me the authoritative config". Sent on every (re)connect. */
+export interface ConfigRequestMessage {
+  type: 'config_request';
 }
 
 export interface ButtonUpdateMessage {

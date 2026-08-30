@@ -132,6 +132,9 @@ function SortableCell({ slot, editMode, onTrigger, onEdit, onAdd, triggerResult 
   const longPressTimer = useRef<ReturnType<typeof setTimeout>>();
   const pressing = useRef(false);
   const [triggered, setTriggered] = useState(false);
+  // Legacy configs can hold icon URLs pointing at the desktop's LAN address, which
+  // never load from elsewhere. Fall back to the label rather than showing a blank.
+  const [iconBroken, setIconBroken] = useState(false);
 
   const {
     attributes,
@@ -191,6 +194,7 @@ function SortableCell({ slot, editMode, onTrigger, onEdit, onAdd, triggerResult 
   const icon = slot.button.icon;
   const isEmoji = icon && icon.length <= 4 && !icon.startsWith('http');
   const isFullSize = slot.button.iconSize === 'full';
+  const showIcon = !!icon && (isEmoji || !iconBroken);
 
   return (
     <div
@@ -202,7 +206,7 @@ function SortableCell({ slot, editMode, onTrigger, onEdit, onAdd, triggerResult 
       onPointerLeave={editMode ? undefined : handlePointerLeave}
       onClick={editMode ? (e) => { e.stopPropagation(); onEdit(slot.button!.id); } : undefined}
     >
-      {icon ? (
+      {showIcon ? (
         isEmoji ? (
           <span className={`${isFullSize ? 'cell-icon-full' : 'cell-icon'} leading-none pointer-events-none select-none`}>{icon}</span>
         ) : (
@@ -211,6 +215,7 @@ function SortableCell({ slot, editMode, onTrigger, onEdit, onAdd, triggerResult 
             alt={slot.button.label}
             className={`${isFullSize ? 'cell-img-full' : 'cell-img'} drop-shadow-lg pointer-events-none`}
             draggable={false}
+            onError={() => setIconBroken(true)}
           />
         )
       ) : (

@@ -7,9 +7,11 @@ interface PairingScreenProps {
   onConnect: (info: ConnectionInfo) => void;
   isConnecting: boolean;
   isLoading: boolean;
+  /** Unrecoverable connection failure from the last attempt, if any. */
+  error?: string | null;
 }
 
-export function PairingScreen({ onConnect, isConnecting, isLoading }: PairingScreenProps) {
+export function PairingScreen({ onConnect, isConnecting, isLoading, error: connectionError }: PairingScreenProps) {
   const { t, locale, setLocale } = useTranslation();
   const [ip, setIp] = useState('');
   const [port, setPort] = useState('8787');
@@ -20,12 +22,23 @@ export function PairingScreen({ onConnect, isConnecting, isLoading }: PairingScr
   const [discovered, setDiscovered] = useState<ConnectionInfo | null>(null);
   const [qrActive, setQrActive] = useState(false);
   const [qrError, setQrError] = useState('');
-  const [connectMode, setConnectMode] = useState<'lan' | 'relay'>('lan');
+  // Cloud mode is the only one that can work from an https origin (a browser blocks
+  // ws:// to a LAN address from a secure page), so default to it there.
+  const [connectMode, setConnectMode] = useState<'lan' | 'relay'>(
+    location.protocol === 'https:' && location.hostname !== 'localhost' ? 'relay' : 'lan'
+  );
   const [licenseKey, setLicenseKey] = useState('');
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const rafRef = useRef<number>(0);
+
+  // ws:// to a LAN IP is blocked from an https page, and the hosted PWA is https.
+  const lanUnavailable = location.protocol === 'https:' && !discovered;
+
+  useEffect(() => {
+    if (connectionError) setError(connectionError);
+  }, [connectionError]);
 
   useEffect(() => {
     store.getConnection().then((conn) => {
@@ -167,7 +180,17 @@ export function PairingScreen({ onConnect, isConnecting, isLoading }: PairingScr
         } catch {}
       }
 
-      // Fallback: scan network for direct HTTP connections
+      // Fallback: scan network for direct HTTP connections. Pointless from an https
+      // origin — the browser blocks every http request as mixed content — so skip it
+      // rather than firing 254 doomed fetches.
+      if (location.protocol === 'https:') {
+        if (!cancelled) {
+          setScanning(false);
+          setScanProgress('');
+        }
+        return;
+      }
+
       setScanProgress('Scanning network...');
 
       try {
@@ -428,6 +451,16 @@ export function PairingScreen({ onConnect, isConnecting, isLoading }: PairingScr
           </button>
         </div>
 
+        {connectMode === 'lan' && lanUnavailable && (
+          <div className="glass-panel px-4 py-3 mb-4 border border-amber-500/30">
+            <p className="text-xs text-amber-300/90 leading-relaxed">
+              Local Network mode doesn't work from the hosted app — your browser blocks
+              insecure LAN connections from a secure page. Use <strong>Cloud</strong> mode
+              with your license key, or open XDECK from your desktop's own address.
+            </p>
+          </div>
+        )}
+
         {connectMode === 'relay' ? (
           <form onSubmit={(e) => {
             e.preventDefault();
@@ -456,7 +489,8 @@ export function PairingScreen({ onConnect, isConnecting, isLoading }: PairingScr
                 className="w-full px-4 py-3 glass-panel text-white placeholder-white/30 outline-none focus:border-purple-500/50 transition-colors font-mono text-center tracking-wider"
               />
               <p className="text-[10px] text-white/30 mt-1.5">
-                Enter the license key from your purchase email
+                Enter the license key from your purchase email. Each key works on one
+                phone and one computer at a time.
               </p>
             </div>
 

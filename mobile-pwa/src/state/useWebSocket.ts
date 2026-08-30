@@ -1,35 +1,52 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import type { WSMessage, DeckConfig, Page } from '@shared/protocol';
+import type { WSMessage, DeckConfig } from '@shared/protocol';
 import { store, type ConnectionInfo } from './store';
 
-const RELAY_URL = (import.meta as any).env?.VITE_RELAY_URL
-  || 'wss://xdeck-relay.onrender.com/relay'
-  || (location.protocol === 'https:'
-    ? `${location.protocol}//${location.host}/relay`
-    : `ws://${location.hostname}:9000/relay`);
+const RELAY_URL: string = (import.meta as any).env?.VITE_RELAY_URL
+  || 'wss://xdeck-relay.onrender.com/relay';
 
-function rewriteHttpUrls(value: string): string {
-  if (!value || location.protocol !== 'https:') return value;
-  return value.replace(/https?:\/\/[^/]+(\/[^\s'"]*)/g, (match, path) => {
-    if (path.startsWith('/uploads')) {
-      return `${location.protocol}//${location.host}${path}`;
+/** Used only when localStorage is unavailable (private mode with storage blocked). */
+const SESSION_DEVICE_ID = `d${Math.random().toString(36).slice(2, 12)}`;
+const DEVICE_ID_KEY = 'xdeck_device_id';
+
+/**
+ * Stable identity for this install. The relay compares it against the device
+ * holding the license key, so that "my phone reconnecting" is allowed while
+ * "a second person using my key" is refused. It must survive reloads.
+ */
+function getDeviceId(): string {
+  try {
+    let id = localStorage.getItem(DEVICE_ID_KEY);
+    if (!id) {
+      id = (globalThis.crypto as any)?.randomUUID?.()
+        || `d${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`;
+      localStorage.setItem(DEVICE_ID_KEY, id!);
     }
-    return match;
-  });
+    return id!;
+  } catch {
+    return SESSION_DEVICE_ID;
+  }
 }
 
-function rewriteConfigUrls(pages: Page[]): Page[] {
-  return pages.map((page) => ({
-    ...page,
-    background: {
-      ...page.background,
-      value: rewriteHttpUrls(page.background.value),
-    },
-    buttons: page.buttons.map((btn) => ({
-      ...btn,
-      icon: btn.icon ? rewriteHttpUrls(btn.icon) : btn.icon,
-    })),
-  }));
+/**
+ * Where to open the LAN socket. When the page is served from the desktop itself
+ * (or through its dev proxy) same-origin is correct; otherwise we must dial the
+ * desktop's LAN address directly — which a browser only allows from an insecure
+ * page, since ws:// from https:// is blocked as mixed content.
+ */
+function lanTarget(info: ConnectionInfo): { url: string } | { error: string } {
+  const sameHost = !!info.ip && info.ip === location.hostname;
+  if (sameHost) {
+    return { url: `${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}/deck` };
+  }
+  if (location.protocol === 'https:') {
+    return {
+      error:
+        'Local Network mode can\'t be used from the hosted app — browsers block insecure LAN connections from an https page. Switch to Cloud mode, or open XDECK from your desktop\'s address.',
+    };
+  }
+  if (!info.ip) return { error: 'No desktop address saved. Scan the QR code again.' };
+  return { url: `ws://${info.ip}:${info.port}/deck` };
 }
 
 const DEFAULT_CONFIG: DeckConfig = {
@@ -45,15 +62,27 @@ const DEFAULT_CONFIG: DeckConfig = {
   layoutPreference: { orientation: 'auto', area: 'safe' },
 };
 
-export type ConnectionState = 'disconnected' | 'connecting' | 'connected' | 'reconnecting';
+export type ConnectionState =
+  | 'disconnected'
+  | 'connecting'
+  /** Relay reached, but the desktop isn't in the session — nothing can be applied yet. */
+  | 'waiting'
+  | 'connected'
+  | 'reconnecting'
+  /** Unrecoverable: bad license key, or LAN mode from an https origin. */
+  | 'error';
 
 interface UseWebSocketReturn {
   connectionState: ConnectionState;
+  /** True only when the desktop can actually receive messages right now. */
+  isLive: boolean;
+  lastError: string | null;
   isInitialized: boolean;
   config: DeckConfig;
   connect: (info: ConnectionInfo) => void;
   disconnect: () => void;
-  sendMessage: (msg: WSMessage) => void;
+  /** Returns false when the message could not be delivered. */
+  sendMessage: (msg: WSMessage) => boolean;
   updateConfig: (updater: (config: DeckConfig) => DeckConfig) => void;
   uploadFileViaRelay: (dir: string, filename: string, data: string) => Promise<string | null>;
   triggerButton: (buttonId: string) => Promise<boolean>;
@@ -61,6 +90,7 @@ interface UseWebSocketReturn {
 
 export function useWebSocket(): UseWebSocketReturn {
   const [connectionState, setConnectionState] = useState<ConnectionState>('disconnected');
+  const [lastError, setLastError] = useState<string | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
   const [config, setConfig] = useState<DeckConfig>(DEFAULT_CONFIG);
 
@@ -72,14 +102,17 @@ export function useWebSocket(): UseWebSocketReturn {
   const pendingTriggers = useRef<Map<string, { resolve: (ok: boolean) => void }>>(new Map());
   const pendingUploads = useRef<Map<string, { resolve: (path: string | null) => void }>>(new Map());
   const savedInfo = useRef<ConnectionInfo | null>(null);
+  /** Peer reachability, separate from socket state: the relay socket stays open
+   *  while the desktop is offline, and messages sent then go nowhere. */
+  const peerOnline = useRef(false);
+  const fatal = useRef(false);
+  const awaitingPong = useRef(false);
 
   // Use a ref-based connect function so every callback always has the latest logic
   const connectRef = useRef<(info: ConnectionInfo) => void>(() => {});
   const disconnectRef = useRef<() => void>(() => {});
 
-  connectRef.current = (info: ConnectionInfo) => {
-    // Clear everything
-    if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
+  function teardownSocket() {
     if (wsRef.current) {
       wsRef.current.onclose = null;
       wsRef.current.onerror = null;
@@ -88,8 +121,16 @@ export function useWebSocket(): UseWebSocketReturn {
       wsRef.current.close();
       wsRef.current = null;
     }
+  }
+
+  connectRef.current = (info: ConnectionInfo) => {
+    if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
+    teardownSocket();
     generation.current++;
     reconnectAttempts.current = 0;
+    peerOnline.current = false;
+    fatal.current = false;
+    setLastError(null);
     savedInfo.current = info;
     store.saveConnection(info);
     startConnect(info, generation.current);
@@ -98,34 +139,43 @@ export function useWebSocket(): UseWebSocketReturn {
   disconnectRef.current = () => {
     generation.current++;
     if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
-    if (wsRef.current) {
-      wsRef.current.onclose = null;
-      wsRef.current.onerror = null;
-      wsRef.current.onmessage = null;
-      wsRef.current.onopen = null;
-      wsRef.current.close();
-      wsRef.current = null;
-    }
+    teardownSocket();
     reconnectAttempts.current = 0;
     savedInfo.current = null;
+    peerOnline.current = false;
+    fatal.current = false;
+    setLastError(null);
     setConnectionState('disconnected');
     store.clearConnection();
   };
 
+  function failFatally(message: string) {
+    fatal.current = true;
+    peerOnline.current = false;
+    if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
+    setLastError(message);
+    setConnectionState('error');
+  }
+
   function startConnect(info: ConnectionInfo, gen: number) {
     if (gen !== generation.current) return;
+    const isRelay = info.mode === 'relay' && !!info.licenseKey;
     console.log(`[XDECK] Connecting (mode=${info.mode}) (gen=${gen})`);
+    peerOnline.current = false;
     setConnectionState('connecting');
+
+    let url: string;
+    if (isRelay) {
+      url = RELAY_URL;
+    } else {
+      const target = lanTarget(info);
+      if ('error' in target) { failFatally(target.error); return; }
+      url = target.url;
+    }
 
     let ws: WebSocket;
     try {
-      if (info.mode === 'relay' && info.licenseKey) {
-        ws = new WebSocket(RELAY_URL);
-      } else {
-        const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsHost = location.protocol === 'https:' ? location.host : `${info.ip}:${info.port}`;
-        ws = new WebSocket(`${proto}//${wsHost}/deck`);
-      }
+      ws = new WebSocket(url);
     } catch (e) {
       console.log('[XDECK] WebSocket constructor failed:', e);
       if (gen === generation.current) {
@@ -139,19 +189,27 @@ export function useWebSocket(): UseWebSocketReturn {
 
     ws.onopen = () => {
       if (gen !== generation.current) { ws.close(); return; }
-      console.log('[XDECK] Connected');
+      console.log('[XDECK] Socket open');
+      reconnectAttempts.current = 0;
+      awaitingPong.current = false;
 
-      if (info.mode === 'relay' && info.licenseKey) {
+      if (isRelay) {
+        // Still not "connected" — that waits on relay_status telling us the
+        // desktop is actually in the session.
+        setConnectionState('waiting');
         ws.send(JSON.stringify({
           type: 'relay_auth',
           licenseKey: info.licenseKey,
           role: 'phone',
           deviceName: navigator.userAgent.slice(0, 50),
+          deviceId: getDeviceId(),
         }));
+      } else {
+        peerOnline.current = true;
+        setConnectionState('connected');
+        // Always pull the desktop's config; never trust our cached copy for edits.
+        ws.send(JSON.stringify({ type: 'config_request' } as WSMessage));
       }
-
-      setConnectionState('connected');
-      reconnectAttempts.current = 0;
     };
 
     ws.onmessage = (event: MessageEvent) => {
@@ -160,30 +218,60 @@ export function useWebSocket(): UseWebSocketReturn {
         const raw = JSON.parse(event.data);
         const msgType: string = raw.type;
 
-        if (msgType === 'relay_auth_ok' || msgType === 'relay_status') {
-          if (raw.connected === false && info.mode === 'relay') {
-            console.log('[XDECK] Relay: desktop disconnected');
-            setConnectionState('reconnecting');
-          } else if (raw.connected === true && info.mode === 'relay') {
-            console.log('[XDECK] Relay: desktop connected');
+        if (msgType === 'relay_auth_ok') {
+          console.log('[XDECK] Relay authenticated');
+          return;
+        }
+
+        if (msgType === 'relay_status') {
+          if (raw.connected === true) {
+            if (!peerOnline.current) console.log('[XDECK] Desktop online');
+            peerOnline.current = true;
+            setLastError(null);
             setConnectionState('connected');
+            // The desktop pushes its config on join too; asking makes the phone
+            // authoritative-config-first regardless of who connected last.
+            ws.send(JSON.stringify({ type: 'config_request' } as WSMessage));
+          } else {
+            if (peerOnline.current) console.log('[XDECK] Desktop went offline');
+            peerOnline.current = false;
+            // The socket is healthy — only the peer is missing. Reconnecting would
+            // accomplish nothing, so sit in 'waiting' until it comes back.
+            setConnectionState('waiting');
+            if (raw.undelivered) {
+              setLastError('Desktop is offline — that change was not saved.');
+            }
           }
           return;
         }
+
         if (msgType === 'relay_error') {
           console.error('[XDECK] Relay error:', raw.error);
+          if (raw.error === 'key_in_use') {
+            // One key, one device. Retrying would only fight the other device,
+            // so stop and tell the user to get their own key.
+            failFatally(raw.message
+              || 'This license key is already in use on another phone. Each key works on one phone at a time — buy your own key to use XDECK.');
+          } else if (/invalid license/i.test(raw.error || '')) {
+            failFatally(raw.message || 'This license key was rejected. Check the key and pair again.');
+          } else if (raw.error === 'replaced') {
+            failFatally('This deck was opened somewhere else, so this window was disconnected.');
+          }
           return;
         }
+
+        if (msgType === 'pong') { awaitingPong.current = false; return; }
 
         const msg = raw as WSMessage;
         switch (msg.type) {
           case 'config_sync': {
-            let pages = msg.pages;
-            if (location.protocol === 'https:') {
-              pages = rewriteConfigUrls(pages);
+            if (!Array.isArray(msg.pages) || msg.pages.length === 0) {
+              console.warn('[XDECK] Ignoring malformed config_sync');
+              break;
             }
-            setConfig({ pages, layoutPreference: msg.layoutPreference });
-            store.saveConfig({ pages, layoutPreference: msg.layoutPreference });
+            const next: DeckConfig = { pages: msg.pages, layoutPreference: msg.layoutPreference };
+            setConfig(next);
+            store.saveConfig(next);
             break;
           }
           case 'trigger_result': {
@@ -212,8 +300,10 @@ export function useWebSocket(): UseWebSocketReturn {
 
     ws.onclose = () => {
       if (gen !== generation.current) return;
-      console.log('[XDECK] Disconnected, will reconnect...');
       wsRef.current = null;
+      peerOnline.current = false;
+      if (fatal.current) return;
+      console.log('[XDECK] Disconnected, will reconnect...');
       setConnectionState('reconnecting');
       scheduleReconnect(gen);
     };
@@ -242,10 +332,12 @@ export function useWebSocket(): UseWebSocketReturn {
     disconnectRef.current();
   }, []);
 
-  const sendMessage = useCallback((msg: WSMessage) => {
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
-      wsRef.current.send(JSON.stringify(msg));
-    }
+  const sendMessage = useCallback((msg: WSMessage): boolean => {
+    if (wsRef.current?.readyState !== WebSocket.OPEN) return false;
+    // Over the relay an open socket proves nothing about the desktop being there.
+    if (!peerOnline.current && msg.type !== 'ping') return false;
+    wsRef.current.send(JSON.stringify(msg));
+    return true;
   }, []);
 
   const updateConfig = useCallback((updater: (config: DeckConfig) => DeckConfig) => {
@@ -259,7 +351,11 @@ export function useWebSocket(): UseWebSocketReturn {
   const triggerButton = useCallback(async (buttonId: string): Promise<boolean> => {
     return new Promise((resolve) => {
       pendingTriggers.current.set(buttonId, { resolve });
-      sendMessage({ type: 'trigger', buttonId });
+      if (!sendMessage({ type: 'trigger', buttonId })) {
+        pendingTriggers.current.delete(buttonId);
+        resolve(false);
+        return;
+      }
       setTimeout(() => {
         if (pendingTriggers.current.has(buttonId)) {
           pendingTriggers.current.delete(buttonId);
@@ -273,7 +369,11 @@ export function useWebSocket(): UseWebSocketReturn {
     return new Promise((resolve) => {
       const uploadId = `up_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
       pendingUploads.current.set(uploadId, { resolve });
-      sendMessage({ type: 'file_upload', uploadId, dir, filename, data });
+      if (!sendMessage({ type: 'file_upload', uploadId, dir, filename, data })) {
+        pendingUploads.current.delete(uploadId);
+        resolve(null);
+        return;
+      }
       setTimeout(() => {
         if (pendingUploads.current.has(uploadId)) {
           pendingUploads.current.delete(uploadId);
@@ -286,11 +386,7 @@ export function useWebSocket(): UseWebSocketReturn {
   // Load cached connection on mount
   useEffect(() => {
     store.getConfig().then((cfg) => {
-      if (location.protocol === 'https:') {
-        setConfig({ ...cfg, pages: rewriteConfigUrls(cfg.pages) });
-      } else {
-        setConfig(cfg);
-      }
+      if (cfg?.pages?.length) setConfig(cfg);
     });
     store.getConnection().then((info) => {
       if (info) {
@@ -303,41 +399,53 @@ export function useWebSocket(): UseWebSocketReturn {
     });
 
     const handleVisibility = () => {
-      if (document.visibilityState === 'visible') {
-        if (wsRef.current === null && savedInfo.current) {
-          console.log('[XDECK] App resumed, attempting reconnect');
-          generation.current++;
-          reconnectAttempts.current = 0;
-          startConnect(savedInfo.current, generation.current);
-        }
+      if (document.visibilityState !== 'visible') return;
+      if (fatal.current || !savedInfo.current) return;
+      // A backgrounded phone often keeps a half-open socket that will never
+      // deliver again, so reconnect whenever we don't have a live peer.
+      if (wsRef.current === null || !peerOnline.current) {
+        console.log('[XDECK] App resumed, attempting reconnect');
+        teardownSocket();
+        generation.current++;
+        reconnectAttempts.current = 0;
+        startConnect(savedInfo.current, generation.current);
       }
     };
     document.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('online', handleVisibility);
 
     return () => {
       generation.current++;
       if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
-      if (wsRef.current) {
-        wsRef.current.onclose = null;
-        wsRef.current.onerror = null;
-        wsRef.current.onmessage = null;
-        wsRef.current.onopen = null;
-        wsRef.current.close();
-        wsRef.current = null;
-      }
+      teardownSocket();
       document.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('online', handleVisibility);
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Heartbeat
+  // Heartbeat — also detects half-open sockets, which mobile networks produce
+  // often and which otherwise look "connected" forever.
   useEffect(() => {
-    if (connectionState !== 'connected') return;
-    const interval = setInterval(() => sendMessage({ type: 'ping' }), 25000);
+    if (connectionState !== 'connected' && connectionState !== 'waiting') return;
+    const interval = setInterval(() => {
+      const ws = wsRef.current;
+      if (ws?.readyState !== WebSocket.OPEN) return;
+      if (awaitingPong.current) {
+        console.log('[XDECK] No pong — socket is stale, reconnecting');
+        awaitingPong.current = false;
+        ws.close();
+        return;
+      }
+      awaitingPong.current = true;
+      ws.send(JSON.stringify({ type: 'ping' } as WSMessage));
+    }, 20000);
     return () => clearInterval(interval);
-  }, [connectionState, sendMessage]);
+  }, [connectionState]);
 
   return {
     connectionState,
+    isLive: connectionState === 'connected',
+    lastError,
     isInitialized,
     config,
     connect,

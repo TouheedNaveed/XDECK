@@ -7,19 +7,20 @@ import { PairingScreen } from './components/PairingScreen';
 import { ConnectionIndicator } from './components/ConnectionIndicator';
 import { useTranslation } from './i18n';
 import toast, { Toaster } from 'react-hot-toast';
-import type { Button, LayoutPreference } from '@shared/protocol';
+import type { Button, LayoutPreference, WSMessage, DeckConfig } from '@shared/protocol';
 
 export function App() {
   const { t } = useTranslation();
   const {
     connectionState,
+    isLive,
+    lastError,
     isInitialized,
     config,
     connect,
     disconnect,
     sendMessage,
     updateConfig,
-    uploadFileViaRelay,
     triggerButton,
   } = useWebSocket();
 
@@ -243,51 +244,77 @@ export function App() {
     setShowSettings(true);
   }, []);
 
+  /**
+   * Every config change goes through here. The desktop owns the config, so a change
+   * we can't deliver must not be shown as applied — that mismatch is what makes the
+   * app look like it "did nothing" while still flashing a success toast.
+   */
+  const commit = useCallback((
+    msg: WSMessage,
+    optimistic: (c: DeckConfig) => DeckConfig,
+    successText?: string,
+  ): boolean => {
+    if (!isLive || !sendMessage(msg)) {
+      toast.error(
+        connectionState === 'waiting'
+          ? 'Desktop is offline — change not saved'
+          : 'Not connected — change not saved',
+        { duration: 2500 },
+      );
+      return false;
+    }
+    updateConfig(optimistic);
+    if (successText) toast.success(successText, { duration: 1200 });
+    return true;
+  }, [isLive, connectionState, sendMessage, updateConfig]);
+
   const handleSaveButton = useCallback((pageId: string, button: any) => {
     const btn = { ...button, id: button.id || `btn_${Date.now()}` };
-    updateConfig((c) => {
-      const pages = c.pages.map((p) => {
+    const ok = commit({ type: 'button_update', pageId, button: btn }, (c) => ({
+      ...c,
+      pages: c.pages.map((p) => {
         if (p.id !== pageId) return p;
         const idx = p.buttons.findIndex((b) => b.id === btn.id);
         const buttons = [...p.buttons];
         if (idx >= 0) buttons[idx] = btn; else buttons.push(btn);
         return { ...p, buttons };
-      });
-      return { ...c, pages };
-    });
-    sendMessage({ type: 'button_update', pageId, button: btn });
+      }),
+    }));
+    if (!ok) return;
     setShowSettings(false);
     setEditingButton(null);
-  }, [sendMessage, updateConfig]);
+  }, [commit]);
 
   const handleDeleteButton = useCallback((pageId: string, buttonId: string) => {
-    updateConfig((c) => ({
+    const ok = commit({ type: 'button_delete', pageId, buttonId }, (c) => ({
       ...c,
       pages: c.pages.map((p) => p.id !== pageId ? p : { ...p, buttons: p.buttons.filter((b) => b.id !== buttonId) }),
     }));
-    sendMessage({ type: 'button_delete', pageId, buttonId });
+    if (!ok) return;
     setShowSettings(false);
     setEditingButton(null);
-  }, [sendMessage, updateConfig]);
+  }, [commit]);
 
   const handleUpdateBackground = useCallback((pageId: string, background: any) => {
-    updateConfig((c) => ({
+    commit({ type: 'background_update', pageId, background }, (c) => ({
       ...c,
       pages: c.pages.map((p) => p.id !== pageId ? p : { ...p, background }),
-    }));
-    sendMessage({ type: 'background_update', pageId, background });
-  }, [sendMessage, updateConfig]);
+    }), 'Background updated');
+  }, [commit]);
 
   const handleUpdateGrid = useCallback((pageId: string, grid: any) => {
-    updateConfig((c) => ({
+    commit({ type: 'grid_update', pageId, grid }, (c) => ({
       ...c,
       pages: c.pages.map((p) => p.id !== pageId ? p : { ...p, grid }),
-    }));
-    sendMessage({ type: 'grid_update', pageId, grid });
-  }, [sendMessage, updateConfig]);
+    }), 'Grid updated');
+  }, [commit]);
 
   const handleReorder = useCallback((buttons: Button[]) => {
     if (!currentPage) return;
+    if (!isLive) {
+      toast.error('Not connected — layout not saved', { duration: 2500 });
+      return;
+    }
     updateConfig((c) => ({
       ...c,
       pages: c.pages.map((p) => p.id !== currentPage.id ? p : { ...p, buttons }),
@@ -295,13 +322,15 @@ export function App() {
     buttons.forEach((btn) => {
       sendMessage({ type: 'button_update', pageId: currentPage.id, button: btn });
     });
-  }, [currentPage, sendMessage, updateConfig]);
+  }, [currentPage, isLive, sendMessage, updateConfig]);
 
   const handleUpdateLayout = useCallback((layoutPref: LayoutPreference) => {
-    updateConfig((c) => ({ ...c, layoutPreference: layoutPref }));
-    sendMessage({ type: 'layout_update', layoutPreference: layoutPref });
-    toast.success('Layout updated');
-  }, [sendMessage, updateConfig]);
+    commit(
+      { type: 'layout_update', layoutPreference: layoutPref },
+      (c) => ({ ...c, layoutPreference: layoutPref }),
+      'Layout updated',
+    );
+  }, [commit]);
 
   const handleAddPage = useCallback(() => {
     const newPage = {
@@ -311,23 +340,37 @@ export function App() {
       background: { type: 'gradient' as const, value: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' },
       buttons: [],
     };
-    updateConfig((c) => ({ ...c, pages: [...c.pages, newPage] }));
-    sendMessage({ type: 'page_update', page: newPage });
-    setCurrentPageIndex(config.pages.length);
-  }, [config.pages.length, sendMessage, updateConfig]);
+    if (commit({ type: 'page_update', page: newPage }, (c) => ({ ...c, pages: [...c.pages, newPage] }))) {
+      setCurrentPageIndex(config.pages.length);
+    }
+  }, [config.pages.length, commit]);
 
   const handleDeletePage = useCallback(() => {
     if (config.pages.length <= 1) {
       toast.error('Cannot delete the only page');
       return;
     }
-    updateConfig((c) => ({ ...c, pages: c.pages.filter((p) => p.id !== currentPage!.id) }));
-    sendMessage({ type: 'page_delete', pageId: currentPage!.id });
-    setCurrentPageIndex(Math.max(0, currentPageIndex - 1));
-  }, [config.pages.length, currentPage, currentPageIndex, sendMessage, updateConfig]);
+    const ok = commit({ type: 'page_delete', pageId: currentPage!.id }, (c) => ({
+      ...c,
+      pages: c.pages.filter((p) => p.id !== currentPage!.id),
+    }));
+    if (ok) setCurrentPageIndex(Math.max(0, currentPageIndex - 1));
+  }, [config.pages.length, currentPage, currentPageIndex, commit]);
 
-  if (!isInitialized || connectionState === 'disconnected') {
-    return <PairingScreen onConnect={connect} isConnecting={connectionState === 'connecting'} isLoading={!isInitialized} />;
+  // Surface connection problems once, rather than silently looping.
+  useEffect(() => {
+    if (lastError) toast.error(lastError, { duration: 6000, id: 'xdeck-conn-error' });
+  }, [lastError]);
+
+  if (!isInitialized || connectionState === 'disconnected' || connectionState === 'error') {
+    return (
+      <PairingScreen
+        onConnect={connect}
+        isConnecting={connectionState === 'connecting'}
+        isLoading={!isInitialized}
+        error={connectionState === 'error' ? lastError : null}
+      />
+    );
   }
 
   return (
@@ -438,7 +481,6 @@ export function App() {
           onUpdateLayout={handleUpdateLayout}
           onPreviewBackground={setPreviewBg}
           onPreviewGrid={setPreviewGrid}
-          uploadFileViaRelay={uploadFileViaRelay}
           onClose={() => {
             setShowSettings(false);
             setEditingButton(null);

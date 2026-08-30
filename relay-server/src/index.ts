@@ -5,9 +5,13 @@ import fs from 'fs';
 import Stripe from 'stripe';
 
 const PORT = parseInt(process.env.PORT || '9000');
-const HEARTBEAT_INTERVAL = 60000;
+// 25s: two missed beats must still be well inside Render's ~100s idle-proxy timeout,
+// and stale sockets need reaping fast so a reconnecting phone isn't shadowed by a ghost.
+const HEARTBEAT_INTERVAL = 25000;
 const LICENSE_KEYS = new Set<string>();
 const LICENSE_DB = process.env.LICENSE_DB || 'licenses.json';
+// Set this to enable self-verifying keys that survive a wiped licenses.json.
+const LICENSE_SIGNING_SECRET = process.env.LICENSE_SIGNING_SECRET || '';
 const STRIPE_SECRET = process.env.STRIPE_SECRET || '';
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://xdeck.app';
@@ -62,25 +66,68 @@ interface RelayClient {
   role: 'desktop' | 'phone';
   licenseKey: string;
   deviceName: string;
+  /** Stable per-install identifier, so a reconnect is distinguishable from a stranger. */
+  deviceId: string;
   alive: boolean;
+  /** Set while another device is contesting this slot; resolved by the next pong. */
+  onProbePong?: () => void;
 }
 
 const sessions = new Map<string, { desktop: RelayClient | null; phone: RelayClient | null }>();
 
 function generateLicenseKey(): string {
-  const bytes = crypto.randomBytes(16);
-  const hex = bytes.toString('hex').toUpperCase();
-  return `XDECK-${hex.slice(0, 4)}-${hex.slice(4, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}`;
+  // Keys are self-verifying: a random serial plus a truncated HMAC of it. That lets
+  // validateLicenseKey() accept a key we issued even after Render's ephemeral disk
+  // has wiped licenses.json, without accepting keys nobody paid for.
+  const serial = crypto.randomBytes(3).toString('hex').toUpperCase(); // 6 hex chars
+  if (!LICENSE_SIGNING_SECRET) {
+    // Unsigned fallback: only usable while it survives in licenses.json / env.
+    const hex = crypto.randomBytes(8).toString('hex').toUpperCase();
+    return `XDECK-${hex.slice(0, 4)}-${hex.slice(4, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}`;
+  }
+  const sig = signSerial(serial);
+  const body = `${serial}${sig}`; // 6 + 10 = 16 chars
+  return `XDECK-${body.slice(0, 4)}-${body.slice(4, 8)}-${body.slice(8, 12)}-${body.slice(12, 16)}`;
+}
+
+function signSerial(serial: string): string {
+  return crypto
+    .createHmac('sha256', LICENSE_SIGNING_SECRET)
+    .update(`xdeck-license:${serial.toUpperCase()}`)
+    .digest('hex')
+    .slice(0, 10)
+    .toUpperCase();
 }
 
 function addLicenseKey(key: string) {
   LICENSE_KEYS.add(key);
-  console.log(`[RELAY] License key added: ${key} (total: ${LICENSE_KEYS.size})`);
+  console.log(`[RELAY] License key added: ${key.slice(0, 12)}... (total: ${LICENSE_KEYS.size})`);
 }
 
+/**
+ * A key is valid only if we issued it: either it is in the allowlist (licenses.json
+ * from Stripe, or the LICENSE_KEYS env var) or it carries a valid signature.
+ * Never accept a key just because it has the right shape — that would make Cloud
+ * mode free for anyone who can read the format.
+ */
 function validateLicenseKey(key: string): boolean {
-  if (LICENSE_KEYS.has(key)) return true;
-  if (/^XDECK-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}$/i.test(key)) return true;
+  const normalized = key.trim().toUpperCase();
+  if (LICENSE_KEYS.has(key) || LICENSE_KEYS.has(normalized)) return true;
+
+  if (LICENSE_SIGNING_SECRET) {
+    const body = normalized.replace(/^XDECK-/, '').replace(/-/g, '');
+    if (body.length !== 16) return false;
+    const serial = body.slice(0, 6);
+    const provided = body.slice(6);
+    const expected = signSerial(serial);
+    if (provided.length !== expected.length) return false;
+    try {
+      return crypto.timingSafeEqual(Buffer.from(provided), Buffer.from(expected));
+    } catch {
+      return false;
+    }
+  }
+
   return false;
 }
 
@@ -92,7 +139,14 @@ function getSession(licenseKey: string) {
 }
 
 function removeClient(client: RelayClient) {
-  const session = getSession(client.licenseKey);
+  const session = sessions.get(client.licenseKey);
+  if (!session) return;
+
+  // Only vacate the slot if it still points at *this* client. A late 'close' event
+  // from a socket we already replaced must not evict its successor.
+  const slot = client.role === 'desktop' ? session.desktop : session.phone;
+  if (slot !== client) return;
+
   if (client.role === 'desktop') {
     session.desktop = null;
     if (session.phone?.ws.readyState === WebSocket.OPEN) {
@@ -112,11 +166,14 @@ function removeClient(client: RelayClient) {
 }
 
 function sendToPeer(client: RelayClient, data: string) {
-  const session = getSession(client.licenseKey);
+  const session = sessions.get(client.licenseKey);
+  if (!session) return false;
   const peer = client.role === 'desktop' ? session.phone : session.desktop;
   if (peer && peer.ws.readyState === WebSocket.OPEN) {
     peer.ws.send(data);
+    return true;
   }
+  return false;
 }
 
 const httpServer = http.createServer((req, res) => {
@@ -282,63 +339,155 @@ const httpServer = http.createServer((req, res) => {
 
 const wss = new WebSocketServer({ server: httpServer, path: '/relay' });
 
-wss.on('connection', (ws, req) => {
+/** How long an incumbent gets to prove it is still there before we hand its slot over. */
+const PROBE_TIMEOUT_MS = 2000;
+
+/**
+ * Asks an existing client to prove it is still alive. Used to tell two cases apart
+ * that look identical from the outside: the same user reconnecting after a network
+ * drop (must succeed) and a second person using a shared key (must be refused).
+ */
+function probeAlive(incumbent: RelayClient): Promise<boolean> {
+  if (incumbent.ws.readyState !== WebSocket.OPEN) return Promise.resolve(false);
+  return new Promise((resolve) => {
+    let settled = false;
+    const done = (alive: boolean) => {
+      if (settled) return;
+      settled = true;
+      incumbent.onProbePong = undefined;
+      resolve(alive);
+    };
+    incumbent.onProbePong = () => done(true);
+    try {
+      incumbent.ws.ping();
+    } catch {
+      done(false);
+      return;
+    }
+    setTimeout(() => done(false), PROBE_TIMEOUT_MS);
+  });
+}
+
+wss.on('connection', (ws) => {
   (ws as any).isAlive = true;
   let client: RelayClient | null = null;
+  let authInProgress = false;
+
+  const rejectFatal = (error: string, message: string) => {
+    try {
+      ws.send(JSON.stringify({ type: 'relay_error', error, message, fatal: true }));
+    } catch {}
+    ws.close();
+  };
+
+  async function handleAuth(msg: any) {
+    const { licenseKey: rawKey, role, deviceName, deviceId } = msg as {
+      licenseKey: string; role: 'desktop' | 'phone'; deviceName: string; deviceId?: string;
+    };
+    if (!rawKey || !role || (role !== 'desktop' && role !== 'phone')) {
+      rejectFatal('Invalid auth', 'Malformed authentication request.');
+      return;
+    }
+    if (!validateLicenseKey(rawKey)) {
+      rejectFatal('Invalid license key', 'That license key is not valid. Buy a key to use Cloud mode.');
+      return;
+    }
+    // Normalize before it becomes a session identity: otherwise "xdeck-…" and
+    // "XDECK-…" would be two independent sessions, letting one key serve many users.
+    const licenseKey = rawKey.trim().toUpperCase();
+
+    const identity = (deviceId || '').trim()
+      // No deviceId (an older client): give it an identity that can never match an
+      // incumbent, so omitting the field can't be used to impersonate one. Such a
+      // client still reclaims its own slot once the liveness probe finds it dead.
+      || `anon:${crypto.randomBytes(8).toString('hex')}`;
+    const session = getSession(licenseKey);
+    const previous = role === 'desktop' ? session.desktop : session.phone;
+
+    if (previous) {
+      if (previous.deviceId === identity) {
+        // Same device reconnecting — take the slot back immediately. Waiting for the
+        // heartbeat to reap the old socket is what caused the connect/reconnect loop.
+        console.log(`[RELAY] ${role} reconnected, replacing its own session (${licenseKey.slice(0, 12)}...)`);
+      } else if (await probeAlive(previous)) {
+        // A different device, and the current holder is demonstrably still there.
+        // One key, one user: refuse instead of kicking the paying customer off.
+        console.log(`[RELAY] ${role} REFUSED — key in use by another device (${licenseKey.slice(0, 12)}...)`);
+        rejectFatal(
+          'key_in_use',
+          `This license key is already in use on another ${role}. Each key works on one ${role} at a time — buy your own key to use XDECK.`,
+        );
+        return;
+      } else {
+        console.log(`[RELAY] ${role} took over a dead session (${licenseKey.slice(0, 12)}...)`);
+      }
+    }
+
+    if (ws.readyState !== WebSocket.OPEN) return;
+
+    client = { ws, role, licenseKey, deviceName: deviceName || role, deviceId: identity, alive: true };
+    // Re-read the session: probeAlive() awaited, so removeClient may have deleted it.
+    const live = getSession(licenseKey);
+    const stale = role === 'desktop' ? live.desktop : live.phone;
+    if (role === 'desktop') live.desktop = client;
+    else live.phone = client;
+
+    if (stale && stale !== client) {
+      try {
+        if (stale.ws.readyState === WebSocket.OPEN) {
+          stale.ws.send(JSON.stringify({ type: 'relay_error', error: 'replaced', fatal: true }));
+        }
+        stale.ws.terminate();
+      } catch {}
+    }
+
+    console.log(`[RELAY] ${role} connected (${licenseKey.slice(0, 12)}...)`);
+
+    ws.send(JSON.stringify({ type: 'relay_auth_ok', role }));
+
+    const peer = role === 'desktop' ? live.phone : live.desktop;
+    if (peer && peer.ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: 'relay_status', connected: true, peer: peer.deviceName }));
+      peer.ws.send(JSON.stringify({ type: 'relay_status', connected: true, peer: client.deviceName }));
+    } else {
+      ws.send(JSON.stringify({ type: 'relay_status', connected: false }));
+    }
+  }
 
   ws.on('message', (raw) => {
     try {
       const msg = JSON.parse(raw.toString());
 
       if (msg.type === 'relay_auth') {
-        const { licenseKey, role, deviceName } = msg as { licenseKey: string; role: 'desktop' | 'phone'; deviceName: string };
-        if (!licenseKey || !role || (role !== 'desktop' && role !== 'phone')) {
-          ws.send(JSON.stringify({ type: 'relay_error', error: 'Invalid auth' }));
-          ws.close();
-          return;
-        }
-        if (!validateLicenseKey(licenseKey)) {
-          ws.send(JSON.stringify({ type: 'relay_error', error: 'Invalid license key' }));
-          ws.close();
-          return;
-        }
-
-        const session = getSession(licenseKey);
-        const existingClient = role === 'desktop' ? session.desktop : session.phone;
-        if (existingClient) {
-          if (existingClient.ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type: 'relay_error', error: `${role} already connected` }));
-            ws.close();
-            return;
-          }
-          // Old connection is stale/closed — clean it up
-          removeClient(existingClient);
-        }
-
-        client = { ws, role, licenseKey, deviceName: deviceName || role, alive: true };
-        if (role === 'desktop') session.desktop = client;
-        else session.phone = client;
-
-        console.log(`[RELAY] ${role} connected (${licenseKey.slice(0, 12)}...)`);
-
-        ws.send(JSON.stringify({ type: 'relay_auth_ok', role }));
-
-        const peer = role === 'desktop' ? session.phone : session.desktop;
-        if (peer && peer.ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify({ type: 'relay_status', connected: true, peer: peer.deviceName }));
-          peer.ws.send(JSON.stringify({ type: 'relay_status', connected: true, peer: deviceName }));
-        } else {
-          ws.send(JSON.stringify({ type: 'relay_status', connected: false }));
-        }
+        if (client || authInProgress) return;
+        authInProgress = true;
+        handleAuth(msg)
+          .catch((e) => console.error('[RELAY] Auth error:', e))
+          .finally(() => { authInProgress = false; });
         return;
       }
+
+      // Anything arriving mid-probe is dropped rather than rejected — the client is
+      // legitimately mid-handshake.
+      if (authInProgress) return;
 
       if (!client) {
         ws.send(JSON.stringify({ type: 'relay_error', error: 'Not authenticated' }));
         return;
       }
 
-      sendToPeer(client, raw.toString());
+      // Keepalive is answered by the relay itself — it must not depend on a peer
+      // being present, or the PWA's liveness check fails whenever the desktop is off.
+      if (msg.type === 'ping') {
+        ws.send(JSON.stringify({ type: 'pong', ts: msg.ts }));
+        return;
+      }
+
+      if (!sendToPeer(client, raw.toString())) {
+        // Tell the sender its message went nowhere so the UI can stop pretending
+        // the edit was applied.
+        ws.send(JSON.stringify({ type: 'relay_status', connected: false, undelivered: msg.type }));
+      }
     } catch {
     }
   });
@@ -348,7 +497,10 @@ wss.on('connection', (ws, req) => {
   });
 
   ws.on('pong', () => {
-    if (client) client.alive = true;
+    if (client) {
+      client.alive = true;
+      client.onProbePong?.();
+    }
     (ws as any).isAlive = true;
   });
 });
@@ -367,11 +519,6 @@ const heartbeat = setInterval(() => {
 }, HEARTBEAT_INTERVAL);
 
 wss.on('close', () => clearInterval(heartbeat));
-
-// Seed default license key for development
-if (process.env.NODE_ENV !== 'production') {
-  addLicenseKey('XDECK-DEV0-0001-0001-0001');
-}
 
 process.on('uncaughtException', (e) => { console.error('[RELAY] Uncaught:', e.message); });
 process.on('unhandledRejection', (e) => { console.error('[RELAY] Unhandled:', e); });

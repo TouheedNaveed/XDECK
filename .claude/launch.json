@@ -1,0 +1,16 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "pwa",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "--host", "127.0.0.1", "--port", "5173"],
+      "cwd": "mobile-pwa",
+      "port": 5173,
+      "env": {
+        "XDECK_DEV_HTTP": "1",
+        "VITE_RELAY_URL": "ws://127.0.0.1:9000/relay"
+      }
+    }
+  ]
+}

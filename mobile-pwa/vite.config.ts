@@ -4,7 +4,10 @@ import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 import fs from 'fs';
 
+// Dev server uses the local self-signed cert so phones get a secure context
+// (needed for camera/QR + service worker). Set XDECK_DEV_HTTP=1 to serve plain HTTP.
 const httpsConfig = (() => {
+  if (process.env.XDECK_DEV_HTTP === '1') return undefined;
   try {
     return {
       key: fs.readFileSync(path.resolve(__dirname, 'key.pem')),
