@@ -213,10 +213,34 @@ export function App() {
 
     try {
       const hapticEnabled = localStorage.getItem('xdeck-haptic-enabled') !== 'false';
-      if (hapticEnabled && navigator.vibrate) {
+      if (hapticEnabled) {
         const durationVal = localStorage.getItem('xdeck-haptic-duration');
         const duration = durationVal ? parseInt(durationVal) : 40;
-        navigator.vibrate(duration);
+
+        if (navigator.vibrate) {
+          navigator.vibrate(duration);
+        }
+
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (AudioContextClass) {
+          const ctx = new AudioContextClass();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          const now = ctx.currentTime;
+          osc.frequency.setValueAtTime(140, now);
+          osc.frequency.exponentialRampToValueAtTime(10, now + 0.03);
+
+          const volume = Math.min(0.22, (duration / 150) * 0.25);
+          gain.gain.setValueAtTime(volume, now);
+          gain.gain.exponentialRampToValueAtTime(0.005, now + 0.03);
+
+          osc.start(now);
+          osc.stop(now + 0.03);
+        }
       }
     } catch (e) {}
 
@@ -419,7 +443,7 @@ export function App() {
       <header className="relative z-10 flex items-center justify-between px-4 py-2 shrink-0">
         <div className="flex items-center gap-2">
           <ConnectionIndicator state={connectionState} />
-          <span className="text-[9px] text-white/20 font-mono">v1.1.6</span>
+          <span className="text-[9px] text-white/20 font-mono">v1.1.7</span>
         </div>
         <div className="flex items-center gap-2">
           <button

@@ -219,17 +219,20 @@ export function SettingsPanel({
 
   const handleSaveButton = useCallback(() => {
     onSaveButton(page.id, buttonForm);
-  }, [page.id, buttonForm, onSaveButton]);
+    onClose();
+  }, [page.id, buttonForm, onSaveButton, onClose]);
 
   const handleSaveGrid = useCallback(() => {
     onUpdateGrid(page.id, gridForm);
     onPreviewGrid?.(null);
-  }, [page.id, gridForm, onUpdateGrid, onPreviewGrid]);
+    onClose();
+  }, [page.id, gridForm, onUpdateGrid, onPreviewGrid, onClose]);
 
   const handleSaveBackground = useCallback(() => {
     onUpdateBackground(page.id, bgForm);
     onPreviewBackground?.(null);
-  }, [page.id, bgForm, onUpdateBackground, onPreviewBackground]);
+    onClose();
+  }, [page.id, bgForm, onUpdateBackground, onPreviewBackground, onClose]);
 
   // Live preview: emit background and grid changes as user edits
   useEffect(() => {
@@ -894,6 +897,20 @@ export function SettingsPanel({
                 )}
               </div>
 
+              {/* Refresh App */}
+              <div className="glass-panel p-4 rounded-xl flex items-center justify-between">
+                <div>
+                  <label className="block text-xs font-semibold text-white">App Cache & Updates</label>
+                  <span className="text-[10px] text-white/40 block mt-0.5">Force reload app to check for updates</span>
+                </div>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="text-xs px-3.5 py-2 rounded-xl font-semibold transition-all bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/30 text-white cursor-pointer"
+                >
+                  Reload
+                </button>
+              </div>
+
               {/* Preview */}
               <div className="glass-panel p-4 rounded-xl">
                 <p className="text-xs text-white/40 mb-2 text-center">Preview</p>
@@ -920,7 +937,7 @@ export function SettingsPanel({
               </div>
 
               <button
-                onClick={() => onUpdateLayout(layoutForm)}
+                onClick={() => { onUpdateLayout(layoutForm); onClose(); }}
                 className="w-full py-3 rounded-xl font-semibold text-white"
                 style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(12px) saturate(150%)', WebkitBackdropFilter: 'blur(12px) saturate(150%)', border: '1px solid rgba(255,255,255,0.3)' }}
               >

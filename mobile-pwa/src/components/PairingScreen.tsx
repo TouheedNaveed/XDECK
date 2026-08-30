@@ -352,7 +352,12 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
   }
 
   return (
-    <div className="h-full w-full overflow-y-auto px-6 py-8 flex flex-col justify-start items-center">
+    <div 
+      className="h-full w-full overflow-y-auto px-6 py-8 flex flex-col justify-start items-center"
+      style={{
+        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+      }}
+    >
       <div className="w-full max-w-sm my-auto">
         {/* Logo */}
         <div className="text-center mb-6">
@@ -665,7 +670,7 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
         </p>
 
         <div className="text-[10px] text-white/10 text-center mt-4 font-mono">
-          v1.1.6
+          v1.1.7
         </div>
 
         {showUpdate && (
