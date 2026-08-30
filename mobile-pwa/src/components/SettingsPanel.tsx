@@ -905,7 +905,18 @@ export function SettingsPanel({
                   <span className="text-[10px] text-white/40 block mt-0.5">Force reload app to check for updates</span>
                 </div>
                 <button
-                  onClick={() => window.location.reload()}
+                  onClick={() => {
+                    if ('serviceWorker' in navigator) {
+                      navigator.serviceWorker.getRegistrations().then((regs) => {
+                        for (let reg of regs) {
+                          reg.unregister();
+                        }
+                        window.location.reload();
+                      });
+                    } else {
+                      window.location.reload();
+                    }
+                  }}
                   className="text-xs px-3.5 py-2 rounded-xl font-semibold transition-all bg-white/10 hover:bg-white/20 border border-white/20 hover:border-white/30 text-white cursor-pointer"
                 >
                   Reload

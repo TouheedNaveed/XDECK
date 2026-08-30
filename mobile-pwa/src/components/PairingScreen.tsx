@@ -670,7 +670,7 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
         </p>
 
         <div className="text-[10px] text-white/10 text-center mt-4 font-mono">
-          v1.1.7
+          v1.1.8
         </div>
 
         {showUpdate && (

@@ -30,10 +30,7 @@ export function App() {
   const [editingButton, setEditingButton] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [deviceIsLandscape, setDeviceIsLandscape] = useState(() => window.matchMedia('(orientation: landscape)').matches);
-  const [viewport, setViewport] = useState(() => ({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  }));
+
   const [triggerResults, setTriggerResults] = useState<Map<string, { ok: boolean; time: number }>>(new Map());
   const [previewBg, setPreviewBg] = useState<import('@shared/protocol').Background | null>(null);
   const [previewGrid, setPreviewGrid] = useState<import('@shared/protocol').GridConfig | null>(null);
@@ -61,8 +58,8 @@ export function App() {
       position: 'fixed',
       top: '50%',
       left: '50%',
-      width: `${viewport.height}px`,
-      height: `${viewport.width}px`,
+      width: '100dvh',
+      height: '100dvw',
       transform: 'translate(-50%, -50%) rotate(90deg)',
       overflow: 'hidden',
     };
@@ -118,20 +115,7 @@ export function App() {
     return () => mq.removeEventListener('change', handler);
   }, []);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setViewport({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleResize);
-    };
-  }, []);
+
 
   // Handle Fullscreen mode dynamically
   useEffect(() => {
@@ -420,7 +404,7 @@ export function App() {
       <header className="relative z-10 flex items-center justify-between px-4 py-2 shrink-0">
         <div className="flex items-center gap-2">
           <ConnectionIndicator state={connectionState} />
-          <span className="text-[9px] text-white/20 font-mono">v1.1.7</span>
+          <span className="text-[9px] text-white/20 font-mono">v1.1.8</span>
         </div>
         <div className="flex items-center gap-2">
           <button
