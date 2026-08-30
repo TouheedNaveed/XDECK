@@ -3,6 +3,7 @@ import type { WSMessage, DeckConfig, Page } from '@shared/protocol';
 import { store, type ConnectionInfo } from './store';
 
 const RELAY_URL = (import.meta as any).env?.VITE_RELAY_URL
+  || 'wss://xdeck-relay.onrender.com/relay'
   || (location.protocol === 'https:'
     ? `${location.protocol}//${location.host}/relay`
     : `ws://${location.hostname}:9000/relay`);

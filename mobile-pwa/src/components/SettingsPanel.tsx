@@ -97,10 +97,10 @@ export function SettingsPanel({
     formData.append('file', file);
 
     try {
-      const isSecure = location.protocol === 'https:';
-      const baseUrl = isSecure
-        ? `${location.protocol}//${location.host}`
-        : `http://${conn.ip}:${conn.port}`;
+    const isSecure = location.protocol === 'https:';
+    const baseUrl = isSecure
+      ? `${location.protocol}//${location.host}`
+      : `http://${conn.ip}:${conn.port}`;
       const res = await fetch(`${baseUrl}/upload?dir=${dir}`, {
         method: 'POST',
         body: formData,
