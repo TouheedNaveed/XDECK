@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, dialog, shell } from 'electron';
 import * as path from 'path';
 import * as http from 'http';
 import { autoUpdater } from 'electron-updater';
@@ -68,7 +68,7 @@ function createWindow(): void {
 
   mainWindow = new BrowserWindow({
     width: 420,
-    height: 580,
+    height: 720,
     title: 'XDECK',
     icon: nativeImage.createFromPath(getIconPath()),
     webPreferences: {
@@ -93,6 +93,7 @@ function createTray(): void {
     tray.setToolTip('XDECK - LAN Stream Deck');
     tray.setContextMenu(Menu.buildFromTemplate([
       { label: 'Show XDECK', click: () => createWindow() },
+      { label: 'Open Pairing Page', click: () => shell.openExternal(`http://localhost:${SERVER_PORT}/pairing`) },
       { type: 'separator' },
       { label: 'Quit', click: () => app.quit() },
     ]));

@@ -174,6 +174,71 @@
       color: rgba(255,255,255,0.25);
       font-style: italic;
     }
+
+    .relay-section {
+      margin-top: 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .relay-section h3 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 10px;
+    }
+    .relay-section input {
+      -webkit-app-region: no-drag;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.3);
+      color: white;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      letter-spacing: 1px;
+      outline: none;
+      margin-bottom: 8px;
+    }
+    .relay-section input::placeholder { color: rgba(255,255,255,0.2); }
+    .relay-section input:focus { border-color: rgba(139,92,246,0.6); }
+    .relay-btn {
+      -webkit-app-region: no-drag;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .relay-btn.connect {
+      background: rgba(74, 222, 128, 0.3);
+      color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+    .relay-btn.connect:hover { background: rgba(74, 222, 128, 0.5); }
+    .relay-btn.disconnect {
+      background: rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .relay-btn.disconnect:hover { background: rgba(239, 68, 68, 0.5); }
+    .relay-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      margin-top: 8px;
+      color: rgba(255,255,255,0.4);
+    }
+    .relay-status .dot { width: 6px; height: 6px; border-radius: 50%; margin-right: 0; }
+    .relay-status .dot.connected { background: #4ade80; }
+    .relay-status .dot.disconnected { background: #f87171; }
   </style>
 </head>
 <body>
@@ -205,6 +270,16 @@
       <h3>Connected Devices</h3>
       <div class="device-list" id="deviceList">
         <div class="empty-devices">No devices connected</div>
+      </div>
+    </div>
+
+    <div class="relay-section">
+      <h3>Cloud Relay</h3>
+      <input type="text" id="relayKey" placeholder="XDECK-XXXX-XXXX-XXXX-XXXX" spellcheck="false">
+      <button class="relay-btn connect" id="relayConnectBtn">Connect</button>
+      <div class="relay-status">
+        <span class="dot disconnected" id="relayDot"></span>
+        <span id="relayStatusText">Disconnected</span>
       </div>
     </div>
 
@@ -258,6 +333,54 @@
     document.getElementById('minimizeBtn').addEventListener('click', function() { window.xdeck.minimizeWindow(); });
     document.getElementById('closeBtn').addEventListener('click', function() { window.xdeck.closeWindow(); });
 
+    async function loadRelayStatus() {
+      try {
+        const res = await fetch('http://localhost:8787/relay/status');
+        const data = await res.json();
+        const dot = document.getElementById('relayDot');
+        const text = document.getElementById('relayStatusText');
+        const btn = document.getElementById('relayConnectBtn');
+        const input = document.getElementById('relayKey');
+        if (data.connected) {
+          dot.className = 'dot connected';
+          text.textContent = 'Connected';
+          btn.textContent = 'Disconnect';
+          btn.className = 'relay-btn disconnect';
+          if (data.licenseKey) input.value = data.licenseKey;
+        } else {
+          dot.className = 'dot disconnected';
+          text.textContent = 'Disconnected';
+          btn.textContent = 'Connect';
+          btn.className = 'relay-btn connect';
+          if (data.licenseKey) input.value = data.licenseKey;
+        }
+      } catch(e) {}
+    }
+
+    document.getElementById('relayConnectBtn').addEventListener('click', async function() {
+      const btn = document.getElementById('relayConnectBtn');
+      const input = document.getElementById('relayKey');
+      const key = input.value.trim();
+      if (!key) { input.focus(); return; }
+      btn.textContent = 'Connecting...';
+      btn.disabled = true;
+      try {
+        if (btn.classList.contains('disconnect')) {
+          await fetch('http://localhost:8787/relay/disconnect', { method: 'POST' });
+        } else {
+          await fetch('http://localhost:8787/relay/connect', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key })
+          });
+        }
+      } catch(e) {}
+      btn.disabled = false;
+      setTimeout(loadRelayStatus, 1000);
+    });
+
+    loadRelayStatus();
+    setInterval(loadRelayStatus, 5000);
     loadPairingInfo();
     loadDevices();
     setInterval(loadDevices, 3000);

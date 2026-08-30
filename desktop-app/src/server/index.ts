@@ -585,10 +585,6 @@ export function startServer() {
     });
     console.log(`[XDECK] mDNS advertised as "XDECK" on local network`);
 
-    // Auto-open QR code in browser for easy pairing
-    const qrUrl = `http://localhost:${PORT}/pairing`;
-    openUrl(qrUrl).catch?.(() => {});
-
     // Connect to relay server if license key is configured
     if (licenseKey) {
       connectToRelay(licenseKey, config, broadcast, wss);

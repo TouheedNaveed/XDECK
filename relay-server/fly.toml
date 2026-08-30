@@ -1,0 +1,19 @@
+app = "xdeck-relay"
+primary_region = "iad"
+
+[build]
+
+[env]
+  NODE_ENV = "production"
+  PORT = "9000"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 9000
+  auto_stop_machines = false
+
+  [[services.ports]]
+    port = 80
+
+  [[services.ports]]
+    port = 443

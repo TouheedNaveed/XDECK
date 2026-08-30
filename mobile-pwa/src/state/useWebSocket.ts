@@ -2,9 +2,10 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import type { WSMessage, DeckConfig, Page } from '@shared/protocol';
 import { store, type ConnectionInfo } from './store';
 
-const RELAY_URL = location.protocol === 'https:'
-  ? `${location.protocol}//${location.host}/relay`
-  : `ws://${location.hostname}:9000/relay`;
+const RELAY_URL = (import.meta as any).env?.VITE_RELAY_URL
+  || (location.protocol === 'https:'
+    ? `${location.protocol}//${location.host}/relay`
+    : `ws://${location.hostname}:9000/relay`);
 
 function rewriteHttpUrls(value: string): string {
   if (!value || location.protocol !== 'https:') return value;
@@ -157,7 +158,11 @@ export function useWebSocket(): UseWebSocketReturn {
 
         if (msgType === 'relay_auth_ok' || msgType === 'relay_status') {
           if (raw.connected === false && info.mode === 'relay') {
-            console.log('[XDECK] Relay: waiting for desktop...');
+            console.log('[XDECK] Relay: desktop disconnected');
+            setConnectionState('reconnecting');
+          } else if (raw.connected === true && info.mode === 'relay') {
+            console.log('[XDECK] Relay: desktop connected');
+            setConnectionState('connected');
           }
           return;
         }

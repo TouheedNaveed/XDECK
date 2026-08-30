@@ -5,7 +5,7 @@ import fs from 'fs';
 import Stripe from 'stripe';
 
 const PORT = parseInt(process.env.PORT || '9000');
-const HEARTBEAT_INTERVAL = 30000;
+const HEARTBEAT_INTERVAL = 60000;
 const LICENSE_KEYS = new Set<string>();
 const LICENSE_DB = process.env.LICENSE_DB || 'licenses.json';
 const STRIPE_SECRET = process.env.STRIPE_SECRET || '';
@@ -17,18 +17,26 @@ if (STRIPE_SECRET) {
   stripe = new Stripe(STRIPE_SECRET, { apiVersion: '2023-10-16' });
 }
 
-function loadLicenses(): Record<string, { key: string; email: string; createdAt: string }> {
+function loadLicenses(): Record<string, { key: string; email: string; createdAt: string; sessionId?: string }> {
   try {
     if (fs.existsSync(LICENSE_DB)) return JSON.parse(fs.readFileSync(LICENSE_DB, 'utf-8'));
   } catch {}
   return {};
 }
 
-function saveLicense(email: string, key: string): void {
+function saveLicense(email: string, key: string, sessionId?: string): void {
   const db = loadLicenses();
-  db[email] = { key, email, createdAt: new Date().toISOString() };
+  db[email] = { key, email, createdAt: new Date().toISOString(), sessionId };
   fs.writeFileSync(LICENSE_DB, JSON.stringify(db, null, 2));
   LICENSE_KEYS.add(key);
+}
+
+function findLicenseBySessionId(sessionId: string): { key: string; email: string } | null {
+  const db = loadLicenses();
+  for (const entry of Object.values(db)) {
+    if (entry.sessionId === sessionId) return { key: entry.key, email: entry.email };
+  }
+  return null;
 }
 
 interface RelayClient {
@@ -94,11 +102,13 @@ function sendToPeer(client: RelayClient, data: string) {
 }
 
 const httpServer = http.createServer((req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const origin = req.headers.origin || '*';
+  res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Stripe-Signature');
   if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
 
+  // All non-async handlers first
   if (req.url === '/health') {
     const stats = { sessions: sessions.size, keys: LICENSE_KEYS.size };
     res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -130,11 +140,23 @@ const httpServer = http.createServer((req, res) => {
       res.end(JSON.stringify({ error: 'Stripe not configured' }));
       return;
     }
+
     let body = '';
     req.on('data', (chunk) => body += chunk);
     req.on('end', async () => {
       try {
         const { email } = JSON.parse(body);
+
+        // Pre-validate: can we actually reach Stripe?
+        try {
+          await stripe!.checkout.sessions.list({ limit: 1 });
+        } catch (e: any) {
+          console.error('[STRIPE] Pre-check failed:', e.message);
+          res.writeHead(503, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Stripe API unreachable. Please try again.' }));
+          return;
+        }
+
         const session = await stripe!.checkout.sessions.create({
           payment_method_types: ['card'],
           line_items: [{
@@ -147,8 +169,8 @@ const httpServer = http.createServer((req, res) => {
           }],
           mode: 'payment',
           customer_email: email || undefined,
-          success_url: `${FRONTEND_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${FRONTEND_URL}/#pricing`,
+          success_url: `${FRONTEND_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${FRONTEND_URL}/index.html#pricing`,
           metadata: { product: 'xdeck_lifetime' },
         });
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -181,8 +203,8 @@ const httpServer = http.createServer((req, res) => {
           const session = event.data.object as Stripe.Checkout.Session;
           const email = session.customer_email || session.customer_details?.email || 'unknown';
           const key = generateLicenseKey();
-          saveLicense(email, key);
-          console.log(`[STRIPE] Payment successful: ${email} → ${key}`);
+          saveLicense(email, key, session.id);
+          console.log(`[STRIPE] Payment successful: ${email} → ${key} (session: ${session.id})`);
         }
 
         res.writeHead(200);
@@ -196,6 +218,46 @@ const httpServer = http.createServer((req, res) => {
     return;
   }
 
+  // Lookup license by Stripe session ID — verifies payment directly via Stripe API
+  const sessionMatch = req.url?.match(/^\/api\/license\/lookup\?session_id=(.+)$/);
+  if (sessionMatch && req.method === 'GET') {
+    const sessionId = decodeURIComponent(sessionMatch[1]);
+
+    // Check if already generated
+    const existing = findLicenseBySessionId(sessionId);
+    if (existing) {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ key: existing.key, email: existing.email }));
+      return;
+    }
+
+    // Verify payment via Stripe API
+    if (!stripe) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Stripe not configured' }));
+      return;
+    }
+
+    stripe.checkout.sessions.retrieve(sessionId).then((session) => {
+      if (session.payment_status === 'paid') {
+        const email = session.customer_email || session.customer_details?.email || 'unknown';
+        const key = generateLicenseKey();
+        saveLicense(email, key, sessionId);
+        console.log(`[STRIPE] License generated via lookup: ${email} → ${key}`);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ key, email }));
+      } else {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ key: null, email: null, status: session.payment_status }));
+      }
+    }).catch((e: any) => {
+      console.error('[STRIPE] Session lookup error:', e.message);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Failed to verify payment' }));
+    });
+    return;
+  }
+
   res.writeHead(404);
   res.end('Not found');
 });
@@ -203,6 +265,7 @@ const httpServer = http.createServer((req, res) => {
 const wss = new WebSocketServer({ server: httpServer, path: '/relay' });
 
 wss.on('connection', (ws, req) => {
+  (ws as any).isAlive = true;
   let client: RelayClient | null = null;
 
   ws.on('message', (raw) => {
@@ -223,10 +286,15 @@ wss.on('connection', (ws, req) => {
         }
 
         const session = getSession(licenseKey);
-        if (role === 'desktop' ? session.desktop : session.phone) {
-          ws.send(JSON.stringify({ type: 'relay_error', error: `${role} already connected` }));
-          ws.close();
-          return;
+        const existingClient = role === 'desktop' ? session.desktop : session.phone;
+        if (existingClient) {
+          if (existingClient.ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ type: 'relay_error', error: `${role} already connected` }));
+            ws.close();
+            return;
+          }
+          // Old connection is stale/closed — clean it up
+          removeClient(existingClient);
         }
 
         client = { ws, role, licenseKey, deviceName: deviceName || role, alive: true };
@@ -263,13 +331,18 @@ wss.on('connection', (ws, req) => {
 
   ws.on('pong', () => {
     if (client) client.alive = true;
+    (ws as any).isAlive = true;
   });
 });
 
 const heartbeat = setInterval(() => {
   wss.clients.forEach((ws) => {
     const socket = ws as WebSocket & { isAlive: boolean };
-    if (!socket.isAlive) { socket.terminate(); return; }
+    if (!socket.isAlive) { 
+      console.log('[RELAY] Heartbeat: terminating stale connection');
+      socket.terminate(); 
+      return; 
+    }
     socket.isAlive = false;
     socket.ping();
   });
@@ -282,8 +355,18 @@ if (process.env.NODE_ENV !== 'production') {
   addLicenseKey('XDECK-DEV0-0001-0001-0001');
 }
 
+process.on('uncaughtException', (e) => { console.error('[RELAY] Uncaught:', e.message); });
+process.on('unhandledRejection', (e) => { console.error('[RELAY] Unhandled:', e); });
+
 httpServer.listen(PORT, () => {
   console.log(`[RELAY] Server running on port ${PORT}`);
   console.log(`[RELAY] WebSocket: ws://0.0.0.0:${PORT}/relay`);
   console.log(`[RELAY] Health: http://0.0.0.0:${PORT}/health`);
+
+  // Keep-alive: self-ping every 5 minutes to prevent Render free tier from sleeping
+  setInterval(() => {
+    http.get(`http://127.0.0.1:${PORT}/health`, (res) => {
+      res.resume();
+    }).on('error', () => {});
+  }, 5 * 60 * 1000);
 });
