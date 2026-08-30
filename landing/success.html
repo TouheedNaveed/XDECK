@@ -69,7 +69,7 @@
         </li>
         <li class="flex gap-3">
           <span class="text-green-400 font-bold shrink-0">4.</span>
-          Open <strong class="text-white/70">pwa.xdeck.app</strong> on your phone
+          Open <strong class="text-white/70">xdeck-pwa.pages.dev</strong> on your phone
         </li>
         <li class="flex gap-3">
           <span class="text-green-400 font-bold shrink-0">5.</span>
@@ -140,7 +140,7 @@
     });
 
     document.getElementById('download-btn').addEventListener('click', () => {
-      const content = `XDECK License Key\n================\n\nKey: ${currentKey}\n\nHow to use:\n1. Open XDECK desktop app\n2. Go to Settings > Cloud Relay\n3. Paste this key and connect\n4. Open pwa.xdeck.app on your phone\n5. Enter the same key\n\nSupport: support@xdeck.app\n`;
+      const content = `XDECK License Key\n================\n\nKey: ${currentKey}\n\nHow to use:\n1. Open XDECK desktop app\n2. Go to Settings > Cloud Relay\n3. Paste this key and connect\n4. Open xdeck-pwa.pages.dev on your phone\n5. Enter the same key\n\nSupport: support@xdeck.app\n`;
       const blob = new Blob([content], { type: 'text/plain' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
