@@ -231,6 +231,10 @@ app.whenReady().then(async () => {
     console.log('[UPDATE] Update downloaded, ready to install');
     mainWindow?.webContents.send('update-status', 'downloaded');
   });
+  autoUpdater.on('update-not-available', () => {
+    console.log('[UPDATE] Update not available');
+    mainWindow?.webContents.send('update-status', 'not-available');
+  });
   autoUpdater.on('error', (e) => {
     console.error('[UPDATE] Error:', e.message);
     mainWindow?.webContents.send('update-status', 'error');

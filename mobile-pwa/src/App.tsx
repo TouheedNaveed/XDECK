@@ -419,7 +419,7 @@ export function App() {
       <header className="relative z-10 flex items-center justify-between px-4 py-2 shrink-0">
         <div className="flex items-center gap-2">
           <ConnectionIndicator state={connectionState} />
-          <span className="text-[9px] text-white/20 font-mono">v1.1.5</span>
+          <span className="text-[9px] text-white/20 font-mono">v1.1.6</span>
         </div>
         <div className="flex items-center gap-2">
           <button

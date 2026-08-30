@@ -307,7 +307,7 @@
         <span class="dot"></span>
         <span id="statusText">Server running</span>
       </div>
-      <span id="appVersion" style="font-size:10px; color:rgba(255,255,255,0.3); font-weight:500; font-family:monospace;">v1.1.5</span>
+      <span id="appVersion" style="font-size:10px; color:rgba(255,255,255,0.3); font-weight:500; font-family:monospace;">v1.1.6</span>
     </div>
   </div>
   <script>
@@ -494,13 +494,20 @@
           banner.style.display = 'block';
           text.textContent = 'Update downloaded and ready!';
           btn.style.display = 'inline-block';
+        } else if (status === 'not-available') {
+          banner.style.display = 'block';
+          text.textContent = 'Running the latest version of XDECK!';
+          btn.style.display = 'none';
+          setTimeout(function() {
+            banner.style.display = 'none';
+          }, 3000);
         } else if (status === 'error') {
           banner.style.display = 'block';
           text.textContent = 'Failed to check or download update.';
           btn.style.display = 'none';
           setTimeout(function() {
             banner.style.display = 'none';
-          }, 4000);
+          }, 3000);
         }
       });
     }
