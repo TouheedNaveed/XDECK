@@ -8,6 +8,7 @@ import { ConnectionIndicator } from './components/ConnectionIndicator';
 import { useTranslation } from './i18n';
 import toast, { Toaster } from 'react-hot-toast';
 import type { Button, LayoutPreference, WSMessage, DeckConfig } from '@shared/protocol';
+import { playTapSound } from './utils/audio';
 
 export function App() {
   const { t } = useTranslation();
@@ -212,35 +213,11 @@ export function App() {
     if (editMode) return;
 
     try {
-      const hapticEnabled = localStorage.getItem('xdeck-haptic-enabled') !== 'false';
-      if (hapticEnabled) {
-        const durationVal = localStorage.getItem('xdeck-haptic-duration');
-        const duration = durationVal ? parseInt(durationVal) : 40;
-
-        if (navigator.vibrate) {
-          navigator.vibrate(duration);
-        }
-
-        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-        if (AudioContextClass) {
-          const ctx = new AudioContextClass();
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-
-          const now = ctx.currentTime;
-          osc.frequency.setValueAtTime(140, now);
-          osc.frequency.exponentialRampToValueAtTime(10, now + 0.03);
-
-          const volume = Math.min(0.22, (duration / 150) * 0.25);
-          gain.gain.setValueAtTime(volume, now);
-          gain.gain.exponentialRampToValueAtTime(0.005, now + 0.03);
-
-          osc.start(now);
-          osc.stop(now + 0.03);
-        }
+      const soundEnabled = localStorage.getItem('xdeck-tap-sound-enabled') !== 'false';
+      if (soundEnabled) {
+        const volumeVal = localStorage.getItem('xdeck-tap-sound-volume');
+        const volume = volumeVal ? parseInt(volumeVal) : 50;
+        playTapSound(volume);
       }
     } catch (e) {}
 

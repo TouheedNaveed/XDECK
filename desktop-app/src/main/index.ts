@@ -113,6 +113,8 @@ function httpPostJson(url: string, body: any): Promise<any> {
 
 function createWindow(): void {
   if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.show();
     mainWindow.focus();
     return;
   }
@@ -143,6 +145,10 @@ function createWindow(): void {
 
   mainWindow.webContents.once('did-finish-load', () => {
     autoUpdater.checkForUpdates().catch(() => {});
+    // Check for updates every 5 minutes (300,000 ms)
+    setInterval(() => {
+      autoUpdater.checkForUpdates().catch(() => {});
+    }, 300000);
   });
 }
 
