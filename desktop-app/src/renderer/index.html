@@ -285,9 +285,18 @@
       <div id="relayError" style="display:none;font-size:10px;color:#fca5a5;margin-top:6px;text-align:center;line-height:1.45;"></div>
     </div>
 
-    <div class="status">
-      <span class="dot"></span>
-      <span id="statusText">Server running</span>
+    <!-- Update Banner -->
+    <div id="updateBanner" style="display:none; margin-top:14px; background:rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.2); border-radius:12px; padding:12px; text-align:center;">
+      <p id="updateText" style="font-size:11px; color:#4ade80; margin-bottom:8px; font-weight:500;"></p>
+      <button id="updateBtn" class="btn" style="margin-top:0; display:none; background:#4ade80; color:#1a1a2e; border:none; padding:6px 12px; border-radius:8px; font-weight:700; cursor:pointer;">Update Now</button>
+    </div>
+
+    <div class="status" style="display:flex; justify-content:space-between; align-items:center; margin-top:14px;">
+      <div style="display:flex; align-items:center;">
+        <span class="dot"></span>
+        <span id="statusText">Server running</span>
+      </div>
+      <span id="appVersion" style="font-size:10px; color:rgba(255,255,255,0.3); font-weight:500; font-family:monospace;">v1.1.3</span>
     </div>
   </div>
   <script>
@@ -443,6 +452,54 @@
     setInterval(loadPairingInfo, 3000);
     loadDevices();
     setInterval(loadDevices, 3000);
+
+    // Dynamic version loading
+    if (window.xdeck && typeof window.xdeck.getVersion === 'function') {
+      window.xdeck.getVersion().then(function(v) {
+        if (v) document.getElementById('appVersion').textContent = 'v' + v;
+      });
+    }
+
+    // Auto-update event listeners
+    if (window.xdeck && typeof window.xdeck.onUpdateStatus === 'function') {
+      window.xdeck.onUpdateStatus(function(event, status) {
+        var banner = document.getElementById('updateBanner');
+        var text = document.getElementById('updateText');
+        var btn = document.getElementById('updateBtn');
+
+        if (status === 'checking') {
+          banner.style.display = 'block';
+          text.textContent = 'Checking for updates...';
+          btn.style.display = 'none';
+        } else if (status === 'available') {
+          banner.style.display = 'block';
+          text.textContent = 'New update available! Downloading...';
+          btn.style.display = 'none';
+        } else if (status === 'downloading') {
+          banner.style.display = 'block';
+          text.textContent = 'Downloading latest version...';
+          btn.style.display = 'none';
+        } else if (status === 'downloaded') {
+          banner.style.display = 'block';
+          text.textContent = 'Update downloaded and ready!';
+          btn.style.display = 'inline-block';
+        } else if (status === 'error') {
+          banner.style.display = 'block';
+          text.textContent = 'Failed to check or download update.';
+          btn.style.display = 'none';
+          setTimeout(function() {
+            banner.style.display = 'none';
+          }, 4000);
+        }
+      });
+    }
+
+    document.getElementById('updateBtn').addEventListener('click', function() {
+      if (window.xdeck && typeof window.xdeck.installUpdate === 'function') {
+        document.getElementById('updateBtn').textContent = 'Installing...';
+        window.xdeck.installUpdate();
+      }
+    });
   </script>
 </body>
 </html>

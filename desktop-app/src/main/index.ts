@@ -90,6 +90,10 @@ function createWindow(): void {
 
   mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
   mainWindow.on('closed', () => { mainWindow = null; });
+
+  mainWindow.webContents.once('did-finish-load', () => {
+    autoUpdater.checkForUpdates().catch(() => {});
+  });
 }
 
 function createTray(): void {
@@ -117,6 +121,10 @@ ipcMain.handle('regenerate-pairing', async () => {
   await httpPost(`http://localhost:${SERVER_PORT}/pairing/regenerate`);
   pairingInfo = await httpGet(`http://localhost:${SERVER_PORT}/pairing`);
   return pairingInfo;
+});
+ipcMain.handle('get-version', () => app.getVersion());
+ipcMain.handle('install-update', () => {
+  autoUpdater.quitAndInstall();
 });
 ipcMain.handle('minimize-window', () => mainWindow?.minimize());
 ipcMain.handle('close-window', () => mainWindow?.hide());
@@ -154,13 +162,25 @@ app.whenReady().then(async () => {
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = true;
   autoUpdater.logger = { info: (m: string) => console.log('[UPDATE]', m), warn: (m: string) => console.warn('[UPDATE]', m), error: (m: string) => console.error('[UPDATE]', m) } as any;
-  autoUpdater.on('update-available', () => console.log('[UPDATE] Update available, downloading...'));
-  autoUpdater.on('update-downloaded', () => {
-    console.log('[UPDATE] Update downloaded, will install on quit');
-    dialog.showMessageBox({ type: 'info', title: 'Update Ready', message: 'A new version of XDECK will be installed when you restart the app.', buttons: ['OK'] });
+
+  autoUpdater.on('checking-for-update', () => {
+    mainWindow?.webContents.send('update-status', 'checking');
   });
-  autoUpdater.on('error', (e) => console.error('[UPDATE] Error:', e.message));
-  autoUpdater.checkForUpdates().catch(() => {});
+  autoUpdater.on('update-available', () => {
+    console.log('[UPDATE] Update available, downloading...');
+    mainWindow?.webContents.send('update-status', 'available');
+  });
+  autoUpdater.on('download-progress', () => {
+    mainWindow?.webContents.send('update-status', 'downloading');
+  });
+  autoUpdater.on('update-downloaded', () => {
+    console.log('[UPDATE] Update downloaded, ready to install');
+    mainWindow?.webContents.send('update-status', 'downloaded');
+  });
+  autoUpdater.on('error', (e) => {
+    console.error('[UPDATE] Error:', e.message);
+    mainWindow?.webContents.send('update-status', 'error');
+  });
 
   startServer();
 

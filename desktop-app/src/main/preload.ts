@@ -10,4 +10,9 @@ contextBridge.exposeInMainWorld('xdeck', {
   disconnectRelay: () => ipcRenderer.invoke('disconnect-relay'),
   minimizeWindow: () => ipcRenderer.invoke('minimize-window'),
   closeWindow: () => ipcRenderer.invoke('close-window'),
+  getVersion: () => ipcRenderer.invoke('get-version'),
+  installUpdate: () => ipcRenderer.invoke('install-update'),
+  onUpdateStatus: (callback: (event: any, status: any) => void) => {
+    ipcRenderer.on('update-status', callback);
+  }
 });

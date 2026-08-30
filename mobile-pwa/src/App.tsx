@@ -407,7 +407,10 @@ export function App() {
 
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between px-4 py-2 shrink-0">
-        <ConnectionIndicator state={connectionState} />
+        <div className="flex items-center gap-2">
+          <ConnectionIndicator state={connectionState} />
+          <span className="text-[9px] text-white/20 font-mono">v1.0.0</span>
+        </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setEditMode(!editMode)}
