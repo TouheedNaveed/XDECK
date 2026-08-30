@@ -54,6 +54,8 @@ interface UseWebSocketReturn {
   connect: (info: ConnectionInfo) => void;
   disconnect: () => void;
   sendMessage: (msg: WSMessage) => void;
+  updateConfig: (updater: (config: DeckConfig) => DeckConfig) => void;
+  uploadFileViaRelay: (dir: string, filename: string, data: string) => Promise<string | null>;
   triggerButton: (buttonId: string) => Promise<boolean>;
 }
 
@@ -68,6 +70,7 @@ export function useWebSocket(): UseWebSocketReturn {
   const reconnectAttempts = useRef(0);
   const generation = useRef(0);
   const pendingTriggers = useRef<Map<string, { resolve: (ok: boolean) => void }>>(new Map());
+  const pendingUploads = useRef<Map<string, { resolve: (path: string | null) => void }>>(new Map());
   const savedInfo = useRef<ConnectionInfo | null>(null);
 
   // Use a ref-based connect function so every callback always has the latest logic
@@ -191,6 +194,14 @@ export function useWebSocket(): UseWebSocketReturn {
             }
             break;
           }
+          case 'file_upload_result': {
+            const pending = pendingUploads.current.get(msg.uploadId);
+            if (pending) {
+              pending.resolve(msg.ok && msg.path ? msg.path : null);
+              pendingUploads.current.delete(msg.uploadId);
+            }
+            break;
+          }
         }
       } catch (e) {
         console.error('[XDECK] Parse error:', e);
@@ -237,6 +248,14 @@ export function useWebSocket(): UseWebSocketReturn {
     }
   }, []);
 
+  const updateConfig = useCallback((updater: (config: DeckConfig) => DeckConfig) => {
+    setConfig((prev) => {
+      const next = updater(prev);
+      store.saveConfig(next);
+      return next;
+    });
+  }, []);
+
   const triggerButton = useCallback(async (buttonId: string): Promise<boolean> => {
     return new Promise((resolve) => {
       pendingTriggers.current.set(buttonId, { resolve });
@@ -247,6 +266,20 @@ export function useWebSocket(): UseWebSocketReturn {
           resolve(false);
         }
       }, 5000);
+    });
+  }, [sendMessage]);
+
+  const uploadFileViaRelay = useCallback(async (dir: string, filename: string, data: string): Promise<string | null> => {
+    return new Promise((resolve) => {
+      const uploadId = `up_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      pendingUploads.current.set(uploadId, { resolve });
+      sendMessage({ type: 'file_upload', uploadId, dir, filename, data });
+      setTimeout(() => {
+        if (pendingUploads.current.has(uploadId)) {
+          pendingUploads.current.delete(uploadId);
+          resolve(null);
+        }
+      }, 15000);
     });
   }, [sendMessage]);
 
@@ -310,6 +343,8 @@ export function useWebSocket(): UseWebSocketReturn {
     connect,
     disconnect,
     sendMessage,
+    updateConfig,
+    uploadFileViaRelay,
     triggerButton,
   };
 }

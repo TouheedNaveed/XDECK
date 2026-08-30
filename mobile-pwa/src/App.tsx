@@ -18,6 +18,8 @@ export function App() {
     connect,
     disconnect,
     sendMessage,
+    updateConfig,
+    uploadFileViaRelay,
     triggerButton,
   } = useWebSocket();
 
@@ -242,42 +244,64 @@ export function App() {
   }, []);
 
   const handleSaveButton = useCallback((pageId: string, button: any) => {
-    sendMessage({
-      type: 'button_update',
-      pageId,
-      button: { ...button, id: button.id || `btn_${Date.now()}` },
+    const btn = { ...button, id: button.id || `btn_${Date.now()}` };
+    updateConfig((c) => {
+      const pages = c.pages.map((p) => {
+        if (p.id !== pageId) return p;
+        const idx = p.buttons.findIndex((b) => b.id === btn.id);
+        const buttons = [...p.buttons];
+        if (idx >= 0) buttons[idx] = btn; else buttons.push(btn);
+        return { ...p, buttons };
+      });
+      return { ...c, pages };
     });
+    sendMessage({ type: 'button_update', pageId, button: btn });
     setShowSettings(false);
     setEditingButton(null);
-  }, [sendMessage]);
+  }, [sendMessage, updateConfig]);
 
   const handleDeleteButton = useCallback((pageId: string, buttonId: string) => {
+    updateConfig((c) => ({
+      ...c,
+      pages: c.pages.map((p) => p.id !== pageId ? p : { ...p, buttons: p.buttons.filter((b) => b.id !== buttonId) }),
+    }));
     sendMessage({ type: 'button_delete', pageId, buttonId });
     setShowSettings(false);
     setEditingButton(null);
-  }, [sendMessage]);
+  }, [sendMessage, updateConfig]);
 
   const handleUpdateBackground = useCallback((pageId: string, background: any) => {
+    updateConfig((c) => ({
+      ...c,
+      pages: c.pages.map((p) => p.id !== pageId ? p : { ...p, background }),
+    }));
     sendMessage({ type: 'background_update', pageId, background });
-  }, [sendMessage]);
+  }, [sendMessage, updateConfig]);
 
   const handleUpdateGrid = useCallback((pageId: string, grid: any) => {
+    updateConfig((c) => ({
+      ...c,
+      pages: c.pages.map((p) => p.id !== pageId ? p : { ...p, grid }),
+    }));
     sendMessage({ type: 'grid_update', pageId, grid });
-  }, [sendMessage]);
+  }, [sendMessage, updateConfig]);
 
   const handleReorder = useCallback((buttons: Button[]) => {
     if (!currentPage) return;
+    updateConfig((c) => ({
+      ...c,
+      pages: c.pages.map((p) => p.id !== currentPage.id ? p : { ...p, buttons }),
+    }));
     buttons.forEach((btn) => {
       sendMessage({ type: 'button_update', pageId: currentPage.id, button: btn });
     });
-  }, [currentPage, sendMessage]);
+  }, [currentPage, sendMessage, updateConfig]);
 
   const handleUpdateLayout = useCallback((layoutPref: LayoutPreference) => {
-    setTimeout(() => {
-      sendMessage({ type: 'layout_update', layoutPreference: layoutPref });
-      toast.success('Layout updated');
-    }, 200);
-  }, [sendMessage]);
+    updateConfig((c) => ({ ...c, layoutPreference: layoutPref }));
+    sendMessage({ type: 'layout_update', layoutPreference: layoutPref });
+    toast.success('Layout updated');
+  }, [sendMessage, updateConfig]);
 
   const handleAddPage = useCallback(() => {
     const newPage = {
@@ -287,18 +311,20 @@ export function App() {
       background: { type: 'gradient' as const, value: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' },
       buttons: [],
     };
+    updateConfig((c) => ({ ...c, pages: [...c.pages, newPage] }));
     sendMessage({ type: 'page_update', page: newPage });
     setCurrentPageIndex(config.pages.length);
-  }, [config.pages.length, sendMessage]);
+  }, [config.pages.length, sendMessage, updateConfig]);
 
   const handleDeletePage = useCallback(() => {
     if (config.pages.length <= 1) {
       toast.error('Cannot delete the only page');
       return;
     }
+    updateConfig((c) => ({ ...c, pages: c.pages.filter((p) => p.id !== currentPage!.id) }));
     sendMessage({ type: 'page_delete', pageId: currentPage!.id });
     setCurrentPageIndex(Math.max(0, currentPageIndex - 1));
-  }, [config.pages.length, currentPage, currentPageIndex, sendMessage]);
+  }, [config.pages.length, currentPage, currentPageIndex, sendMessage, updateConfig]);
 
   if (!isInitialized || connectionState === 'disconnected') {
     return <PairingScreen onConnect={connect} isConnecting={connectionState === 'connecting'} isLoading={!isInitialized} />;
@@ -412,6 +438,7 @@ export function App() {
           onUpdateLayout={handleUpdateLayout}
           onPreviewBackground={setPreviewBg}
           onPreviewGrid={setPreviewGrid}
+          uploadFileViaRelay={uploadFileViaRelay}
           onClose={() => {
             setShowSettings(false);
             setEditingButton(null);

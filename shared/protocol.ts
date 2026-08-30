@@ -70,7 +70,9 @@ export type WSMessage =
   | ButtonDeleteMessage
   | BackgroundUpdateMessage
   | GridUpdateMessage
-  | LayoutUpdateMessage;
+  | LayoutUpdateMessage
+  | FileUploadMessage
+  | FileUploadResultMessage;
 
 export interface TriggerMessage {
   type: 'trigger';
@@ -135,6 +137,22 @@ export interface GridUpdateMessage {
 export interface LayoutUpdateMessage {
   type: 'layout_update';
   layoutPreference: LayoutPreference;
+}
+
+export interface FileUploadMessage {
+  type: 'file_upload';
+  uploadId: string;
+  dir: string;
+  filename: string;
+  data: string;
+}
+
+export interface FileUploadResultMessage {
+  type: 'file_upload_result';
+  uploadId: string;
+  ok: boolean;
+  path?: string;
+  error?: string;
 }
 
 // Pairing

@@ -160,6 +160,22 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
       }
 
       // Forward to local processing
+      if (msg.type === 'file_upload') {
+        try {
+          const buffer = Buffer.from(msg.data, 'base64');
+          const dir = path.join(UPLOADS_DIR, msg.dir || 'icons');
+          fs.mkdirSync(dir, { recursive: true });
+          const filePath = path.join(dir, msg.filename);
+          fs.writeFileSync(filePath, buffer);
+          console.log(`[RELAY] File uploaded: ${filePath}`);
+          ws.send(JSON.stringify({ type: 'file_upload_result', uploadId: msg.uploadId, ok: true, path: `/uploads/${msg.dir || 'icons'}/${msg.filename}` }));
+        } catch (e: any) {
+          console.error('[RELAY] File upload error:', e.message);
+          ws.send(JSON.stringify({ type: 'file_upload_result', uploadId: msg.uploadId, ok: false, error: e.message }));
+        }
+        return;
+      }
+
       if (msg.type === 'trigger') {
         const btn = findButton(config, msg.buttonId);
         if (btn) {

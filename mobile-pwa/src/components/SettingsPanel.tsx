@@ -14,6 +14,7 @@ interface SettingsPanelProps {
   onUpdateLayout: (layout: LayoutPreference) => void;
   onPreviewBackground?: (background: Background | null) => void;
   onPreviewGrid?: (grid: GridConfig | null) => void;
+  uploadFileViaRelay?: (dir: string, filename: string, data: string) => Promise<string | null>;
   onClose: () => void;
 }
 
@@ -55,6 +56,7 @@ export function SettingsPanel({
   onUpdateLayout,
   onPreviewBackground,
   onPreviewGrid,
+  uploadFileViaRelay,
   onClose,
 }: SettingsPanelProps) {
   const [tab, setTab] = useState<'buttons' | 'grid' | 'background' | 'layout'>(
@@ -93,14 +95,27 @@ export function SettingsPanel({
     const conn = await store.getConnection();
     if (!conn) return null;
 
+    if (conn.mode === 'relay' && uploadFileViaRelay) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = async () => {
+          const base64 = (reader.result as string).split(',')[1];
+          const path = await uploadFileViaRelay(dir, file.name, base64);
+          resolve(path);
+        };
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(file);
+      });
+    }
+
     const formData = new FormData();
     formData.append('file', file);
 
     try {
-    const isSecure = location.protocol === 'https:';
-    const baseUrl = isSecure
-      ? `${location.protocol}//${location.host}`
-      : `http://${conn.ip}:${conn.port}`;
+      const isSecure = location.protocol === 'https:';
+      const baseUrl = isSecure
+        ? `${location.protocol}//${location.host}`
+        : `http://${conn.ip}:${conn.port}`;
       const res = await fetch(`${baseUrl}/upload?dir=${dir}`, {
         method: 'POST',
         body: formData,
@@ -111,7 +126,7 @@ export function SettingsPanel({
       console.error('Upload failed:', err);
       return null;
     }
-  }, []);
+  }, [uploadFileViaRelay]);
 
   const handleIconUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
