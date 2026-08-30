@@ -898,6 +898,7 @@ export function startServer() {
     if (licenseKey) {
       connectToRelay(licenseKey, config, broadcast, wss);
     }
+    serverEvents.emit('server-ready');
   });
 
   // Relay API endpoints

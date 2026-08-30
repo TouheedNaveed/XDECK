@@ -36,7 +36,7 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
   const rafRef = useRef<number>(0);
 
   // ws:// to a LAN IP is blocked from an https page, and the hosted PWA is https.
-  const lanUnavailable = location.protocol === 'https:' && !discovered;
+  const lanUnavailable = location.protocol === 'https:' && location.hostname !== 'localhost' && !discovered;
 
   useEffect(() => {
     if (connectionError) setError(connectionError);
@@ -50,6 +50,11 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
       }
     });
   }, []);
+
+  // Clear error when switching tabs
+  useEffect(() => {
+    setError('');
+  }, [connectMode]);
 
   const stopQrScanner = useCallback(() => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -450,8 +455,10 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
         {connectMode === 'lan' && lanUnavailable && (
           <div className="glass-panel px-4 py-3 mb-4 border border-amber-500/30">
             <p className="text-xs text-amber-300/90 leading-relaxed">
-              Blocked by browser security on HTTPS pages. Switch to <strong>Cloud</strong>, or
-              open <code className="bg-white/10 px-1 rounded">http://{location.hostname}:{location.port || '8787'}</code> directly.
+              {ip
+                ? <>Open <code className="bg-white/10 px-1 rounded">http://{ip}:{port || '8787'}</code> on this phone for local control.</>
+                : <>Blocked by browser security. Switch to <strong>Cloud</strong>, or open XDECK from your desktop's address.</>
+              }
             </p>
           </div>
         )}
@@ -514,6 +521,14 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
               )}
             </button>
           </form>
+        ) : lanUnavailable ? (
+        /* LAN blocked on HTTPS — show message instead of useless form */
+        <div className="text-center py-4">
+          <p className="text-xs text-white/30">
+            Switch to <strong>Cloud</strong> mode above, or open XDECK directly from
+            your desktop's address on this phone's browser.
+          </p>
+        </div>
         ) : (
         /* Manual form */
         <form onSubmit={handleSubmit} className="space-y-3">

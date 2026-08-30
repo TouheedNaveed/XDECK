@@ -162,18 +162,40 @@ app.whenReady().then(async () => {
 
   startServer();
 
-  // Wait for server to be ready (retry up to 10 times, 500ms apart)
-  for (let i = 0; i < 10; i++) {
-    try {
+  // Wait for server to be ready via event (fallback: poll up to 30s)
+  await new Promise<void>((resolve) => {
+    let resolved = false;
+    serverEvents.once('server-ready', async () => {
+      if (resolved) return;
+      resolved = true;
       pairingInfo = await httpGet(`http://localhost:${SERVER_PORT}/pairing`);
-      if (pairingInfo) break;
-    } catch {
-      await new Promise((r) => setTimeout(r, 500));
-    }
-  }
-  if (!pairingInfo) {
-    pairingInfo = { ip: '127.0.0.1', port: SERVER_PORT, code: '------', qr: '' };
-  }
+      resolve();
+    });
+    // Fallback polling in case event doesn't fire
+    const poll = setInterval(async () => {
+      if (resolved) { clearInterval(poll); return; }
+      try {
+        const info = await httpGet(`http://localhost:${SERVER_PORT}/pairing`);
+        if (info && info.qr) {
+          resolved = true;
+          clearInterval(poll);
+          pairingInfo = info;
+          resolve();
+        }
+      } catch {}
+    }, 500);
+    // Safety timeout
+    setTimeout(() => {
+      if (!resolved) {
+        resolved = true;
+        clearInterval(poll);
+        if (!pairingInfo) {
+          pairingInfo = { ip: '127.0.0.1', port: SERVER_PORT, code: '------', qr: '' };
+        }
+        resolve();
+      }
+    }, 30000);
+  });
 
   createTray();
   createWindow();

@@ -42,7 +42,7 @@ function lanTarget(info: ConnectionInfo): { url: string } | { error: string } {
   if (location.protocol === 'https:') {
     return {
       error:
-        'Local Network mode can\'t be used from the hosted app — browsers block insecure LAN connections from an https page. Switch to Cloud mode, or open XDECK from your desktop\'s address.',
+        'LAN mode blocked by browser security on HTTPS. Use Cloud mode instead.',
     };
   }
   if (!info.ip) return { error: 'No desktop address saved. Scan the QR code again.' };
