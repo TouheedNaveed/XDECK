@@ -107,6 +107,7 @@ export function useWebSocket(): UseWebSocketReturn {
   const peerOnline = useRef(false);
   const fatal = useRef(false);
   const awaitingPong = useRef(false);
+  const missedPongs = useRef(0);
 
   // Use a ref-based connect function so every callback always has the latest logic
   const connectRef = useRef<(info: ConnectionInfo) => void>(() => {});
@@ -192,6 +193,7 @@ export function useWebSocket(): UseWebSocketReturn {
       console.log('[XDECK] Socket open');
       reconnectAttempts.current = 0;
       awaitingPong.current = false;
+      missedPongs.current = 0;
 
       if (isRelay) {
         // Still not "connected" — that waits on relay_status telling us the
@@ -260,7 +262,7 @@ export function useWebSocket(): UseWebSocketReturn {
           return;
         }
 
-        if (msgType === 'pong') { awaitingPong.current = false; return; }
+        if (msgType === 'pong') { awaitingPong.current = false; missedPongs.current = 0; return; }
 
         const msg = raw as WSMessage;
         switch (msg.type) {
@@ -427,18 +429,25 @@ export function useWebSocket(): UseWebSocketReturn {
   // often and which otherwise look "connected" forever.
   useEffect(() => {
     if (connectionState !== 'connected' && connectionState !== 'waiting') return;
+    missedPongs.current = 0;
     const interval = setInterval(() => {
       const ws = wsRef.current;
       if (ws?.readyState !== WebSocket.OPEN) return;
       if (awaitingPong.current) {
-        console.log('[XDECK] No pong — socket is stale, reconnecting');
-        awaitingPong.current = false;
-        ws.close();
-        return;
+        missedPongs.current++;
+        if (missedPongs.current >= 2) {
+          console.log('[XDECK] No pong for 2 cycles — socket is stale, reconnecting');
+          missedPongs.current = 0;
+          awaitingPong.current = false;
+          ws.close();
+          return;
+        }
+        console.log(`[XDECK] Missed pong (${missedPongs.current}/2) — trying once more`);
+        // Still send another ping to give it a chance
       }
       awaitingPong.current = true;
       ws.send(JSON.stringify({ type: 'ping' } as WSMessage));
-    }, 20000);
+    }, 25000);
     return () => clearInterval(interval);
   }, [connectionState]);
 

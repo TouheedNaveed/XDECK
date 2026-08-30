@@ -1,6 +1,6 @@
 {
   "name": "xdeck-desktop",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "XDECK - Turn Your Phone Into a Stream Deck",
   "main": "dist/desktop-app/src/main/index.js",
   "author": {
