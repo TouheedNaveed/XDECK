@@ -517,6 +517,10 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
   });
 
   ws.on('close', () => {
+    if (relayWs !== ws) {
+      console.log('[RELAY] Ignoring close event from superseded connection.');
+      return;
+    }
     relayWs = null;
     if (relayDisabled) {
       console.log('[RELAY] Disconnected by request.');

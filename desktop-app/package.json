@@ -1,6 +1,6 @@
 {
   "name": "xdeck-desktop",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "XDECK - Turn Your Phone Into a Stream Deck",
   "main": "dist/desktop-app/src/main/index.js",
   "author": {
@@ -12,11 +12,11 @@
   "scripts": {
     "dev": "tsx src/server/index.ts",
     "dev:electron": "tsc --skipLibCheck && cp -r src/renderer dist/desktop-app/src/renderer && mkdir -p dist/desktop-app/assets && cp assets/icon.png dist/desktop-app/assets/icon.png && cp assets/icon.png dist/desktop-app/src/renderer/icon.png && rm -rf assets/pwa && cp -r ../mobile-pwa/dist assets/pwa && electron . --no-sandbox --ozone-platform-hint=x11",
-    "build": "tsc --skipLibCheck && rm -rf assets/pwa && cp -r ../mobile-pwa/dist assets/pwa && electron-builder",
-    "build:linux": "tsc --skipLibCheck && electron-builder --linux deb appimage",
-    "build:win": "tsc --skipLibCheck && electron-builder --win",
-    "build:mac": "tsc --skipLibCheck && electron-builder --mac",
-    "publish": "tsc --skipLibCheck && electron-builder --publish always",
+    "build": "tsc --skipLibCheck && mkdir -p dist/desktop-app/src/renderer && cp -r src/renderer/* dist/desktop-app/src/renderer/ && mkdir -p dist/desktop-app/assets && cp assets/icon.png dist/desktop-app/assets/icon.png && cp assets/icon.png dist/desktop-app/src/renderer/icon.png && rm -rf assets/pwa && cp -r ../mobile-pwa/dist assets/pwa && electron-builder",
+    "build:linux": "tsc --skipLibCheck && mkdir -p dist/desktop-app/src/renderer && cp -r src/renderer/* dist/desktop-app/src/renderer/ && mkdir -p dist/desktop-app/assets && cp assets/icon.png dist/desktop-app/assets/icon.png && cp assets/icon.png dist/desktop-app/src/renderer/icon.png && rm -rf assets/pwa && cp -r ../mobile-pwa/dist assets/pwa && electron-builder --linux deb appimage",
+    "build:win": "tsc --skipLibCheck && mkdir -p dist/desktop-app/src/renderer && cp -r src/renderer/* dist/desktop-app/src/renderer/ && mkdir -p dist/desktop-app/assets && cp assets/icon.png dist/desktop-app/assets/icon.png && cp assets/icon.png dist/desktop-app/src/renderer/icon.png && rm -rf assets/pwa && cp -r ../mobile-pwa/dist assets/pwa && electron-builder --win",
+    "build:mac": "tsc --skipLibCheck && mkdir -p dist/desktop-app/src/renderer && cp -r src/renderer/* dist/desktop-app/src/renderer/ && mkdir -p dist/desktop-app/assets && cp assets/icon.png dist/desktop-app/assets/icon.png && cp assets/icon.png dist/desktop-app/src/renderer/icon.png && rm -rf assets/pwa && cp -r ../mobile-pwa/dist assets/pwa && electron-builder --mac",
+    "publish": "tsc --skipLibCheck && mkdir -p dist/desktop-app/src/renderer && cp -r src/renderer/* dist/desktop-app/src/renderer/ && mkdir -p dist/desktop-app/assets && cp assets/icon.png dist/desktop-app/assets/icon.png && cp assets/icon.png dist/desktop-app/src/renderer/icon.png && rm -rf assets/pwa && cp -r ../mobile-pwa/dist assets/pwa && electron-builder --publish always",
     "start": "electron dist/desktop-app/src/main/index.js"
   },
   "build": {

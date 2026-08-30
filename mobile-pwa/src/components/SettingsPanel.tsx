@@ -114,6 +114,39 @@ export function SettingsPanel({
   );
   const [uploading, setUploading] = useState(false);
   const [iconCategory, setIconCategory] = useState<keyof typeof CATEGORIZED_ICONS>('browsers');
+  const [hapticEnabled, setHapticEnabled] = useState(() => {
+    try {
+      const val = localStorage.getItem('xdeck-haptic-enabled');
+      return val !== 'false';
+    } catch {
+      return true;
+    }
+  });
+  const [hapticDuration, setHapticDuration] = useState(() => {
+    try {
+      const val = localStorage.getItem('xdeck-haptic-duration');
+      return val ? parseInt(val) : 40;
+    } catch {
+      return 40;
+    }
+  });
+
+  const handleToggleHaptic = (enabled: boolean) => {
+    setHapticEnabled(enabled);
+    localStorage.setItem('xdeck-haptic-enabled', String(enabled));
+    if (enabled && navigator.vibrate) {
+      navigator.vibrate(hapticDuration);
+    }
+  };
+
+  const handleChangeHapticDuration = (duration: number) => {
+    setHapticDuration(duration);
+    localStorage.setItem('xdeck-haptic-duration', String(duration));
+    if (hapticEnabled && navigator.vibrate) {
+      navigator.vibrate(duration);
+    }
+  };
+
   const iconInputRef = useRef<HTMLInputElement>(null);
   const iconCameraRef = useRef<HTMLInputElement>(null);
   const bgInputRef = useRef<HTMLInputElement>(null);
@@ -815,6 +848,50 @@ export function SettingsPanel({
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* Haptic Vibration Settings */}
+              <div className="glass-panel p-4 rounded-xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <label className="block text-xs font-semibold text-white">Haptic Vibration</label>
+                    <span className="text-[10px] text-white/40 block mt-0.5">Vibrate phone when a button is tapped</span>
+                  </div>
+                  <button
+                    onClick={() => handleToggleHaptic(!hapticEnabled)}
+                    className={`text-xs px-3 py-1.5 rounded-lg font-semibold transition-all ${
+                      hapticEnabled
+                        ? 'bg-white/25 border border-white/35 text-white'
+                        : 'glass-panel text-white/40'
+                    }`}
+                  >
+                    {hapticEnabled ? 'Enabled' : 'Disabled'}
+                  </button>
+                </div>
+
+                {hapticEnabled && (
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-[10px] text-white/50 font-mono">
+                      <span>Vibration Strength</span>
+                      <span>{hapticDuration}ms</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="10"
+                      max="150"
+                      step="5"
+                      value={hapticDuration}
+                      onChange={(e) => handleChangeHapticDuration(parseInt(e.target.value))}
+                      className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-white"
+                      style={{ outline: 'none' }}
+                    />
+                    <div className="flex justify-between text-[8px] text-white/30">
+                      <span>Light (10ms)</span>
+                      <span>Medium (40ms)</span>
+                      <span>Strong (150ms)</span>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Preview */}

@@ -210,6 +210,16 @@ export function App() {
 
   const handleTrigger = useCallback(async (buttonId: string) => {
     if (editMode) return;
+
+    try {
+      const hapticEnabled = localStorage.getItem('xdeck-haptic-enabled') !== 'false';
+      if (hapticEnabled && navigator.vibrate) {
+        const durationVal = localStorage.getItem('xdeck-haptic-duration');
+        const duration = durationVal ? parseInt(durationVal) : 40;
+        navigator.vibrate(duration);
+      }
+    } catch (e) {}
+
     const ok = await triggerButton(buttonId);
     setTriggerResults((prev) => {
       const next = new Map(prev);
