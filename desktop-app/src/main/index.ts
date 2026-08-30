@@ -2,8 +2,53 @@ import { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, dialog, shell } f
 import * as path from 'path';
 import * as http from 'http';
 import * as fs from 'fs';
+import * as os from 'os';
+import { execSync } from 'child_process';
 import { autoUpdater } from 'electron-updater';
 import { startServer, serverEvents } from '../server/index';
+
+function integrateLinuxDesktop() {
+  if (process.platform !== 'linux') return;
+  const appImagePath = process.env.APPIMAGE;
+  if (!appImagePath) return;
+
+  try {
+    const homeDir = os.homedir();
+    const destDir = path.join(homeDir, '.local/share/xdeck');
+    fs.mkdirSync(destDir, { recursive: true });
+
+    const iconDest = path.join(destDir, 'icon.png');
+    const sourceIcon = getIconPath();
+    if (fs.existsSync(sourceIcon)) {
+      fs.copyFileSync(sourceIcon, iconDest);
+    }
+
+    const desktopFileDir = path.join(homeDir, '.local/share/applications');
+    fs.mkdirSync(desktopFileDir, { recursive: true });
+    const desktopFilePath = path.join(desktopFileDir, 'xdeck.desktop');
+
+    const desktopContent = `[Desktop Entry]
+Name=XDECK
+Exec="${appImagePath}" %U
+Terminal=false
+Type=Application
+Icon=${iconDest}
+StartupWMClass=XDECK
+Comment=XDECK Stream Deck App
+Categories=Utility;
+`;
+
+    fs.writeFileSync(desktopFilePath, desktopContent, 'utf-8');
+    fs.chmodSync(desktopFilePath, 0o755);
+
+    try {
+      execSync('update-desktop-database ~/.local/share/applications || true');
+    } catch {}
+    console.log('[LINUX] Integrated desktop launcher and icon successfully.');
+  } catch (e: any) {
+    console.error('[LINUX] Desktop integration failed:', e.message);
+  }
+}
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
@@ -156,6 +201,10 @@ ipcMain.handle('disconnect-relay', async () => {
 });
 
 app.whenReady().then(async () => {
+  if (process.platform === 'linux') {
+    app.setName('XDECK');
+    integrateLinuxDesktop();
+  }
   // Prevent ugly crash dialog on uncaught errors
   process.on('uncaughtException', (err) => {
     console.error('[MAIN] Uncaught exception:', err.message);
