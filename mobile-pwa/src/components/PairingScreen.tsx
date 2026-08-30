@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { store, type ConnectionInfo } from '../state/store';
 import jsQR from 'jsqr';
 import { useTranslation, type Locale } from '../i18n';
+import { usePwa } from '../hooks/usePwa';
 
 interface PairingScreenProps {
   onConnect: (info: ConnectionInfo) => void;
@@ -13,6 +14,7 @@ interface PairingScreenProps {
 
 export function PairingScreen({ onConnect, isConnecting, isLoading, error: connectionError }: PairingScreenProps) {
   const { t, locale, setLocale } = useTranslation();
+  const { canInstall, showUpdate, install, reload } = usePwa();
   const [ip, setIp] = useState('');
   const [port, setPort] = useState('8787');
   const [code, setCode] = useState('');
@@ -590,6 +592,24 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
             : 'Make sure your phone and desktop are on the same WiFi network'
           }
         </p>
+
+        {showUpdate && (
+          <button
+            onClick={reload}
+            className="w-full py-2.5 mt-3 rounded-2xl text-sm font-medium bg-green-500/20 text-green-300 border border-green-500/30 hover:bg-green-500/30 transition-all"
+          >
+            New version available — tap to update
+          </button>
+        )}
+
+        {canInstall && !showUpdate && (
+          <button
+            onClick={install}
+            className="w-full py-2.5 mt-3 rounded-2xl text-sm font-medium bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-500/30 transition-all"
+          >
+            Install XDECK App
+          </button>
+        )}
       </div>
     </div>
   );
