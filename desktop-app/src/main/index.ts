@@ -19,13 +19,15 @@ function getIconPath(): string {
 
 function httpGet(url: string): Promise<any> {
   return new Promise((resolve, reject) => {
-    http.get(url, (res) => {
+    const req = http.get(url, (res) => {
       let data = '';
       res.on('data', (chunk) => data += chunk);
       res.on('end', () => {
         try { resolve(JSON.parse(data)); } catch { resolve(null); }
       });
-    }).on('error', reject);
+    });
+    req.on('error', reject);
+    req.setTimeout(3000, () => { req.destroy(); reject(new Error('timeout')); });
   });
 }
 
@@ -162,40 +164,20 @@ app.whenReady().then(async () => {
 
   startServer();
 
-  // Wait for server to be ready via event (fallback: poll up to 30s)
-  await new Promise<void>((resolve) => {
-    let resolved = false;
-    serverEvents.once('server-ready', async () => {
-      if (resolved) return;
-      resolved = true;
-      pairingInfo = await httpGet(`http://localhost:${SERVER_PORT}/pairing`);
-      resolve();
-    });
-    // Fallback polling in case event doesn't fire
-    const poll = setInterval(async () => {
-      if (resolved) { clearInterval(poll); return; }
-      try {
-        const info = await httpGet(`http://localhost:${SERVER_PORT}/pairing`);
-        if (info && info.qr) {
-          resolved = true;
-          clearInterval(poll);
-          pairingInfo = info;
-          resolve();
-        }
-      } catch {}
-    }, 500);
-    // Safety timeout
-    setTimeout(() => {
-      if (!resolved) {
-        resolved = true;
-        clearInterval(poll);
-        if (!pairingInfo) {
-          pairingInfo = { ip: '127.0.0.1', port: SERVER_PORT, code: '------', qr: '' };
-        }
-        resolve();
+  // Poll until the server responds with valid pairing info
+  for (let i = 0; i < 60; i++) {
+    try {
+      const info = await httpGet(`http://127.0.0.1:${SERVER_PORT}/pairing`);
+      if (info && info.ip) {
+        pairingInfo = info;
+        break;
       }
-    }, 30000);
-  });
+    } catch {}
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  if (!pairingInfo) {
+    pairingInfo = { ip: '127.0.0.1', port: SERVER_PORT, code: '------', qr: '' };
+  }
 
   createTray();
   createWindow();

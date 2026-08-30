@@ -853,9 +853,15 @@ export function startServer() {
 
   // Pairing info endpoint
   expressApp.get('/pairing', async (_req, res) => {
-    const ip = getLocalIP();
-    const qr = await QRCode.toDataURL(JSON.stringify({ ip, port: PORT, code: pairingCode }));
-    res.json({ ip, port: PORT, code: pairingCode, qr });
+    try {
+      const ip = getLocalIP();
+      const qr = await QRCode.toDataURL(JSON.stringify({ ip, port: PORT, code: pairingCode }));
+      res.json({ ip, port: PORT, code: pairingCode, qr });
+    } catch (err) {
+      console.error('[XDECK] /pairing error:', err);
+      const ip = getLocalIP();
+      res.json({ ip, port: PORT, code: pairingCode, qr: '' });
+    }
   });
 
   expressApp.post('/pairing/regenerate', (_req, res) => {
@@ -898,7 +904,6 @@ export function startServer() {
     if (licenseKey) {
       connectToRelay(licenseKey, config, broadcast, wss);
     }
-    serverEvents.emit('server-ready');
   });
 
   // Relay API endpoints
