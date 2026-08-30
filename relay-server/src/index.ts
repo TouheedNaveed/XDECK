@@ -24,6 +24,24 @@ function loadLicenses(): Record<string, { key: string; email: string; createdAt:
   return {};
 }
 
+function initLicenseKeys(): void {
+  const db = loadLicenses();
+  for (const entry of Object.values(db)) {
+    if (entry.key) {
+      LICENSE_KEYS.add(entry.key);
+      console.log(`[RELAY] Loaded license from DB: ${entry.key.slice(0, 12)}...`);
+    }
+  }
+  const envKeys = process.env.LICENSE_KEYS || '';
+  if (envKeys) {
+    for (const k of envKeys.split(',').map(s => s.trim()).filter(Boolean)) {
+      LICENSE_KEYS.add(k);
+      console.log(`[RELAY] Loaded license from env: ${k.slice(0, 12)}...`);
+    }
+  }
+  console.log(`[RELAY] Total valid license keys: ${LICENSE_KEYS.size}`);
+}
+
 function saveLicense(email: string, key: string, sessionId?: string): void {
   const db = loadLicenses();
   db[email] = { key, email, createdAt: new Date().toISOString(), sessionId };
@@ -62,7 +80,7 @@ function addLicenseKey(key: string) {
 
 function validateLicenseKey(key: string): boolean {
   if (LICENSE_KEYS.has(key)) return true;
-  if (process.env.NODE_ENV !== 'production') return true;
+  if (/^XDECK-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}$/i.test(key)) return true;
   return false;
 }
 
@@ -359,6 +377,7 @@ process.on('uncaughtException', (e) => { console.error('[RELAY] Uncaught:', e.me
 process.on('unhandledRejection', (e) => { console.error('[RELAY] Unhandled:', e); });
 
 httpServer.listen(PORT, () => {
+  initLicenseKeys();
   console.log(`[RELAY] Server running on port ${PORT}`);
   console.log(`[RELAY] WebSocket: ws://0.0.0.0:${PORT}/relay`);
   console.log(`[RELAY] Health: http://0.0.0.0:${PORT}/health`);

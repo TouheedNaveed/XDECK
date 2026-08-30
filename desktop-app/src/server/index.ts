@@ -10,6 +10,7 @@ import fs from 'fs';
 import { exec } from 'child_process';
 import path from 'path';
 import { Bonjour } from 'bonjour-service';
+import crypto from 'crypto';
 import type { DeckConfig, WSMessage, Button } from '../../../shared/protocol';
 
 export const serverEvents = new EventEmitter();
@@ -105,10 +106,20 @@ function savePairingCode(code: string): void {
 function loadLicenseKey(): string {
   try {
     if (fs.existsSync(LICENSE_FILE)) {
-      return fs.readFileSync(LICENSE_FILE, 'utf-8').trim();
+      const key = fs.readFileSync(LICENSE_FILE, 'utf-8').trim();
+      if (key) return key;
     }
   } catch {}
-  return '';
+  const generated = generateLicenseKey();
+  saveLicenseKey(generated);
+  console.log(`[XDECK] No license key found, generated: ${generated}`);
+  return generated;
+}
+
+function generateLicenseKey(): string {
+  const bytes = crypto.randomBytes(16);
+  const hex = bytes.toString('hex').toUpperCase();
+  return `XDECK-${hex.slice(0,4)}-${hex.slice(4,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}`;
 }
 
 function saveLicenseKey(key: string): void {
@@ -118,10 +129,12 @@ function saveLicenseKey(key: string): void {
 let relayWs: WebSocket | null = null;
 let relayReconnectTimer: ReturnType<typeof setTimeout> | null = null;
 let relayReconnectDelay = 5000;
+let relayAuthFailed = false;
 
 function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg: WSMessage) => void, wss: WebSocketServer) {
   if (relayWs) { relayWs.close(); relayWs = null; }
   if (relayReconnectTimer) { clearTimeout(relayReconnectTimer); relayReconnectTimer = null; }
+  relayAuthFailed = false;
 
   console.log(`[RELAY] Connecting to ${RELAY_URL}...`);
   const ws = new WebSocket(RELAY_URL);
@@ -144,6 +157,8 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
 
       if (msg.type === 'relay_auth_ok') {
         console.log('[RELAY] Authenticated as desktop');
+        relayAuthFailed = false;
+        relayReconnectDelay = 5000;
         ws.send(JSON.stringify({ type: 'config_sync', pages: config.pages, layoutPreference: config.layoutPreference }));
         return;
       }
@@ -156,6 +171,9 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
 
       if (msg.type === 'relay_error') {
         console.error('[RELAY] Error:', msg.error);
+        if (msg.error?.includes('Invalid license key')) {
+          relayAuthFailed = true;
+        }
         return;
       }
 
@@ -235,6 +253,11 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
   });
 
   ws.on('close', () => {
+    if (relayAuthFailed) {
+      console.log('[RELAY] Auth failed, not reconnecting. Update your license key.');
+      relayWs = null;
+      return;
+    }
     console.log(`[RELAY] Disconnected, reconnecting in ${relayReconnectDelay / 1000}s...`);
     relayWs = null;
     relayReconnectTimer = setTimeout(() => connectToRelay(licenseKey, config, broadcast, wss), relayReconnectDelay);
