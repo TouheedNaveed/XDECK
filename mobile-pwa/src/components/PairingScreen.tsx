@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import jsQR from 'jsqr';
 import { store, type ConnectionInfo } from '../state/store';
+import jsQR from 'jsqr';
 import { useTranslation, type Locale } from '../i18n';
 
 interface PairingScreenProps {
@@ -26,6 +26,15 @@ export function PairingScreen({ onConnect, isConnecting, isLoading }: PairingScr
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const rafRef = useRef<number>(0);
+
+  useEffect(() => {
+    store.getConnection().then((conn) => {
+      if (conn?.mode === 'relay' && conn.licenseKey) {
+        setConnectMode('relay');
+        setLicenseKey(conn.licenseKey);
+      }
+    });
+  }, []);
 
   const stopQrScanner = useCallback(() => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -447,7 +456,7 @@ export function PairingScreen({ onConnect, isConnecting, isLoading }: PairingScr
                 className="w-full px-4 py-3 glass-panel text-white placeholder-white/30 outline-none focus:border-purple-500/50 transition-colors font-mono text-center tracking-wider"
               />
               <p className="text-[10px] text-white/30 mt-1.5">
-                Enter the license key from your desktop app
+                Enter the license key from your purchase email
               </p>
             </div>
 

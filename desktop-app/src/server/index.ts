@@ -655,8 +655,7 @@ export function startServer() {
 
   expressApp.post('/relay/disconnect', (_req, res) => {
     if (relayWs) { relayWs.close(); relayWs = null; }
-    licenseKey = null;
-    saveLicenseKey('');
+    relayAuthFailed = false;
     res.json({ ok: true });
   });
 
