@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XDECK - Turn Your Phone Into a Stream Deck</title>
+  <meta name="description" content="Control your PC from your phone. Custom buttons, hotkeys, media controls, app launchers. Works over WiFi or cloud.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['Space Grotesk', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+          },
+          colors: {
+            dark: { 900: '#0F172A', 800: '#1E293B', 700: '#334155' },
+            accent: { DEFAULT: '#6366f1', light: '#818cf8', dark: '#4f46e5' },
+            cta: { DEFAULT: '#22C55E', hover: '#16A34A' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #0F172A; color: #F8FAFC; overflow-x: hidden; }
+    .font-heading { font-family: 'Space Grotesk', sans-serif; }
+    .glass { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+    .glass-card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s ease; }
+    .glass-card:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(99,102,241,0.15); }
+    .gradient-text { background: linear-gradient(135deg, #818cf8, #a78bfa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .glow { box-shadow: 0 0 60px rgba(99,102,241,0.3); }
+    .btn-cta { background: linear-gradient(135deg, #22C55E, #16A34A); transition: all 0.2s ease; }
+    .btn-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(34,197,94,0.4); }
+    .phone-mockup { background: linear-gradient(135deg, #1E293B, #0F172A); border: 2px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+    .grid-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; transition: all 0.2s; }
+    .grid-btn:hover { background: rgba(99,102,241,0.3); border-color: rgba(99,102,241,0.5); }
+    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+    .float { animation: float 6s ease-in-out infinite; }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="fixed top-4 left-4 right-4 z-50 glass rounded-2xl px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="logo.png" alt="XDECK" class="w-8 h-8 rounded-lg">
+      <span class="font-heading font-bold text-lg">XDECK</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="#features" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">Features</a>
+      <a href="#pricing" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">Pricing</a>
+      <a href="#download" class="btn-cta px-4 py-2 rounded-xl text-sm font-semibold text-white">Download</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="min-h-screen flex items-center justify-center px-6 pt-24 pb-16 relative">
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/15 rounded-full blur-3xl"></div>
+    </div>
+    <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs text-white/60 mb-6">
+          <span class="w-2 h-2 rounded-full bg-cta animate-pulse"></span>
+          Now with cloud relay
+        </div>
+        <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+          Turn Your Phone Into a
+          <span class="gradient-text"> Stream Deck</span>
+        </h1>
+        <p class="text-lg text-white/50 mb-8 max-w-lg leading-relaxed">
+          Custom buttons, hotkeys, media controls, and app launchers — all from your phone. Works over WiFi or from anywhere via cloud.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="#download" class="btn-cta px-8 py-3.5 rounded-2xl text-white font-semibold text-center cursor-pointer">
+            Download Free
+          </a>
+          <a href="#features" class="glass px-8 py-3.5 rounded-2xl text-white/70 font-semibold hover:text-white transition-colors text-center cursor-pointer">
+            See Features
+          </a>
+        </div>
+      </div>
+
+      <!-- Phone Mockup -->
+      <div class="flex justify-center float">
+        <div class="phone-mockup w-64">
+          <div class="bg-dark-900 rounded-2xl p-3">
+            <div class="grid grid-cols-3 gap-2 mb-2">
+              <div class="grid-btn aspect-square flex items-center justify-center text-2xl cursor-pointer">🌐</div>
+              <div class="grid-btn aspect-square flex items-center justify-center text-2xl cursor-pointer">⌨️</div>
+              <div class="grid-btn aspect-square flex items-center justify-center text-2xl cursor-pointer">🎵</div>
+              <div class="grid-btn aspect-square flex items-center justify-center text-2xl cursor-pointer">📱</div>
+              <div class="grid-btn aspect-square flex items-center justify-center text-2xl cursor-pointer">⚙️</div>
+              <div class="grid-btn aspect-square flex items-center justify-center text-2xl cursor-pointer">💻</div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="grid-btn aspect-square flex items-center justify-center text-2xl cursor-pointer">📧</div>
+              <div class="grid-btn aspect-square flex items-center justify-center text-2xl cursor-pointer">💬</div>
+              <div class="grid-btn aspect-square flex items-center justify-center text-2xl cursor-pointer">🎬</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 fade-in">
+        <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-4">Everything You Need</h2>
+        <p class="text-white/40 max-w-lg mx-auto">One app to control your entire PC. No limits on what you can do.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass-card rounded-2xl p-6 fade-in cursor-default">
+          <div class="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Hotkeys & Shortcuts</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Trigger any keyboard shortcut. Ctrl+C, Alt+Tab, media keys — all from a single tap.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 fade-in cursor-default">
+          <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Phone as Controller</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Use your phone as a customizable Stream Deck. Portrait, landscape, any grid size.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 fade-in cursor-default">
+          <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Cloud Relay</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Control from anywhere. Cloud relay connects your phone to your PC over the internet.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 fade-in cursor-default">
+          <div class="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Media Controls</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Play, pause, skip tracks, volume control. Works with Spotify, YouTube, any media.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 fade-in cursor-default">
+          <div class="w-12 h-12 rounded-xl bg-rose-500/20 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Start Apps with Args</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Launch apps with custom arguments. Open Chrome PWAs, scripts, any executable.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-6 fade-in cursor-default">
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Custom Layouts</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Drag to reorder, custom backgrounds, emoji or image icons, any grid size.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-24 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 fade-in">
+        <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-4">Up and Running in 30 Seconds</h2>
+        <p class="text-white/40 max-w-lg mx-auto">No account needed. Install, pair, and start controlling.</p>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-8">
+        <div class="text-center fade-in">
+          <div class="w-16 h-16 rounded-2xl glass mx-auto mb-4 flex items-center justify-center">
+            <span class="font-heading text-2xl font-bold gradient-text">1</span>
+          </div>
+          <h3 class="font-heading font-semibold mb-2">Install Desktop App</h3>
+          <p class="text-sm text-white/40">Download and run. It starts a local server automatically.</p>
+        </div>
+        <div class="text-center fade-in">
+          <div class="w-16 h-16 rounded-2xl glass mx-auto mb-4 flex items-center justify-center">
+            <span class="font-heading text-2xl font-bold gradient-text">2</span>
+          </div>
+          <h3 class="font-heading font-semibold mb-2">Open Phone Browser</h3>
+          <p class="text-sm text-white/40">Scan QR code or enter IP. PWA installs directly from browser.</p>
+        </div>
+        <div class="text-center fade-in">
+          <div class="w-16 h-16 rounded-2xl glass mx-auto mb-4 flex items-center justify-center">
+            <span class="font-heading text-2xl font-bold gradient-text">3</span>
+          </div>
+          <h3 class="font-heading font-semibold mb-2">Start Controlling</h3>
+          <p class="text-sm text-white/40">Tap buttons on your phone, see instant results on your PC.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-24 px-6">
+    <div class="max-w-xl mx-auto text-center fade-in">
+      <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-4">Simple Pricing</h2>
+      <p class="text-white/40 mb-12">One purchase. Lifetime access. No subscriptions.</p>
+      <div class="glass-card rounded-3xl p-8 glow">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cta/20 text-cta text-xs font-semibold mb-4">
+          BEST VALUE
+        </div>
+        <div class="mb-4">
+          <span class="font-heading text-5xl font-bold">$10</span>
+          <span class="text-white/40 ml-2">one-time</span>
+        </div>
+        <p class="text-white/50 mb-8">Lifetime license for unlimited devices</p>
+        <ul class="text-left space-y-3 mb-8">
+          <li class="flex items-center gap-3 text-sm text-white/60">
+            <svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Unlimited buttons & pages
+          </li>
+          <li class="flex items-center gap-3 text-sm text-white/60">
+            <svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Cloud relay (use from anywhere)
+          </li>
+          <li class="flex items-center gap-3 text-sm text-white/60">
+            <svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Hotkeys, media keys, app launcher
+          </li>
+          <li class="flex items-center gap-3 text-sm text-white/60">
+            <svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Custom layouts & backgrounds
+          </li>
+          <li class="flex items-center gap-3 text-sm text-white/60">
+            <svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Free updates forever
+          </li>
+        </ul>
+        <a href="#" id="buy-btn" class="btn-cta block w-full py-3.5 rounded-2xl text-white font-semibold text-center cursor-pointer">
+          Get XDECK — $10
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download -->
+  <section id="download" class="py-24 px-6">
+    <div class="max-w-4xl mx-auto text-center fade-in">
+      <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-4">Download XDECK</h2>
+      <p class="text-white/40 mb-12">Available for Windows, macOS, and Linux</p>
+      <div class="grid sm:grid-cols-3 gap-6">
+        <a href="https://github.com/xdeck-app/xdeck-desktop/releases/latest/download/XDECK-Setup.exe" class="glass-card rounded-2xl p-6 text-center cursor-pointer group">
+          <svg class="w-10 h-10 mx-auto mb-3 text-white/50 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+          <h3 class="font-heading font-semibold mb-1">Windows</h3>
+          <p class="text-xs text-white/30">Windows 10+</p>
+        </a>
+        <a href="https://github.com/xdeck-app/xdeck-desktop/releases/latest/download/XDECK.dmg" class="glass-card rounded-2xl p-6 text-center cursor-pointer group">
+          <svg class="w-10 h-10 mx-auto mb-3 text-white/50 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <h3 class="font-heading font-semibold mb-1">macOS</h3>
+          <p class="text-xs text-white/30">macOS 12+</p>
+        </a>
+        <a href="https://github.com/xdeck-app/xdeck-desktop/releases/latest/download/XDECK-1.0.0.AppImage" class="glass-card rounded-2xl p-6 text-center cursor-pointer group">
+          <svg class="w-10 h-10 mx-auto mb-3 text-white/50 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.368 1.884 1.43.199.025.363-.155.363-.334 0-.06-.028-.12-.043-.199-.063-.199-.127-.299-.163-.466-.04-.199.012-.535.012-.535s.07-.334.07-.667c0-.466-.07-.865-.333-1.465.535-.4.975-1.065 1.175-1.865.082-.319.149-.639.149-.968 0-.478-.095-.956-.344-1.377.463-.265.782-.798.782-1.367 0-.334-.095-.667-.299-.933.232-.465.339-.996.295-1.565-.038-.334-.265-.6-.595-.732a5.35 5.35 0 00-.546-.167 13.15 13.15 0 00-.334-.064c-.134-.025-.265-.049-.4-.069-.09-.012-.174-.023-.268-.029a4.03 4.03 0 00-.363-.018c-.143 0-.285.006-.424.022z"/></svg>
+          <h3 class="font-heading font-semibold mb-1">Linux</h3>
+          <p class="text-xs text-white/30">.deb / .AppImage</p>
+        </a>
+      </div>
+      <div class="mt-12 glass rounded-2xl p-6 inline-block">
+        <p class="text-sm text-white/40">Or open on your phone:</p>
+        <p class="font-heading font-semibold text-lg mt-1">pwa.xdeck.app</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 px-6 border-t border-white/5">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <img src="logo.png" alt="XDECK" class="w-6 h-6 rounded-md">
+        <span class="text-sm text-white/30">&copy; 2026 XDECK. All rights reserved.</span>
+      </div>
+      <div class="flex gap-6">
+        <a href="#" class="text-sm text-white/30 hover:text-white transition-colors">Privacy</a>
+        <a href="#" class="text-sm text-white/30 hover:text-white transition-colors">Terms</a>
+        <a href="#" class="text-sm text-white/30 hover:text-white transition-colors">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    const RELAY_URL = location.hostname === 'localhost' ? 'http://localhost:9000' : 'https://relay.xdeck.app';
+
+    document.getElementById('buy-btn').addEventListener('click', async (e) => {
+      e.preventDefault();
+      const btn = e.target;
+      btn.textContent = 'Redirecting to checkout...';
+      btn.style.pointerEvents = 'none';
+      try {
+        const res = await fetch(`${RELAY_URL}/api/checkout`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({})
+        });
+        const data = await res.json();
+        if (data.url) {
+          location.href = data.url;
+        } else {
+          alert('Checkout failed: ' + (data.error || 'Unknown error'));
+          btn.textContent = 'Get XDECK — $10';
+          btn.style.pointerEvents = '';
+        }
+      } catch (err) {
+        alert('Could not connect to checkout. Please try again.');
+        btn.textContent = 'Get XDECK — $10';
+        btn.style.pointerEvents = '';
+      }
+    });
+  </script>
+</body>
+</html>

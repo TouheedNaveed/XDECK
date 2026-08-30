@@ -1,0 +1,28 @@
+
+# SSL certs
+*.pem
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+release/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.local
+
+# Relay server license DB
+relay-server/licenses.json
+
+# Logs
+*.log

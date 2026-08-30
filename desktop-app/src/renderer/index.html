@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' file: data:; connect-src 'self' http://localhost:*;">
+  <title>XDECK</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #e0e7ff;
+      min-height: 100vh;
+      -webkit-app-region: drag;
+      user-select: none;
+      overflow: hidden;
+      border-radius: 16px;
+    }
+
+    .titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px 8px;
+      -webkit-app-region: drag;
+    }
+    .titlebar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .titlebar h1 {
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #c084fc, #e879f9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .titlebar-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      mix-blend-mode: screen;
+    }
+    .titlebar-buttons {
+      display: flex;
+      gap: 6px;
+      -webkit-app-region: no-drag;
+    }
+    .titlebar-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: none;
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.5);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .titlebar-btn:hover { background: rgba(255,255,255,0.15); color: white; }
+    .titlebar-btn.close:hover { background: rgba(239,68,68,0.8); color: white; }
+
+    .container { padding: 0 20px 20px; }
+
+    .qr-section {
+      text-align: center;
+      margin: 12px 0 16px;
+    }
+    .qr-section #qr {
+      width: 180px;
+      height: 180px;
+      border-radius: 16px;
+      background: white;
+      padding: 8px;
+    }
+
+    .info-card {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin: 8px 0;
+    }
+    .info-card label {
+      display: block;
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .info-card .value {
+      font-size: 18px;
+      font-weight: 600;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      letter-spacing: 2px;
+    }
+
+    .btn {
+      -webkit-app-region: no-drag;
+      width: 100%;
+      padding: 11px;
+      border: none;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      background: rgba(139, 92, 246, 0.4);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: all 0.2s;
+    }
+    .btn:hover { background: rgba(139, 92, 246, 0.6); }
+
+    .status {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+    }
+    .status .dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      margin-right: 6px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .devices-section {
+      margin-top: 12px;
+    }
+    .devices-section h3 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 6px;
+    }
+    .device-list {
+      max-height: 80px;
+      overflow-y: auto;
+    }
+    .device-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .device-item:last-child { border-bottom: none; }
+    .device-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+    }
+    .empty-devices {
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="titlebar">
+    <div class="titlebar-left">
+      <img id="logo" class="titlebar-logo" src="icon.png" alt="">
+      <h1>XDECK</h1>
+    </div>
+    <div class="titlebar-buttons">
+      <button class="titlebar-btn" id="minimizeBtn">−</button>
+      <button class="titlebar-btn close" id="closeBtn">×</button>
+    </div>
+  </div>
+  <div class="container">
+    <div class="qr-section">
+      <img id="qr" src="" alt="QR Code">
+    </div>
+    <div class="info-card">
+      <label>Server Address</label>
+      <div class="value" id="ip">Loading...</div>
+    </div>
+    <div class="info-card">
+      <label>Pairing Code</label>
+      <div class="value" id="code">------</div>
+    </div>
+    <button class="btn" id="regenBtn">Generate New Code</button>
+
+    <div class="devices-section">
+      <h3>Connected Devices</h3>
+      <div class="device-list" id="deviceList">
+        <div class="empty-devices">No devices connected</div>
+      </div>
+    </div>
+
+    <div class="status">
+      <span class="dot"></span>
+      <span id="statusText">Server running</span>
+    </div>
+  </div>
+  <script>
+    async function loadPairingInfo() {
+      try {
+        const info = await window.xdeck.getPairingInfo();
+        if (info) {
+          document.getElementById('qr').src = info.qr;
+          document.getElementById('ip').textContent = info.ip + ':' + info.port;
+          document.getElementById('code').textContent = info.code;
+        }
+      } catch(e) { console.error('Pairing info error:', e); }
+    }
+
+    async function loadDevices() {
+      try {
+        const devices = await window.xdeck.getDevices();
+        const list = document.getElementById('deviceList');
+        if (!devices || devices.length === 0) {
+          list.innerHTML = '<div class="empty-devices">No devices connected</div>';
+        } else {
+          list.innerHTML = devices.map(function(d) {
+            return '<div class="device-item"><span class="device-dot"></span>' + d.ip + '</div>';
+          }).join('');
+        }
+      } catch(e) {
+        console.error('Devices error:', e);
+      }
+    }
+
+    document.getElementById('regenBtn').addEventListener('click', async function() {
+      var btn = document.getElementById('regenBtn');
+      btn.textContent = 'Generating...';
+      btn.disabled = true;
+      try {
+        var info = await window.xdeck.regeneratePairing();
+        document.getElementById('qr').src = info.qr;
+        document.getElementById('ip').textContent = info.ip + ':' + info.port;
+        document.getElementById('code').textContent = info.code;
+      } catch(e) { console.error('Regen error:', e); }
+      btn.textContent = 'Generate New Code';
+      btn.disabled = false;
+    });
+
+    document.getElementById('minimizeBtn').addEventListener('click', function() { window.xdeck.minimizeWindow(); });
+    document.getElementById('closeBtn').addEventListener('click', function() { window.xdeck.closeWindow(); });
+
+    loadPairingInfo();
+    loadDevices();
+    setInterval(loadDevices, 3000);
+  </script>
+</body>
+</html>

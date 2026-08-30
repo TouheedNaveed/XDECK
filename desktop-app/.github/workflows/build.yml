@@ -1,0 +1,107 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            build_cmd: npm run build:linux
+            artifacts: |
+              desktop-app/release/*.deb
+              desktop-app/release/*.AppImage
+          - os: windows-latest
+            platform: windows
+            build_cmd: npm run build:win
+            artifacts: |
+              desktop-app/release/*.exe
+          - os: macos-latest
+            platform: mac
+            build_cmd: npm run build:mac
+            artifacts: |
+              desktop-app/release/*.dmg
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: desktop-app
+        run: npm install
+
+      - name: Build TypeScript
+        working-directory: desktop-app
+        run: npx tsc --skipLibCheck
+
+      - name: Copy renderer assets
+        working-directory: desktop-app
+        run: |
+          mkdir -p dist/desktop-app/src/renderer
+          mkdir -p dist/desktop-app/assets
+          cp -r src/renderer/* dist/desktop-app/src/renderer/
+          cp assets/icon.png dist/desktop-app/assets/icon.png
+
+      - name: Build Electron package
+        working-directory: desktop-app
+        run: ${{ matrix.build_cmd }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: xdeck-${{ matrix.platform }}
+          path: |
+            desktop-app/release/*.deb
+            desktop-app/release/*.AppImage
+            desktop-app/release/*.exe
+            desktop-app/release/*.dmg
+            desktop-app/release/*.yml
+            desktop-app/release/*.yaml
+          if-no-files-found: warn
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: List artifacts
+        run: find artifacts -type f
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            artifacts/**/*.deb
+            artifacts/**/*.AppImage
+            artifacts/**/*.exe
+            artifacts/**/*.dmg
+            artifacts/**/*.yml
+            artifacts/**/*.yaml

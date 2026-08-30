@@ -1,0 +1,23 @@
+{
+  "appId": "com.xdeck.desktop",
+  "productName": "XDECK",
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "dist/**/*",
+    "assets/**/*"
+  ],
+  "linux": {
+    "target": ["AppImage", "deb"],
+    "category": "Utility"
+  },
+  "win": {
+    "target": ["nsis"],
+    "icon": "assets/icon.png"
+  },
+  "mac": {
+    "target": ["dmg"],
+    "icon": "assets/icon.png"
+  }
+}
