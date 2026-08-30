@@ -1,6 +1,7 @@
 import { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain, dialog, shell } from 'electron';
 import * as path from 'path';
 import * as http from 'http';
+import * as fs from 'fs';
 import { autoUpdater } from 'electron-updater';
 import { startServer, serverEvents } from '../server/index';
 
@@ -10,6 +11,9 @@ let pairingInfo: { ip: string; port: number; code: string; qr: string } | null =
 const SERVER_PORT = 8787;
 
 function getIconPath(): string {
+  const resourcesPath = (process as any).resourcesPath || path.join(__dirname, '..');
+  const iconPath = path.join(resourcesPath, 'icon.png');
+  if (fs.existsSync(iconPath)) return iconPath;
   return path.join(__dirname, '../../assets/icon.png');
 }
 

@@ -52,6 +52,7 @@ jobs:
           mkdir -p dist/desktop-app/assets
           cp -r src/renderer/* dist/desktop-app/src/renderer/
           cp assets/icon.png dist/desktop-app/assets/icon.png
+          cp assets/icon.png dist/desktop-app/src/renderer/icon.png
 
       - name: Build Electron package
         working-directory: desktop-app

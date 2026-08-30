@@ -117,6 +117,7 @@ function saveLicenseKey(key: string): void {
 
 let relayWs: WebSocket | null = null;
 let relayReconnectTimer: ReturnType<typeof setTimeout> | null = null;
+let relayReconnectDelay = 5000;
 
 function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg: WSMessage) => void, wss: WebSocketServer) {
   if (relayWs) { relayWs.close(); relayWs = null; }
@@ -128,6 +129,7 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
 
   ws.on('open', () => {
     console.log('[RELAY] Connected, authenticating...');
+    relayReconnectDelay = 5000;
     ws.send(JSON.stringify({
       type: 'relay_auth',
       licenseKey,
@@ -217,9 +219,10 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
   });
 
   ws.on('close', () => {
-    console.log('[RELAY] Disconnected, reconnecting in 5s...');
+    console.log(`[RELAY] Disconnected, reconnecting in ${relayReconnectDelay / 1000}s...`);
     relayWs = null;
-    relayReconnectTimer = setTimeout(() => connectToRelay(licenseKey, config, broadcast, wss), 5000);
+    relayReconnectTimer = setTimeout(() => connectToRelay(licenseKey, config, broadcast, wss), relayReconnectDelay);
+    relayReconnectDelay = Math.min(relayReconnectDelay * 2, 60000);
   });
 
   ws.on('error', (err) => {
