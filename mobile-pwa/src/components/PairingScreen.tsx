@@ -533,7 +533,23 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
               <input
                 type="text"
                 value={licenseKey}
-                onChange={(e) => setLicenseKey(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  const clean = val.replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 21);
+                  let raw = clean;
+                  if (raw.length > 0 && !raw.startsWith('XDECK')) {
+                    if (raw.length <= 16) {
+                      raw = 'XDECK' + raw;
+                    }
+                  }
+                  let formatted = '';
+                  if (raw.length > 0) formatted += raw.slice(0, 5);
+                  if (raw.length > 5) formatted += '-' + raw.slice(5, 9);
+                  if (raw.length > 9) formatted += '-' + raw.slice(9, 13);
+                  if (raw.length > 13) formatted += '-' + raw.slice(13, 17);
+                  if (raw.length > 17) formatted += '-' + raw.slice(17, 21);
+                  setLicenseKey(formatted);
+                }}
                 placeholder="XDECK-XXXX-XXXX-XXXX-XXXX"
                 className="w-full px-4 py-3 glass-panel text-white placeholder-white/30 outline-none focus:border-purple-500/50 transition-colors font-mono text-center tracking-wider"
               />

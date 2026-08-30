@@ -34,20 +34,66 @@ const PRESET_GRADIENTS = [
   'linear-gradient(135deg, #232526 0%, #414345 100%)',
 ];
 
-const ICON_PRESETS = [
-  { label: 'Globe', emoji: '🌐' },
-  { label: 'Terminal', emoji: '⬛' },
-  { label: 'Music', emoji: '🎵' },
-  { label: 'Folder', emoji: '📁' },
-  { label: 'Settings', emoji: '⚙️' },
-  { label: 'Camera', emoji: '📷' },
-  { label: 'Code', emoji: '💻' },
-  { label: 'Chat', emoji: '💬' },
-  { label: 'Mail', emoji: '📧' },
-  { label: 'Video', emoji: '🎬' },
-  { label: 'Game', emoji: '🎮' },
-  { label: 'Lock', emoji: '🔒' },
-];
+const CATEGORIZED_ICONS = {
+  browsers: [
+    { label: 'Chrome/Web', emoji: '🌐' },
+    { label: 'Firefox', emoji: '🦊' },
+    { label: 'Safari', emoji: '🧭' },
+    { label: 'Tor', emoji: '🧅' },
+    { label: 'Brave', emoji: '🦁' },
+    { label: 'Edge', emoji: '🌊' },
+    { label: 'Internet', emoji: '🌍' },
+    { label: 'Webpage', emoji: '🕸️' },
+  ],
+  games: [
+    { label: 'Steam/Game', emoji: '🎮' },
+    { label: 'Joystick', emoji: '🕹️' },
+    { label: 'Target', emoji: '🎯' },
+    { label: 'Swords', emoji: '⚔️' },
+    { label: 'Trophy', emoji: '🏆' },
+    { label: 'Race', emoji: '🏁' },
+    { label: 'Alien', emoji: '👾' },
+    { label: 'Dice', emoji: '🎲' },
+    { label: 'Puzzle', emoji: '🧩' },
+    { label: 'Ghost', emoji: '👻' },
+  ],
+  streaming: [
+    { label: 'Netflix/Popcorn', emoji: '🍿' },
+    { label: 'Movie/Cinema', emoji: '🎬' },
+    { label: 'TV Screen', emoji: '📺' },
+    { label: 'Music Player', emoji: '🎵' },
+    { label: 'Headphones', emoji: '🎧' },
+    { label: 'Microphone', emoji: '🎤' },
+    { label: 'Speaker', emoji: '🔊' },
+    { label: 'Camcorder', emoji: '📹' },
+    { label: 'Radio', emoji: '📻' },
+    { label: 'Streaming', emoji: '🔴' },
+  ],
+  development: [
+    { label: 'IDE/Code', emoji: '💻' },
+    { label: 'VS Code/Tools', emoji: '🛠️' },
+    { label: 'Terminal', emoji: '⬛' },
+    { label: 'Bug/Debug', emoji: '🐞' },
+    { label: 'Rocket/Deploy', emoji: '🚀' },
+    { label: 'Folder/Workspace', emoji: '📁' },
+    { label: 'Database', emoji: '🗄️' },
+    { label: 'System Settings', emoji: '⚙️' },
+    { label: 'Password/Key', emoji: '🔑' },
+    { label: 'Hardware/Rig', emoji: '🖥️' },
+  ],
+  creative: [
+    { label: 'Photoshop/Paint', emoji: '🎨' },
+    { label: 'Brush/Design', emoji: '🖌️' },
+    { label: 'Camera/Photos', emoji: '📷' },
+    { label: 'Ruler/Layout', emoji: '📐' },
+    { label: 'Text Editor', emoji: '📝' },
+    { label: 'Office/Mail', emoji: '📧' },
+    { label: 'Chat/Slack', emoji: '💬' },
+    { label: 'Calendar/Tasks', emoji: '📅' },
+    { label: 'Store/Cart', emoji: '🛒' },
+    { label: 'Secure/Lock', emoji: '🔒' },
+  ],
+};
 
 export function SettingsPanel({
   page,
@@ -67,6 +113,7 @@ export function SettingsPanel({
     editingButtonId ? 'buttons' : 'layout'
   );
   const [uploading, setUploading] = useState(false);
+  const [iconCategory, setIconCategory] = useState<keyof typeof CATEGORIZED_ICONS>('browsers');
   const iconInputRef = useRef<HTMLInputElement>(null);
   const iconCameraRef = useRef<HTMLInputElement>(null);
   const bgInputRef = useRef<HTMLInputElement>(null);
@@ -297,10 +344,38 @@ export function SettingsPanel({
               </div>
 
               {/* Preset emoji icons */}
-              <div>
-                <label className="block text-xs text-white/50 mb-2">Or pick an emoji icon</label>
+              <div className="space-y-2.5">
+                <label className="block text-xs text-white/50">Or pick a preset icon</label>
+                
+                {/* Category selector */}
+                <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none" style={{ WebkitOverflowScrolling: 'touch' }}>
+                  {(Object.keys(CATEGORIZED_ICONS) as Array<keyof typeof CATEGORIZED_ICONS>).map((cat) => {
+                    const labels = {
+                      browsers: '🌐 Browsers',
+                      games: '🎮 Games',
+                      streaming: '🍿 Media/Netflix',
+                      development: '💻 Dev/IDE',
+                      creative: '🎨 Apps/Creative'
+                    };
+                    return (
+                      <button
+                        key={cat}
+                        onClick={() => setIconCategory(cat)}
+                        className={`text-xs px-2.5 py-1.5 rounded-lg font-medium transition-all shrink-0 ${
+                          iconCategory === cat
+                            ? 'bg-white/20 text-white border border-white/35'
+                            : 'glass-panel text-white/50'
+                        }`}
+                      >
+                        {labels[cat]}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Preset Grid */}
                 <div className="grid grid-cols-6 gap-2">
-                  {ICON_PRESETS.map((preset) => (
+                  {CATEGORIZED_ICONS[iconCategory].map((preset) => (
                     <button
                       key={preset.label}
                       onClick={() => setButtonForm((prev) => ({ ...prev, icon: preset.emoji }))}
