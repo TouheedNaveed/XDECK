@@ -58,8 +58,8 @@ export function App() {
       position: 'fixed',
       top: '50%',
       left: '50%',
-      width: '100dvh',
-      height: '100dvw',
+      width: '100vh',
+      height: '100vw',
       transform: 'translate(-50%, -50%) rotate(90deg)',
       overflow: 'hidden',
     };
