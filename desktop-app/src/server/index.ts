@@ -844,6 +844,13 @@ export function startServer() {
   });
 
   // Start HTTP server
+  httpServer.on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`[XDECK] Port ${PORT} is already in use. Another XDECK instance may be running. Close it and try again.`);
+    } else {
+      console.error('[XDECK] Server error:', err.message);
+    }
+  });
   httpServer.listen(PORT, '0.0.0.0', () => {
     const ip = getLocalIP();
     console.log('');

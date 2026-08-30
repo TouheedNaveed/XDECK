@@ -141,6 +141,13 @@ ipcMain.handle('disconnect-relay', async () => {
 });
 
 app.whenReady().then(async () => {
+  // Prevent ugly crash dialog on uncaught errors
+  process.on('uncaughtException', (err) => {
+    console.error('[MAIN] Uncaught exception:', err.message);
+    if (err.message.includes('EADDRINUSE')) {
+      dialog.showMessageBox({ type: 'error', title: 'XDECK is already running', message: `Port ${SERVER_PORT} is in use.\n\nClose the other XDECK instance and try again.`, buttons: ['OK'] }).then(() => app.quit());
+    }
+  });
   // Auto-update: check for updates on startup (non-blocking)
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = true;
