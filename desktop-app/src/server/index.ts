@@ -758,10 +758,6 @@ export function startServer() {
   if (pwaDir) {
     expressApp.use(express.static(pwaDir));
     console.log(`[XDECK] Serving PWA from ${pwaDir}`);
-    // SPA fallback — serve index.html for all non-API, non-file routes
-    expressApp.get('*', (_req, res) => {
-      res.sendFile(path.join(pwaDir, 'index.html'));
-    });
   }
 
   expressApp.post('/upload', upload.single('file'), (req, res) => {
@@ -945,6 +941,13 @@ export function startServer() {
     if (relayWs) { relayWs.close(); relayWs = null; }
     res.json({ ok: true });
   });
+
+  // SPA fallback — serve index.html for all non-API, non-file routes (must be registered last)
+  if (pwaDir) {
+    expressApp.get('*', (_req, res) => {
+      res.sendFile(path.join(pwaDir, 'index.html'));
+    });
+  }
 
   return { wss, httpServer, config };
 }
