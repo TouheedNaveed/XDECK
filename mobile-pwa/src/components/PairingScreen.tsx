@@ -118,16 +118,9 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
             try {
               const data = JSON.parse(code.data);
               if (data.ip) {
-                if (location.protocol === 'https:') {
-                  // Behind Vite proxy — use same origin, only need the code
-                  setIp(location.hostname);
-                  setPort(location.port || '443');
-                  setCode(String(data.code || ''));
-                } else {
-                  setIp(data.ip);
-                  setPort(String(data.port || 8787));
-                  setCode(String(data.code || ''));
-                }
+                setIp(data.ip);
+                setPort(String(data.port || 8787));
+                setCode(String(data.code || ''));
                 active = false;
                 stream.getTracks().forEach(t => t.stop());
                 setQrActive(false);
@@ -163,8 +156,9 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
     (async () => {
       setScanning(true);
 
-      // If served over HTTPS (Vite proxy), the desktop server is on the same origin
-      if (location.protocol === 'https:') {
+      // If served over HTTPS from a local dev server (Vite), the desktop server is on the same origin.
+      // But from Cloudflare Pages (xdeck-pwa.pages.dev), /pairing doesn't exist — skip it.
+      if (location.protocol === 'https:' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.match(/^192\.168\./))) {
         setScanProgress('Connecting via local server...');
         try {
           const res = await fetch('/pairing', { signal: AbortSignal.timeout(2000) });
