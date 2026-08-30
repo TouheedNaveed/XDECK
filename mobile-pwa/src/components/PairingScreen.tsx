@@ -42,6 +42,22 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
     if (connectionError) setError(connectionError);
   }, [connectionError]);
 
+  // Auto-connect when opened via QR code URL: http://desktop-ip:8787?code=123456
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const urlCode = params.get('code');
+    if (urlCode && (location.protocol === 'http:' || location.hostname === 'localhost')) {
+      const info: ConnectionInfo = {
+        ip: location.hostname,
+        port: parseInt(location.port) || 8787,
+        code: urlCode,
+        mode: 'lan',
+      };
+      store.saveConnection(info);
+      onConnect(info);
+    }
+  }, [onConnect]);
+
   useEffect(() => {
     store.getConnection().then((conn) => {
       if (conn?.mode === 'relay' && conn.licenseKey) {
@@ -120,18 +136,42 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
           });
 
           if (code) {
+            // Try URL format first: http://192.168.x.x:8787?code=123456
             try {
-              const data = JSON.parse(code.data);
-              if (data.ip) {
-                setIp(data.ip);
-                setPort(String(data.port || 8787));
-                setCode(String(data.code || ''));
+              const url = new URL(code.data);
+              if (url.hostname && (url.port || url.protocol === 'http:')) {
+                const scannedCode = url.searchParams.get('code') || '';
+                // If currently on HTTPS (pages.dev PWA), redirect to desktop-served PWA
+                if (location.protocol === 'https:' && location.hostname !== url.hostname) {
+                  active = false;
+                  stream.getTracks().forEach(t => t.stop());
+                  setQrActive(false);
+                  window.location.href = code.data;
+                  return;
+                }
+                setIp(url.hostname);
+                setPort(url.port || '8787');
+                setCode(scannedCode);
                 active = false;
                 stream.getTracks().forEach(t => t.stop());
                 setQrActive(false);
                 return;
               }
-            } catch {}
+            } catch {
+              // Not a URL, try JSON format (legacy)
+              try {
+                const data = JSON.parse(code.data);
+                if (data.ip) {
+                  setIp(data.ip);
+                  setPort(String(data.port || 8787));
+                  setCode(String(data.code || ''));
+                  active = false;
+                  stream.getTracks().forEach(t => t.stop());
+                  setQrActive(false);
+                  return;
+                }
+              } catch {}
+            }
           }
 
           if (active) rafRef.current = requestAnimationFrame(scan);
@@ -161,18 +201,25 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
     (async () => {
       setScanning(true);
 
-      // If served over HTTPS from a local dev server (Vite), the desktop server is on the same origin.
-      // But from Cloudflare Pages (xdeck-pwa.pages.dev), /pairing doesn't exist — skip it.
-      if (location.protocol === 'https:' && (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.match(/^192\.168\./))) {
+      // If served from the desktop server itself (http://desktop-ip:8787) or a local dev server,
+      // try fetching /pairing from same origin. Skip when on Cloudflare Pages (xdeck-pwa.pages.dev).
+      const isLocalOrigin = location.hostname === 'localhost'
+        || location.hostname === '127.0.0.1'
+        || location.hostname.match(/^192\.168\./)
+        || location.hostname.match(/^10\./)
+        || location.hostname.match(/^172\.(1[6-9]|2\d|3[01])\./);
+
+      if (isLocalOrigin) {
         setScanProgress('Connecting via local server...');
         try {
           const res = await fetch('/pairing', { signal: AbortSignal.timeout(2000) });
           if (res.ok) {
             const data = await res.json();
             if (!cancelled) {
-              setDiscovered({ ip: location.hostname, port: parseInt(location.port) || 443, code: data.code, mode: 'lan' });
+              const detectedPort = parseInt(location.port) || 8787;
+              setDiscovered({ ip: location.hostname, port: detectedPort, code: data.code, mode: 'lan' });
               setIp(location.hostname);
-              setPort(location.port || '443');
+              setPort(String(detectedPort));
               setScanProgress(`Found XDECK at ${location.hostname}!`);
               setScanning(false);
             }

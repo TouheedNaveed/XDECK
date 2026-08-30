@@ -855,8 +855,9 @@ export function startServer() {
   expressApp.get('/pairing', async (_req, res) => {
     try {
       const ip = getLocalIP();
-      const qr = await QRCode.toDataURL(JSON.stringify({ ip, port: PORT, code: pairingCode }));
-      res.json({ ip, port: PORT, code: pairingCode, qr });
+      const pwaUrl = `http://${ip}:${PORT}?code=${pairingCode}`;
+      const qr = await QRCode.toDataURL(pwaUrl);
+      res.json({ ip, port: PORT, code: pairingCode, qr, pwaUrl });
     } catch (err) {
       console.error('[XDECK] /pairing error:', err);
       const ip = getLocalIP();

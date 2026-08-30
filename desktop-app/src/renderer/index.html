@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' file: data:; connect-src 'self' http://localhost:*;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' file: data:; connect-src 'self' http://localhost:* http://127.0.0.1:*;">
   <title>XDECK</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -293,8 +293,15 @@
   <script>
     async function loadPairingInfo() {
       try {
-        const info = await window.xdeck.getPairingInfo();
-        if (info) {
+        var info = await window.xdeck.getPairingInfo();
+        // If IPC didn't populate yet (server still starting), fetch directly
+        if (!info || !info.qr) {
+          try {
+            var res = await fetch('http://127.0.0.1:8787/pairing');
+            info = await res.json();
+          } catch(e2) {}
+        }
+        if (info && info.qr) {
           document.getElementById('qr').src = info.qr;
           document.getElementById('ip').textContent = info.ip + ':' + info.port;
           document.getElementById('code').textContent = info.code;
@@ -403,6 +410,7 @@
     loadRelayStatus();
     setInterval(loadRelayStatus, 5000);
     loadPairingInfo();
+    setInterval(loadPairingInfo, 3000);
     loadDevices();
     setInterval(loadDevices, 3000);
   </script>
