@@ -352,8 +352,8 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
   }
 
   return (
-    <div className="h-full w-full flex items-center justify-center p-6 overflow-y-auto">
-      <div className="w-full max-w-sm">
+    <div className="h-full w-full overflow-y-auto px-6 py-8 flex flex-col justify-start items-center">
+      <div className="w-full max-w-sm my-auto">
         {/* Logo */}
         <div className="text-center mb-6">
           <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg shadow-purple-500/20">
