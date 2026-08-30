@@ -37,8 +37,8 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "xdeck-app",
-      "repo": "xdeck-desktop",
+      "owner": "TouheedNaveed",
+      "repo": "XDECK",
       "releaseType": "release"
     },
     "linux": {
