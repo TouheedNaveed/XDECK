@@ -1,19 +1,41 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+
+function isIOS(): boolean {
+  return /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+}
+
+function isStandalone(): boolean {
+  return window.matchMedia('(display-mode: standalone)').matches ||
+    (navigator as any).standalone === true;
+}
 
 export function usePwa() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [canInstall, setCanInstall] = useState(false);
   const [showUpdate, setShowUpdate] = useState(false);
+  const [canShowManualInstall, setCanShowManualInstall] = useState(false);
+  const gotNativePrompt = useRef(false);
 
   // Capture install prompt
   useEffect(() => {
+    if (isStandalone()) return;
+
     const handler = (e: Event) => {
       e.preventDefault();
+      gotNativePrompt.current = true;
       setDeferredPrompt(e);
       setCanInstall(true);
     };
     window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
+
+    const t = setTimeout(() => {
+      if (!gotNativePrompt.current) setCanShowManualInstall(true);
+    }, isIOS() ? 1500 : 3000);
+
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener('beforeinstallprompt', handler);
+    };
   }, []);
 
   useEffect(() => {
@@ -90,5 +112,5 @@ export function usePwa() {
     });
   }, []);
 
-  return { canInstall, showUpdate, install, reload };
+  return { canInstall, showUpdate, install, reload, isIOS: isIOS(), canShowManualInstall: canShowManualInstall && !canInstall && !isStandalone() };
 }

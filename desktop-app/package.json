@@ -11,8 +11,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx src/server/index.ts",
-    "dev:electron": "tsc --skipLibCheck && cp -r src/renderer dist/desktop-app/src/renderer && mkdir -p dist/desktop-app/assets && cp assets/icon.png dist/desktop-app/assets/icon.png && cp assets/icon.png dist/desktop-app/src/renderer/icon.png && electron . --no-sandbox --ozone-platform-hint=x11",
-    "build": "tsc --skipLibCheck && electron-builder",
+    "dev:electron": "tsc --skipLibCheck && cp -r src/renderer dist/desktop-app/src/renderer && mkdir -p dist/desktop-app/assets && cp assets/icon.png dist/desktop-app/assets/icon.png && cp assets/icon.png dist/desktop-app/src/renderer/icon.png && rm -rf assets/pwa && cp -r ../mobile-pwa/dist assets/pwa && electron . --no-sandbox --ozone-platform-hint=x11",
+    "build": "tsc --skipLibCheck && rm -rf assets/pwa && cp -r ../mobile-pwa/dist assets/pwa && electron-builder",
     "build:linux": "tsc --skipLibCheck && electron-builder --linux deb appimage",
     "build:win": "tsc --skipLibCheck && electron-builder --win",
     "build:mac": "tsc --skipLibCheck && electron-builder --mac",

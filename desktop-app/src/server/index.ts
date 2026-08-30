@@ -743,6 +743,27 @@ export function startServer() {
 
   expressApp.use('/uploads', express.static(UPLOADS_DIR));
 
+  // Serve bundled PWA so phones can open http://desktop-ip:8787 directly.
+  // Inside asar: /dist/desktop-app/src/server/index.js → ../../../../assets/pwa
+  const candidatePaths = [
+    path.join(__dirname, '../../../../assets/pwa'),
+    path.join(__dirname, '../../../assets/pwa'),
+    path.join(__dirname, '../../assets/pwa'),
+    path.join(process.cwd(), 'assets/pwa'),
+    path.join(path.dirname(process.execPath), 'assets/pwa'),
+  ];
+  const pwaDir = candidatePaths.find((p) => {
+    try { return fs.existsSync(path.join(p, 'index.html')); } catch { return false; }
+  }) || '';
+  if (pwaDir) {
+    expressApp.use(express.static(pwaDir));
+    console.log(`[XDECK] Serving PWA from ${pwaDir}`);
+    // SPA fallback — serve index.html for all non-API, non-file routes
+    expressApp.get('*', (_req, res) => {
+      res.sendFile(path.join(pwaDir, 'index.html'));
+    });
+  }
+
   expressApp.post('/upload', upload.single('file'), (req, res) => {
     if (!req.file) { res.status(400).json({ error: 'No file' }); return; }
     const dir = (req.query.dir as string) || 'icons';

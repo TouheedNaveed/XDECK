@@ -14,7 +14,7 @@ interface PairingScreenProps {
 
 export function PairingScreen({ onConnect, isConnecting, isLoading, error: connectionError }: PairingScreenProps) {
   const { t, locale, setLocale } = useTranslation();
-  const { canInstall, showUpdate, install, reload } = usePwa();
+  const { canInstall, showUpdate, install, reload, isIOS, canShowManualInstall } = usePwa();
   const [ip, setIp] = useState('');
   const [port, setPort] = useState('8787');
   const [code, setCode] = useState('');
@@ -450,9 +450,8 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
         {connectMode === 'lan' && lanUnavailable && (
           <div className="glass-panel px-4 py-3 mb-4 border border-amber-500/30">
             <p className="text-xs text-amber-300/90 leading-relaxed">
-              Local Network mode doesn't work from the hosted app — your browser blocks
-              insecure LAN connections from a secure page. Use <strong>Cloud</strong> mode
-              with your license key, or open XDECK from your desktop's own address.
+              Blocked by browser security on HTTPS pages. Switch to <strong>Cloud</strong>, or
+              open <code className="bg-white/10 px-1 rounded">http://{location.hostname}:{location.port || '8787'}</code> directly.
             </p>
           </div>
         )}
@@ -603,6 +602,17 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
           >
             Install XDECK App
           </button>
+        )}
+
+        {!canInstall && !showUpdate && canShowManualInstall && (
+          <div className="glass-panel px-4 py-3 mt-3 border border-indigo-500/20 text-center">
+            <p className="text-xs text-indigo-300/80 font-medium mb-1">Install XDECK App</p>
+            <p className="text-[10px] text-white/40 leading-relaxed">
+              {isIOS
+                ? 'Tap the Share button in Safari, then "Add to Home Screen".'
+                : 'Open this page in Chrome, tap the menu, then "Add to Home Screen" or "Install App".'}
+            </p>
+          </div>
         )}
       </div>
     </div>
