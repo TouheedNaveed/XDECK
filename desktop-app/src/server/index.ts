@@ -42,7 +42,7 @@ const CONFIG_DIR = path.join(os.homedir(), '.xdeck');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 const LICENSE_FILE = path.join(CONFIG_DIR, 'license.key');
 const UPLOADS_DIR = path.join(CONFIG_DIR, 'uploads');
-const RELAY_URL = process.env.XDECK_RELAY || 'ws://localhost:9000/relay';
+const RELAY_URL = process.env.XDECK_RELAY || 'wss://xdeck-relay.onrender.com/relay';
 
 fs.mkdirSync(CONFIG_DIR, { recursive: true });
 fs.mkdirSync(UPLOADS_DIR, { recursive: true });

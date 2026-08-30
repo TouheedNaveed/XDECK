@@ -153,7 +153,7 @@ export interface TrustedDevice {
 
 // Relay connection
 export type RelayMode = 'lan' | 'relay';
-export const RELAY_URL = 'wss://relay.xdeck.app/relay';
+export const RELAY_URL = 'wss://xdeck-relay.onrender.com/relay';
 
 export interface RelayAuthMessage {
   type: 'relay_auth';
