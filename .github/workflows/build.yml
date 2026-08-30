@@ -37,7 +37,15 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
+      - name: Install PWA dependencies
+        working-directory: mobile-pwa
+        run: npm install
+
+      - name: Build PWA
+        working-directory: mobile-pwa
+        run: npm run build
+
+      - name: Install desktop dependencies
         working-directory: desktop-app
         run: npm install
 

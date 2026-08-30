@@ -88,6 +88,11 @@ function createWindow(): void {
     skipTaskbar: false,
   });
 
+  const iconPath = getIconPath();
+  if (fs.existsSync(iconPath)) {
+    mainWindow.setIcon(nativeImage.createFromPath(iconPath));
+  }
+
   mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
   mainWindow.on('closed', () => { mainWindow = null; });
 
