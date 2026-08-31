@@ -42,7 +42,7 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
 
   useEffect(() => {
     if (!(window as any).Capacitor) return;
-    const APP_VERSION = 'v1.2.0';
+    const APP_VERSION = 'v1.2.1';
 
     function isNewer(latest: string, current: string): boolean {
       const l = latest.replace(/^v/, '').split('.').map(Number);
@@ -377,7 +377,7 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
 
   return (
     <div 
-      className="h-full w-full overflow-y-auto px-6 py-8 flex flex-col justify-start items-center"
+      className="min-h-screen w-full overflow-y-auto px-6 py-8 flex flex-col justify-start items-center"
       style={{
         background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
       }}
@@ -693,7 +693,7 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
         </p>
 
         <div className="text-[10px] text-white/10 text-center mt-4 font-mono">
-          v1.2.0
+          v1.2.1
         </div>
 
         {apkUpdateUrl && (

@@ -100,26 +100,28 @@ export function App() {
   }, []);
 
   useEffect(() => {
-    if (!currentPage) return;
-    const bgData = previewBg || currentPage.background;
+    const isConnected = connectionState === 'connected' && currentPage;
+    const bg = isConnected
+      ? (previewBg || currentPage.background).type === 'gradient'
+        ? (previewBg || currentPage.background).value
+        : (previewBg || currentPage.background).type === 'image'
+        ? `url(${(previewBg || currentPage.background).value}) center/cover`
+        : (previewBg || currentPage.background).value
+      : 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)';
+
     document.body.classList.add('xdeck-bg-dynamic');
-    const bg =
-      bgData.type === 'gradient'
-        ? bgData.value
-        : bgData.type === 'image'
-        ? `url(${bgData.value}) center/cover`
-        : bgData.value;
     document.body.style.background = bg;
     document.documentElement.style.background = bg;
     const root = document.getElementById('root');
     if (root) root.style.background = bg;
+
     return () => {
       document.body.style.background = '';
       document.documentElement.style.background = '';
       if (root) root.style.background = '';
       document.body.classList.remove('xdeck-bg-dynamic');
     };
-  }, [currentPage?.background, previewBg]);
+  }, [connectionState, currentPage, currentPage?.background, previewBg]);
 
   useEffect(() => {
     const mq = window.matchMedia('(orientation: landscape)');
@@ -423,7 +425,7 @@ export function App() {
       <header className="relative z-10 flex items-center justify-between px-4 py-2 shrink-0">
         <div className="flex items-center gap-2">
           <ConnectionIndicator state={connectionState} />
-          <span className="text-[9px] text-white/20 font-mono">v1.2.0</span>
+          <span className="text-[9px] text-white/20 font-mono">v1.2.1</span>
         </div>
         <div className="flex items-center gap-2">
           <button
