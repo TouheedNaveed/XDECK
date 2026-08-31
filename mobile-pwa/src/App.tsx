@@ -86,6 +86,19 @@ export function App() {
     };
   }
 
+  // Clean up any stale service workers when running natively inside Capacitor
+  useEffect(() => {
+    if ((window as any).Capacitor && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const registration of registrations) {
+          registration.unregister().then((ok) => {
+            if (ok) console.log('[Capacitor] Unregistered stale service worker');
+          });
+        }
+      });
+    }
+  }, []);
+
   useEffect(() => {
     if (!currentPage) return;
     const bgData = previewBg || currentPage.background;

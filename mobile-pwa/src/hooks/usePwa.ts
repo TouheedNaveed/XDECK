@@ -44,9 +44,9 @@ export function usePwa() {
     return () => window.removeEventListener('appinstalled', handler);
   }, []);
 
-  // Detect service worker updates
+  // Detect service worker updates (disabled in native Capacitor app)
   useEffect(() => {
-    if (!('serviceWorker' in navigator)) return;
+    if (!('serviceWorker' in navigator) || (window as any).Capacitor) return;
 
     function checkWaiting(swreg: ServiceWorkerRegistration) {
       if (swreg.waiting && navigator.serviceWorker.controller) {
@@ -112,5 +112,13 @@ export function usePwa() {
     });
   }, []);
 
-  return { canInstall, showUpdate, install, reload, isIOS: isIOS(), canShowManualInstall: canShowManualInstall && !canInstall && !isStandalone() };
+  const isCapacitor = (window as any).Capacitor;
+  return { 
+    canInstall: canInstall && !isCapacitor, 
+    showUpdate: showUpdate && !isCapacitor, 
+    install, 
+    reload, 
+    isIOS: isIOS(), 
+    canShowManualInstall: canShowManualInstall && !canInstall && !isStandalone() && !isCapacitor 
+  };
 }
