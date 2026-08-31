@@ -967,16 +967,16 @@ function getPlatformInputCmds() {
     useYdotool = hasYdotool && (!hasXdotool || !!waylandDisplay || xdgSession === 'wayland');
 
     if (useYdotool) {
-      console.log('[XDECK] Using ydotool for input');
+      console.log('[XDECK] Using ydotool (with xdotool fallback) for input');
       return {
-        key: (key: string) => `ydotool key ${key}`,
-        type: (text: string) => `ydotool type -- ${JSON.stringify(text)}`,
-        mouseMove: (dx: number, dy: number) => `ydotool mousemove --relative -- ${dx} ${dy}`,
-        mouseClick: (button: number) => `ydotool click ${button === 3 ? 0x111 : 0x110}`,
+        key: (key: string) => `ydotool key ${key} 2>/dev/null || xdotool key ${key}`,
+        type: (text: string) => `ydotool type -- ${JSON.stringify(text)} 2>/dev/null || xdotool type --delay 0 -- ${JSON.stringify(text)}`,
+        mouseMove: (dx: number, dy: number) => `ydotool mousemove --delay 0 -- ${dx} ${dy} 2>/dev/null || xdotool mousemove_relative -- ${dx} ${dy}`,
+        mouseClick: (button: number) => `ydotool click --delay 0 ${button === 3 ? 2 : 1} 2>/dev/null || xdotool click ${button === 3 ? 3 : 1}`,
         mouseScroll: (dy: number) => {
           const clicks = Math.min(Math.max(Math.round(dy), -10), 10);
           if (clicks === 0) return '';
-          return `ydotool wheel ${clicks > 0 ? -1 : 1}`;
+          return `xdotool click ${clicks > 0 ? 5 : 4} 2>/dev/null || ydotool click ${clicks > 0 ? 5 : 4}`;
         },
       };
     }
