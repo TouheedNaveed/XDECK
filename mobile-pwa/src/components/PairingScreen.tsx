@@ -56,14 +56,26 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
       return false;
     }
 
-    fetch('https://api.github.com/repos/TouheedNaveed/XDECK/releases/latest')
+    function isSemver(tag: string): boolean {
+      return /^v?\d+\.\d+\.\d+/.test(tag);
+    }
+
+    fetch('https://api.github.com/repos/TouheedNaveed/XDECK/releases')
       .then(res => res.json())
-      .then(data => {
-        const latestTag = data.tag_name;
-        if (latestTag && isNewer(latestTag, APP_VERSION)) {
-          const apkAsset = (data.assets || []).find((a: any) => a.name.endsWith('.apk'));
-          if (apkAsset) {
-            setApkUpdateUrl(apkAsset.browser_download_url);
+      .then((releases: any[]) => {
+        if (!Array.isArray(releases) || !releases.length) return;
+        for (const release of releases) {
+          const tag = release.tag_name;
+          if (!tag || release.draft) continue;
+          const apk = (release.assets || []).find((a: any) => a.name.endsWith('.apk'));
+          if (!apk) continue;
+          if (isSemver(tag) && isNewer(tag, APP_VERSION)) {
+            setApkUpdateUrl(apk.browser_download_url);
+            return;
+          }
+          if (!isSemver(tag)) {
+            setApkUpdateUrl(apk.browser_download_url);
+            return;
           }
         }
       })
