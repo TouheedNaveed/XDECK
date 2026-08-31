@@ -36,7 +36,7 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
   const rafRef = useRef<number>(0);
 
   // ws:// to a LAN IP is blocked from an https page, and the hosted PWA is https.
-  const lanUnavailable = location.protocol === 'https:' && location.hostname !== 'localhost' && !discovered;
+  const lanUnavailable = location.protocol === 'https:' && location.hostname !== 'localhost' && !discovered && !(window as any).Capacitor;
 
   useEffect(() => {
     if (connectionError) setError(connectionError);
@@ -673,7 +673,7 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
           </button>
         )}
 
-        {canInstall && !showUpdate && (
+        {canInstall && !showUpdate && !(window as any).Capacitor && (
           <button
             onClick={install}
             className="w-full py-2.5 mt-3 rounded-2xl text-sm font-medium bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 hover:bg-indigo-500/30 transition-all"
@@ -682,7 +682,7 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
           </button>
         )}
 
-        {!canInstall && !showUpdate && canShowManualInstall && (
+        {!canInstall && !showUpdate && canShowManualInstall && !(window as any).Capacitor && (
           <div className="glass-panel px-4 py-3 mt-3 border border-indigo-500/20 text-center">
             <p className="text-xs text-indigo-300/80 font-medium mb-1">Install XDECK App</p>
             <p className="text-[10px] text-white/40 leading-relaxed">
