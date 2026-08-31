@@ -19,15 +19,15 @@ export default function InputTab({ sendMessage, onBack }: InputTabProps) {
       }}
     >
       <header className="flex items-center justify-between px-4 py-2 border-b border-white/5 shrink-0">
-        <button onClick={onBack} className="flex items-center gap-1 text-white/50 hover:text-white transition-colors text-xs">
+        <button onClick={onBack} className="flex items-center gap-1 text-white/50 hover:text-white transition-colors text-xs min-w-[48px]">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/></svg>
           Back
         </button>
         <span className="text-xs font-semibold text-white/60">Input</span>
-        <div className="w-12" />
+        <div className="min-w-[48px]" />
       </header>
 
-      <div className="flex-1 flex flex-col overflow-hidden min-h-0">
+      <div className="flex-1 flex flex-col landscape:flex-row overflow-hidden min-h-0">
         <Trackpad sendMessage={sendMessage} />
         <Keyboard sendMessage={sendMessage} />
       </div>
@@ -87,7 +87,7 @@ function Trackpad({ sendMessage }: { sendMessage: (msg: WSMessage) => boolean })
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className="relative flex-shrink-0 select-none touch-none overflow-hidden"
+      className="relative shrink-0 select-none touch-none overflow-hidden"
       style={{ flex: '0 0 35%', minHeight: 80, background: 'rgba(255,255,255,0.02)' }}
     >
       <div className="absolute inset-0 pointer-events-none" style={{
@@ -175,7 +175,7 @@ function Keyboard({ sendMessage }: { sendMessage: (msg: WSMessage) => boolean })
   }, [textInput, sendText]);
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden min-h-0" style={{ background: 'rgba(255,255,255,0.01)' }}>
+    <div className="flex-1 flex flex-col overflow-hidden min-h-0 min-w-0" style={{ background: 'rgba(255,255,255,0.01)' }}>
       <div className="flex items-center gap-1.5 px-3 py-1.5 border-t border-white/5 shrink-0">
         <button
           onClick={() => setTextMode(!textMode)}
@@ -209,7 +209,7 @@ function Keyboard({ sendMessage }: { sendMessage: (msg: WSMessage) => boolean })
           </button>
         </form>
       ) : (
-        <div className="flex-1 flex flex-col overflow-hidden min-h-0 px-1">
+        <div className="flex-1 flex flex-col overflow-hidden min-h-0 min-w-0 px-1 py-1">
           <div className="flex gap-1 mb-1 shrink-0">
             {MODIFIERS.map(mod => (
               <button
@@ -226,14 +226,14 @@ function Keyboard({ sendMessage }: { sendMessage: (msg: WSMessage) => boolean })
             ))}
           </div>
 
-          <div className="flex-1 flex flex-col justify-center gap-[3px] min-h-0 overflow-hidden">
+          <div className="flex-1 flex flex-col justify-between min-h-0 overflow-hidden gap-[2px]">
             {KEY_ROWS.map((row, ri) => (
               <div key={ri} className="flex gap-[3px]">
                 {row.map(key => (
                   <button
                     key={key}
                     onTouchStart={(e) => { e.preventDefault(); handleKeyPress(key); }}
-                    className="flex-1 py-2 rounded-md text-[13px] font-medium bg-white/5 text-white/70 border border-white/8 active:bg-indigo-500/20 active:text-indigo-200 active:border-indigo-500/30 transition-all select-none"
+                    className="flex-1 min-h-[36px] rounded-md text-[13px] font-medium bg-white/5 text-white/70 border border-white/8 active:bg-indigo-500/20 active:text-indigo-200 active:border-indigo-500/30 transition-all select-none"
                   >
                     {key}
                   </button>
@@ -244,25 +244,25 @@ function Keyboard({ sendMessage }: { sendMessage: (msg: WSMessage) => boolean })
             <div className="flex gap-[3px]">
               <button
                 onTouchStart={(e) => { e.preventDefault(); handleKeyPress('⇥'); }}
-                className="px-2 py-2 rounded-md text-[9px] font-medium bg-white/5 text-white/40 border border-white/8 active:bg-indigo-500/20 select-none"
+                className="px-2 min-h-[36px] rounded-md text-[9px] font-medium bg-white/5 text-white/40 border border-white/8 active:bg-indigo-500/20 select-none"
               >
                 Tab
               </button>
               <button
                 onTouchStart={(e) => { e.preventDefault(); handleKeyPress('⌫'); }}
-                className="flex-1 py-2 rounded-md text-[13px] font-medium bg-white/5 text-white/70 border border-white/8 active:bg-red-500/20 active:text-red-300 select-none"
+                className="flex-1 min-h-[36px] rounded-md text-[13px] font-medium bg-white/5 text-white/70 border border-white/8 active:bg-red-500/20 active:text-red-300 select-none"
               >
                 ⌫
               </button>
               <button
                 onTouchStart={(e) => { e.preventDefault(); handleKeyPress(' '); }}
-                className="flex-[2] py-2 rounded-md text-[10px] font-medium bg-white/5 text-white/50 border border-white/8 active:bg-indigo-500/20 select-none"
+                className="flex-[2] min-h-[36px] rounded-md text-[10px] font-medium bg-white/5 text-white/50 border border-white/8 active:bg-indigo-500/20 select-none"
               >
                 Space
               </button>
               <button
                 onTouchStart={(e) => { e.preventDefault(); handleKeyPress('⏎'); }}
-                className="flex-1 py-2 rounded-md text-[12px] font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/20 active:bg-indigo-500/30 select-none"
+                className="flex-1 min-h-[36px] rounded-md text-[12px] font-semibold bg-indigo-500/15 text-indigo-300 border border-indigo-500/20 active:bg-indigo-500/30 select-none"
               >
                 Enter
               </button>
@@ -271,17 +271,17 @@ function Keyboard({ sendMessage }: { sendMessage: (msg: WSMessage) => boolean })
             <div className="flex gap-[3px]">
               <button
                 onTouchStart={(e) => { e.preventDefault(); handleKeyPress('⎋'); }}
-                className="px-2 py-1.5 rounded-md text-[9px] font-medium bg-white/5 text-white/40 border border-white/8 active:bg-red-500/20 active:text-red-300 select-none"
+                className="px-2 min-h-[28px] rounded-md text-[9px] font-medium bg-white/5 text-white/40 border border-white/8 active:bg-red-500/20 active:text-red-300 select-none"
               >
                 Esc
               </button>
-              <button onTouchStart={(e) => { e.preventDefault(); handleKeyPress('▲'); }} className="flex-1 py-1.5 rounded-md text-[9px] bg-white/5 text-white/40 border border-white/8 active:bg-indigo-500/20 select-none">▲</button>
-              <button onTouchStart={(e) => { e.preventDefault(); handleKeyPress('▼'); }} className="flex-1 py-1.5 rounded-md text-[9px] bg-white/5 text-white/40 border border-white/8 active:bg-indigo-500/20 select-none">▼</button>
-              <button onTouchStart={(e) => { e.preventDefault(); handleKeyPress('◀'); }} className="flex-1 py-1.5 rounded-md text-[9px] bg-white/5 text-white/40 border border-white/8 active:bg-indigo-500/20 select-none">◀</button>
-              <button onTouchStart={(e) => { e.preventDefault(); handleKeyPress('▶'); }} className="flex-1 py-1.5 rounded-md text-[9px] bg-white/5 text-white/40 border border-white/8 active:bg-indigo-500/20 select-none">▶</button>
+              <button onTouchStart={(e) => { e.preventDefault(); handleKeyPress('▲'); }} className="flex-1 min-h-[28px] rounded-md text-[9px] bg-white/5 text-white/40 border border-white/8 active:bg-indigo-500/20 select-none">▲</button>
+              <button onTouchStart={(e) => { e.preventDefault(); handleKeyPress('▼'); }} className="flex-1 min-h-[28px] rounded-md text-[9px] bg-white/5 text-white/40 border border-white/8 active:bg-indigo-500/20 select-none">▼</button>
+              <button onTouchStart={(e) => { e.preventDefault(); handleKeyPress('◀'); }} className="flex-1 min-h-[28px] rounded-md text-[9px] bg-white/5 text-white/40 border border-white/8 active:bg-indigo-500/20 select-none">◀</button>
+              <button onTouchStart={(e) => { e.preventDefault(); handleKeyPress('▶'); }} className="flex-1 min-h-[28px] rounded-md text-[9px] bg-white/5 text-white/40 border border-white/8 active:bg-indigo-500/20 select-none">▶</button>
               <button
                 onTouchStart={(e) => { e.preventDefault(); handleKeyPress('Delete'); }}
-                className="px-2 py-1.5 rounded-md text-[9px] bg-white/5 text-white/30 border border-white/8 active:bg-red-500/20 active:text-red-300 select-none"
+                className="px-2 min-h-[28px] rounded-md text-[9px] bg-white/5 text-white/30 border border-white/8 active:bg-red-500/20 active:text-red-300 select-none"
               >
                 Del
               </button>

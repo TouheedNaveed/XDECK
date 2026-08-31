@@ -948,16 +948,30 @@ function launchTarget(action: { kind: string; target: string }): Promise<boolean
   });
 }
 
+import { execSync } from 'child_process';
+
 function getPlatformInputCmds() {
   const platform = process.platform;
-  const isWayland = process.env.XDG_SESSION_TYPE === 'wayland';
 
   if (platform === 'linux') {
-    if (isWayland) {
+    let useYdotool = false;
+    const waylandDisplay = process.env.WAYLAND_DISPLAY;
+    const xdgSession = process.env.XDG_SESSION_TYPE;
+    let hasYdotool = false;
+    let hasXdotool = false;
+    try { hasYdotool = !!execSync('which ydotool 2>/dev/null', { encoding: 'utf8', timeout: 2000 }).trim(); } catch {}
+    try { hasXdotool = !!execSync('which xdotool 2>/dev/null', { encoding: 'utf8', timeout: 2000 }).trim(); } catch {}
+
+    console.log(`[XDECK] Input tools: WAYLAND_DISPLAY=${waylandDisplay || 'unset'}, XDG_SESSION_TYPE=${xdgSession || 'unset'}, ydotool=${hasYdotool}, xdotool=${hasXdotool}`);
+
+    useYdotool = hasYdotool && (!hasXdotool || !!waylandDisplay || xdgSession === 'wayland');
+
+    if (useYdotool) {
+      console.log('[XDECK] Using ydotool for input');
       return {
         key: (key: string) => `ydotool key ${key}`,
         type: (text: string) => `ydotool type -- ${JSON.stringify(text)}`,
-        mouseMove: (dx: number, dy: number) => `ydotool mousemove --relative ${dx} ${dy}`,
+        mouseMove: (dx: number, dy: number) => `ydotool mousemove --relative -- ${dx} ${dy}`,
         mouseClick: (button: number) => `ydotool click ${button === 3 ? 0x111 : 0x110}`,
         mouseScroll: (dy: number) => {
           const clicks = Math.min(Math.max(Math.round(dy), -10), 10);
@@ -966,6 +980,8 @@ function getPlatformInputCmds() {
         },
       };
     }
+
+    console.log('[XDECK] Using xdotool for input');
     return {
       key: (key: string) => `xdotool key ${key}`,
       type: (text: string) => `xdotool type --delay 0 -- ${JSON.stringify(text)}`,
