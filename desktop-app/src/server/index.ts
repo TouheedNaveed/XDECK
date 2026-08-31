@@ -1108,13 +1108,23 @@ function handleMouseEvent(action: string, params: { dx?: number; dy?: number; bu
         return true;
       }
       if (action === 'click' && params.button !== undefined) {
-        const downParam = params.down !== undefined ? (params.down ? ' 1' : ' 0') : '';
-        uinputProcess.stdin.write(`C ${params.button}${downParam}\n`);
+        uinputProcess.stdin.write(`C ${params.button} 2\n`);
+        return true;
+      }
+      if (action === 'mousedown' && params.button !== undefined) {
+        uinputProcess.stdin.write(`C ${params.button} 1\n`);
+        return true;
+      }
+      if (action === 'mouseup' && params.button !== undefined) {
+        uinputProcess.stdin.write(`C ${params.button} 0\n`);
         return true;
       }
       if (action === 'scroll' && params.scrollY !== undefined) {
-        uinputProcess.stdin.write(`S ${params.scrollY}\n`);
-        return true;
+        const sy = Math.round(params.scrollY);
+        if (sy !== 0) {
+          uinputProcess.stdin.write(`S ${sy}\n`);
+          return true;
+        }
       }
     } catch (e) {
       console.warn('[XDECK] uinput write error:', e);

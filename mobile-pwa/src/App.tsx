@@ -527,6 +527,7 @@ export function App() {
       {showInput && (
         <InputTab
           sendMessage={sendMessage}
+          isRotated={isRotated}
           onBack={() => setShowInput(false)}
         />
       )}

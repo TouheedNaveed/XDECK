@@ -3,6 +3,7 @@ import type { WSMessage } from '@shared/protocol';
 
 interface InputTabProps {
   sendMessage: (msg: WSMessage) => boolean;
+  isRotated?: boolean;
   onBack: () => void;
 }
 
@@ -28,29 +29,29 @@ const PRESET_THEMES: KeyboardTheme[] = [
     id: 'midnight',
     name: 'Midnight Blue',
     bgColor: '#080d1a',
-    padBg: 'rgba(255, 255, 255, 0.02)',
-    keyBg: 'rgba(255, 255, 255, 0.06)',
-    keyBorder: 'rgba(255, 255, 255, 0.1)',
+    padBg: '#0f172a',
+    keyBg: '#1e293b',
+    keyBorder: '#334155',
     keyText: '#f1f5f9',
-    modActiveBg: 'rgba(99, 102, 241, 0.35)',
-    modActiveText: '#c7d2fe',
+    modActiveBg: '#4f46e5',
+    modActiveText: '#ffffff',
     accentBg: 'rgba(99, 102, 241, 0.25)',
-    accentText: '#a5b4fc',
-    accentBorder: 'rgba(99, 102, 241, 0.4)',
+    accentText: '#818cf8',
+    accentBorder: '#6366f1',
   },
   {
     id: 'cyberpunk',
     name: 'Cyberpunk Neon',
     bgColor: '#12072b',
-    padBg: 'rgba(236, 72, 153, 0.04)',
-    keyBg: 'rgba(36, 20, 71, 0.8)',
-    keyBorder: 'rgba(236, 72, 153, 0.25)',
+    padBg: '#1a0b38',
+    keyBg: '#241447',
+    keyBorder: '#ec4899',
     keyText: '#fdf2f8',
-    modActiveBg: 'rgba(236, 72, 153, 0.45)',
-    modActiveText: '#fbcfe8',
+    modActiveBg: '#ec4899',
+    modActiveText: '#ffffff',
     accentBg: 'rgba(236, 72, 153, 0.3)',
     accentText: '#f472b6',
-    accentBorder: 'rgba(236, 72, 153, 0.5)',
+    accentBorder: '#ec4899',
   },
   {
     id: 'oled',
@@ -64,41 +65,41 @@ const PRESET_THEMES: KeyboardTheme[] = [
     modActiveText: '#ffffff',
     accentBg: 'rgba(16, 185, 129, 0.2)',
     accentText: '#34d399',
-    accentBorder: 'rgba(16, 185, 129, 0.4)',
+    accentBorder: '#10b981',
   },
   {
     id: 'royal',
     name: 'Royal Violet',
     bgColor: '#0d061c',
-    padBg: 'rgba(168, 85, 247, 0.03)',
-    keyBg: 'rgba(38, 21, 74, 0.7)',
-    keyBorder: 'rgba(168, 85, 247, 0.2)',
+    padBg: '#170c2e',
+    keyBg: '#26154a',
+    keyBorder: '#a855f7',
     keyText: '#f5f3ff',
-    modActiveBg: 'rgba(168, 85, 247, 0.4)',
-    modActiveText: '#e9d5ff',
+    modActiveBg: '#a855f7',
+    modActiveText: '#ffffff',
     accentBg: 'rgba(168, 85, 247, 0.25)',
     accentText: '#c084fc',
-    accentBorder: 'rgba(168, 85, 247, 0.45)',
+    accentBorder: '#a855f7',
   },
   {
     id: 'matrix',
     name: 'Emerald Matrix',
     bgColor: '#02150d',
-    padBg: 'rgba(34, 197, 94, 0.03)',
-    keyBg: 'rgba(10, 41, 24, 0.75)',
-    keyBorder: 'rgba(34, 197, 94, 0.25)',
+    padBg: '#062417',
+    keyBg: '#0a2918',
+    keyBorder: '#22c55e',
     keyText: '#bbf7d0',
-    modActiveBg: 'rgba(34, 197, 94, 0.4)',
-    modActiveText: '#dcfce7',
+    modActiveBg: '#22c55e',
+    modActiveText: '#000000',
     accentBg: 'rgba(34, 197, 94, 0.25)',
     accentText: '#4ade80',
-    accentBorder: 'rgba(34, 197, 94, 0.45)',
+    accentBorder: '#22c55e',
   },
 ];
 
 const THEME_STORAGE_KEY = 'xdeck_input_theme_v2';
 
-export default function InputTab({ sendMessage, onBack }: InputTabProps) {
+export default function InputTab({ sendMessage, isRotated = false, onBack }: InputTabProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('split');
   const [showSettings, setShowSettings] = useState(false);
   const [theme, setTheme] = useState<KeyboardTheme>(() => {
@@ -190,6 +191,7 @@ export default function InputTab({ sendMessage, onBack }: InputTabProps) {
           <Trackpad
             sendMessage={sendMessage}
             theme={theme}
+            isRotated={isRotated}
             isFull={viewMode === 'trackpad'}
           />
         )}
@@ -221,10 +223,12 @@ export default function InputTab({ sendMessage, onBack }: InputTabProps) {
 function Trackpad({
   sendMessage,
   theme,
+  isRotated,
   isFull,
 }: {
   sendMessage: (msg: WSMessage) => boolean;
   theme: KeyboardTheme;
+  isRotated: boolean;
   isFull: boolean;
 }) {
   const padRef = useRef<HTMLDivElement>(null);
@@ -261,12 +265,23 @@ function Trackpad({
     }
 
     if (e.touches.length >= 2) {
-      sendMouse('scroll', { scrollY: -Math.round(dy * 1.5) });
+      // 2-Finger scroll with orientation correction
+      const rawScroll = isRotated ? -dx : dy;
+      const scrollClicks = -Math.sign(rawScroll) * Math.max(1, Math.round(Math.abs(rawScroll) / 5));
+      if (scrollClicks !== 0) {
+        sendMouse('scroll', { scrollY: scrollClicks });
+      }
     } else {
-      // 1.8x sensitivity factor for smooth response
-      sendMouse('move', { dx: Math.round(dx * 1.8), dy: Math.round(dy * 1.8) });
+      // 1-Finger drag relative move with CSS 90deg rotation correction
+      let effectiveDx = dx;
+      let effectiveDy = dy;
+      if (isRotated) {
+        effectiveDx = dy;
+        effectiveDy = -dx;
+      }
+      sendMouse('move', { dx: Math.round(effectiveDx * 1.8), dy: Math.round(effectiveDy * 1.8) });
     }
-  }, [sendMouse]);
+  }, [sendMouse, isRotated]);
 
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
     e.preventDefault();
@@ -275,10 +290,10 @@ function Trackpad({
       lastPos.current = null;
       setTapping(false);
 
-      // If tap was quick and didn't drag, trigger left click
+      // If tap was short and stationary, trigger Left Click
       const elapsed = Date.now() - touchStartTime.current;
-      if (!didMove.current && elapsed < 250) {
-        sendMouse('click', { button: 1, down: false });
+      if (!didMove.current && elapsed < 280) {
+        sendMouse('click', { button: 1 });
       }
     } else {
       lastPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -330,7 +345,7 @@ function Trackpad({
 
         {/* Gesture Hint */}
         <div className="absolute top-2 left-0 right-0 text-center pointer-events-none px-4">
-          <span className="text-[9px] text-white/30 font-mono tracking-wider">
+          <span className="text-[9px] text-white/40 font-mono tracking-wider">
             Drag = Move &middot; Tap = Left Click &middot; 2-Finger = Scroll
           </span>
         </div>
@@ -341,18 +356,20 @@ function Trackpad({
         <button
           onTouchStart={(e) => {
             e.preventDefault();
-            sendMouse('click', { button: 1, down: false });
+            sendMouse('click', { button: 1 });
           }}
-          className="flex-1 flex items-center justify-center text-[11px] font-semibold text-white/70 active:bg-white/15 border-r border-white/10 transition-colors"
+          onClick={() => sendMouse('click', { button: 1 })}
+          className="flex-1 flex items-center justify-center text-[11px] font-semibold text-white/80 active:bg-white/20 border-r border-white/10 transition-colors"
         >
           Left Click
         </button>
         <button
           onTouchStart={(e) => {
             e.preventDefault();
-            sendMouse('click', { button: 3, down: false });
+            sendMouse('click', { button: 3 });
           }}
-          className="flex-1 flex items-center justify-center text-[11px] font-semibold text-white/70 active:bg-white/15 transition-colors"
+          onClick={() => sendMouse('click', { button: 3 })}
+          className="flex-1 flex items-center justify-center text-[11px] font-semibold text-white/80 active:bg-white/20 transition-colors"
         >
           Right Click
         </button>
@@ -804,10 +821,18 @@ function ThemeSettingsModal({
   const [current, setCurrent] = useState<KeyboardTheme>({ ...theme });
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 select-none">
-      <div className="w-full max-w-sm bg-slate-900/95 border border-white/20 rounded-2xl shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md select-none overflow-hidden"
+      style={{
+        paddingTop: 'max(env(safe-area-inset-top, 0px), 12px)',
+        paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 12px)',
+        paddingLeft: 'max(env(safe-area-inset-left, 0px), 12px)',
+        paddingRight: 'max(env(safe-area-inset-right, 0px), 12px)',
+      }}
+    >
+      <div className="w-full max-w-sm bg-slate-900 border border-white/20 rounded-2xl shadow-2xl flex flex-col max-h-full h-auto overflow-hidden">
         {/* Pinned Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 shrink-0 bg-slate-900">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/10 shrink-0 bg-slate-900">
           <h2 className="text-sm font-bold text-white flex items-center gap-2">
             <span>🎨</span>
             <span>Keyboard & Key Colors</span>
@@ -821,13 +846,13 @@ function ThemeSettingsModal({
         </div>
 
         {/* Scrollable Content Body */}
-        <div className="flex-1 overflow-y-auto min-h-0 p-4 space-y-4 touch-pan-y">
+        <div className="flex-1 overflow-y-auto min-h-0 p-3 space-y-3 touch-pan-y overscroll-contain">
           {/* Preset Themes Section */}
           <div>
-            <label className="text-[11px] font-semibold text-white/60 uppercase tracking-wider block mb-2">
+            <label className="text-[11px] font-semibold text-white/60 uppercase tracking-wider block mb-1.5">
               Preset Themes
             </label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-1.5">
               {PRESET_THEMES.map((preset) => {
                 const isSelected = current.id === preset.id;
                 return (
@@ -844,7 +869,7 @@ function ThemeSettingsModal({
                     }`}
                   >
                     <div
-                      className="w-5 h-5 rounded-md border border-white/20 shrink-0 shadow-sm"
+                      className="w-4 h-4 rounded-md border border-white/20 shrink-0 shadow-sm"
                       style={{ backgroundColor: preset.bgColor }}
                     />
                     <span className="text-[11px] font-medium text-white/90 truncate">{preset.name}</span>
@@ -855,13 +880,13 @@ function ThemeSettingsModal({
           </div>
 
           {/* Custom Colors Section */}
-          <div className="space-y-2.5 pt-2 border-t border-white/10">
+          <div className="space-y-2 pt-2 border-t border-white/10">
             <label className="text-[11px] font-semibold text-white/60 uppercase tracking-wider block">
               Custom Colors
             </label>
 
             {/* Background Color */}
-            <div className="flex items-center justify-between bg-white/5 p-2.5 rounded-xl border border-white/10">
+            <div className="flex items-center justify-between bg-white/5 p-2 rounded-xl border border-white/10">
               <span className="text-xs text-white/80 font-medium">Keyboard Background</span>
               <div className="flex items-center gap-2">
                 <input
@@ -872,14 +897,14 @@ function ThemeSettingsModal({
                     setCurrent(updated);
                     onSave(updated);
                   }}
-                  className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                  className="w-7 h-7 rounded-lg cursor-pointer bg-transparent border-0"
                 />
                 <span className="text-[11px] font-mono text-white/60">{current.bgColor}</span>
               </div>
             </div>
 
             {/* Key Background Color */}
-            <div className="flex items-center justify-between bg-white/5 p-2.5 rounded-xl border border-white/10">
+            <div className="flex items-center justify-between bg-white/5 p-2 rounded-xl border border-white/10">
               <span className="text-xs text-white/80 font-medium">Key Background</span>
               <div className="flex items-center gap-2">
                 <input
@@ -890,14 +915,14 @@ function ThemeSettingsModal({
                     setCurrent(updated);
                     onSave(updated);
                   }}
-                  className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                  className="w-7 h-7 rounded-lg cursor-pointer bg-transparent border-0"
                 />
                 <span className="text-[11px] font-mono text-white/60">{current.keyBg}</span>
               </div>
             </div>
 
             {/* Key Text Color */}
-            <div className="flex items-center justify-between bg-white/5 p-2.5 rounded-xl border border-white/10">
+            <div className="flex items-center justify-between bg-white/5 p-2 rounded-xl border border-white/10">
               <span className="text-xs text-white/80 font-medium">Key Text Color</span>
               <div className="flex items-center gap-2">
                 <input
@@ -908,14 +933,14 @@ function ThemeSettingsModal({
                     setCurrent(updated);
                     onSave(updated);
                   }}
-                  className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                  className="w-7 h-7 rounded-lg cursor-pointer bg-transparent border-0"
                 />
                 <span className="text-[11px] font-mono text-white/60">{current.keyText}</span>
               </div>
             </div>
 
             {/* Accent Color */}
-            <div className="flex items-center justify-between bg-white/5 p-2.5 rounded-xl border border-white/10">
+            <div className="flex items-center justify-between bg-white/5 p-2 rounded-xl border border-white/10">
               <span className="text-xs text-white/80 font-medium">Accent / Special Key</span>
               <div className="flex items-center gap-2">
                 <input
@@ -928,12 +953,12 @@ function ThemeSettingsModal({
                       id: 'custom',
                       accentText: val,
                       accentBg: `${val}33`,
-                      accentBorder: `${val}66`,
+                      accentBorder: val,
                     };
                     setCurrent(updated);
                     onSave(updated);
                   }}
-                  className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0"
+                  className="w-7 h-7 rounded-lg cursor-pointer bg-transparent border-0"
                 />
                 <span className="text-[11px] font-mono text-white/60">{current.accentText}</span>
               </div>
@@ -942,7 +967,7 @@ function ThemeSettingsModal({
         </div>
 
         {/* Pinned Action Buttons Footer */}
-        <div className="px-4 py-3 border-t border-white/10 flex gap-2 shrink-0 bg-slate-900">
+        <div className="px-4 py-2.5 border-t border-white/10 flex gap-2 shrink-0 bg-slate-900">
           <button
             onClick={() => {
               const defaultTheme = PRESET_THEMES[0];

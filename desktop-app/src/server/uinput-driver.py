@@ -114,17 +114,19 @@ def main():
                 pass
 
         elif cmd == 'C' and len(parts) >= 2:
-            # Click / button: C <button> [down]
+            # Click / button: C <button> [mode]
+            # mode: 1 = down, 0 = up, 2 or omitted = full click (down + 25ms delay + up)
             try:
                 btn_num = int(parts[1])
                 btn_code = BUTTON_MAP.get(btn_num, BTN_LEFT)
-                if len(parts) >= 3:
-                    down = int(parts[2])
-                    write_event(EV_KEY, btn_code, 1 if down else 0)
-                else:
-                    # Click: press down then up
+                mode = int(parts[2]) if len(parts) >= 3 else 2
+                if mode == 1:
                     write_event(EV_KEY, btn_code, 1)
-                    time.sleep(0.01)
+                elif mode == 0:
+                    write_event(EV_KEY, btn_code, 0)
+                else:
+                    write_event(EV_KEY, btn_code, 1)
+                    time.sleep(0.025)
                     write_event(EV_KEY, btn_code, 0)
             except Exception:
                 pass
