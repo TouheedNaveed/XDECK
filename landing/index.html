@@ -262,7 +262,7 @@
     <div class="max-w-4xl mx-auto text-center fade-in">
       <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-4">Download XDECK</h2>
       <p class="text-white/40 mb-12">Available for Windows, macOS, and Linux</p>
-      <div class="grid sm:grid-cols-3 gap-6">
+      <div class="grid sm:grid-cols-4 gap-6">
         <a href="javascript:void(0)" onclick="downloadRelease('win')" class="glass-card rounded-2xl p-6 text-center cursor-pointer group">
           <svg class="w-10 h-10 mx-auto mb-3 text-white/50 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
           <h3 class="font-heading font-semibold mb-1">Windows</h3>
@@ -278,6 +278,40 @@
           <h3 class="font-heading font-semibold mb-1">Linux</h3>
           <p class="text-xs text-white/30">.deb / .AppImage</p>
         </a>
+        <a href="javascript:void(0)" onclick="downloadRelease('android')" class="glass-card rounded-2xl p-6 text-center cursor-pointer group">
+          <svg class="w-10 h-10 mx-auto mb-3 text-white/50 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3l1.815 3.144a.54.54 0 01-.19.736.54.54 0 01-.74-.188L16.56 15.79c-1.32.57-2.77.9-4.32.9a10.5 10.5 0 01-4.33-.9l-1.85 3.203a.54.54 0 01-.738.188.54.54 0 01-.19-.736l1.816-3.144A10.15 10.15 0 012.3 11.23c-.15 0-.27-.12-.27-.27V9.75c0-.15.12-.27.27-.27H3.4A8.7 8.7 0 0111.4 3.09V1.35c0-.15.12-.27.27-.27h.66c.15 0 .27.12.27.27v1.74a8.7 8.7 0 018 6.39h1.1c.15 0 .27.12.27.27v1.21c0 .15-.12.27-.27.27H20.6a10.15 10.15 0 01-3.077 4.07zM7.34 9.17a.82.82 0 100 1.64.82.82 0 000-1.64zm8.68 0a.82.82 0 100 1.64.82.82 0 000-1.64z"/></svg>
+          <h3 class="font-heading font-semibold mb-1">Android</h3>
+          <p class="text-xs text-white/30">Native APK</p>
+        </a>
+      </div>
+
+      <!-- iOS Installation Steps -->
+      <div class="mt-16 max-w-2xl mx-auto glass-card rounded-3xl p-8 text-left border border-white/5">
+        <h3 class="font-heading font-bold text-xl mb-4 text-center">Using an iPhone? Install as PWA</h3>
+        <p class="text-xs text-white/40 text-center mb-6">Since sideloading is restricted on iOS, you can easily install the app directly via Safari:</p>
+        <div class="space-y-4">
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 text-sm font-bold text-white/60">1</div>
+            <div>
+              <p class="text-sm font-semibold text-white">Open the Web App</p>
+              <p class="text-xs text-white/40">Navigate to <a href="https://xdeck-pwa.pages.dev" target="_blank" class="text-purple-400 hover:underline">xdeck-pwa.pages.dev</a> in Safari browser.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 text-sm font-bold text-white/60">2</div>
+            <div>
+              <p class="text-sm font-semibold text-white">Tap Share Button</p>
+              <p class="text-xs text-white/40">Tap the Safari Share icon <span class="bg-white/10 px-1.5 py-0.5 rounded font-mono text-[10px] text-white">Share [↑]</span> at the bottom of the screen.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 text-sm font-bold text-white/60">3</div>
+            <div>
+              <p class="text-sm font-semibold text-white">Add to Home Screen</p>
+              <p class="text-xs text-white/40">Scroll down and select <span class="bg-white/10 px-1.5 py-0.5 rounded font-mono text-[10px] text-white">Add to Home Screen [+]</span> from the list.</p>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="mt-12 glass rounded-2xl p-6 inline-block">
         <p class="text-sm text-white/40">Or open on your phone:</p>
@@ -356,7 +390,8 @@
         let filename;
         if (platform === 'win') filename = assets.find(a => a.name.endsWith('.exe') && !a.name.includes('blockmap'));
         else if (platform === 'mac') filename = assets.find(a => a.name.endsWith('.dmg'));
-        else filename = assets.find(a => a.name.endsWith('.AppImage'));
+        else if (platform === 'linux') filename = assets.find(a => a.name.endsWith('.AppImage'));
+        else if (platform === 'android') filename = assets.find(a => a.name.endsWith('.apk'));
         if (filename) {
           location.href = filename.browser_download_url;
         } else {
