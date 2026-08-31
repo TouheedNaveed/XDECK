@@ -7,7 +7,7 @@ import { EventEmitter } from 'events';
 import QRCode from 'qrcode';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
-import { exec, spawn, execFileSync } from 'child_process';
+import { exec, spawn, execSync, execFileSync, type ChildProcess } from 'child_process';
 import path from 'path';
 import { Bonjour } from 'bonjour-service';
 import crypto from 'crypto';
@@ -948,8 +948,6 @@ function launchTarget(action: { kind: string; target: string }): Promise<boolean
   });
 }
 
-import { execSync } from 'child_process';
-
 function getPlatformInputCmds() {
   const platform = process.platform;
 
@@ -1068,8 +1066,6 @@ function handleKeyboardEvent(action: string, value: string): boolean {
   }
   return false;
 }
-
-import { spawn, ChildProcess } from 'child_process';
 
 let uinputProcess: ChildProcess | null = null;
 let uinputReady = false;
