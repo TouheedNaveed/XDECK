@@ -306,16 +306,20 @@ export function App() {
   }, [commit]);
 
   const handleUpdatePageProperties = useCallback((pageId: string, background: any, name: string, textColor: string) => {
-    const nextPages = config.pages.map((p) => p.id !== pageId ? p : { ...p, background, name, textColor });
-    commit({ type: 'config_sync', pages: nextPages, layoutPreference: layout }, (c) => ({
+    // Find the full current page so we can send the complete object via page_update
+    const existingPage = config.pages.find((p) => p.id === pageId);
+    if (!existingPage) return;
+    const updatedPage = { ...existingPage, background, name, textColor };
+    commit({ type: 'page_update', page: updatedPage }, (c) => ({
       ...c,
-      pages: nextPages,
+      pages: c.pages.map((p) => p.id !== pageId ? p : { ...p, background, name, textColor }),
     }), 'Page properties updated');
-  }, [config.pages, layout, commit]);
+  }, [config.pages, commit]);
 
   const handleUpdateBackground = useCallback((pageId: string, background: any) => {
     const pageObj = config.pages.find((p) => p.id === pageId);
-    handleUpdatePageProperties(pageId, background, pageObj?.name || 'Main', pageObj?.textColor || '#ffffff');
+    if (!pageObj) return;
+    handleUpdatePageProperties(pageId, background, pageObj.name || 'Main', pageObj.textColor || '#ffffff');
   }, [config.pages, handleUpdatePageProperties]);
 
   const handleUpdateGrid = useCallback((pageId: string, grid: any) => {
