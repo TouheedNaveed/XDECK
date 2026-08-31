@@ -114,10 +114,13 @@ export interface TriggerResultMessage {
 
 export interface PingMessage {
   type: 'ping';
+  /** Echoed back in the pong so a sender can measure round-trip time. */
+  ts?: number;
 }
 
 export interface PongMessage {
   type: 'pong';
+  ts?: number;
 }
 
 export interface PageUpdateMessage {

@@ -188,7 +188,17 @@ export function useWebSocket(): UseWebSocketReturn {
 
     wsRef.current = ws;
 
+    // A phone that loses its network mid-handshake can sit in CONNECTING for a
+    // minute or more before the browser gives up, which reads as "stuck" and is
+    // why reconnecting by hand seemed to be the only fix. Give it a deadline.
+    const openTimeout = setTimeout(() => {
+      if (gen !== generation.current || ws.readyState !== WebSocket.CONNECTING) return;
+      console.log('[XDECK] Handshake timed out, retrying');
+      ws.close();
+    }, 15000);
+
     ws.onopen = () => {
+      clearTimeout(openTimeout);
       if (gen !== generation.current) { ws.close(); return; }
       console.log('[XDECK] Socket open');
       reconnectAttempts.current = 0;
@@ -301,6 +311,7 @@ export function useWebSocket(): UseWebSocketReturn {
     ws.onerror = () => {};
 
     ws.onclose = () => {
+      clearTimeout(openTimeout);
       if (gen !== generation.current) return;
       wsRef.current = null;
       peerOnline.current = false;

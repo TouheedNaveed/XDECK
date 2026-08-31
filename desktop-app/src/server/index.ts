@@ -7,7 +7,7 @@ import { EventEmitter } from 'events';
 import QRCode from 'qrcode';
 import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
-import { exec } from 'child_process';
+import { exec, spawn, execFileSync } from 'child_process';
 import path from 'path';
 import { Bonjour } from 'bonjour-service';
 import crypto from 'crypto';
@@ -338,10 +338,6 @@ function saveLicenseKey(key: string): void {
   fs.writeFileSync(LICENSE_FILE, key);
 }
 
-function clearLicenseKey(): void {
-  try { fs.rmSync(LICENSE_FILE, { force: true }); } catch {}
-}
-
 /**
  * Stable identity for this install. The relay uses it to allow this machine to
  * reclaim its own session after a sleep/network drop while still refusing a
@@ -369,17 +365,37 @@ let relayAuthFailed = false;
 let relayDisabled = false;
 /** Last fatal relay message, surfaced to the desktop UI via /relay/status. */
 let relayLastError: string | null = null;
+let relayHeartbeat: ReturnType<typeof setInterval> | null = null;
+
+/**
+ * How often the desktop proves the relay link is still carrying traffic. A dead
+ * TCP path (laptop slept, router dropped the NAT entry, Render replaced the
+ * instance) does not close the socket — readyState stays OPEN forever and the app
+ * looks connected while every trigger silently goes nowhere. Only an unanswered
+ * ping reveals it.
+ */
+const RELAY_PING_INTERVAL = 20000;
+/** Missed replies tolerated before we declare the link dead and reconnect. */
+const RELAY_MAX_MISSED_PONGS = 2;
+
+function stopRelayHeartbeat() {
+  if (relayHeartbeat) { clearInterval(relayHeartbeat); relayHeartbeat = null; }
+}
 
 function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg: WSMessage) => void, wss: WebSocketServer) {
   if (relayWs) { relayWs.close(); relayWs = null; }
   if (relayReconnectTimer) { clearTimeout(relayReconnectTimer); relayReconnectTimer = null; }
+  stopRelayHeartbeat();
   relayAuthFailed = false;
   relayDisabled = false;
   relayLastError = null;
 
   console.log(`[RELAY] Connecting to ${RELAY_URL}...`);
-  const ws = new WebSocket(RELAY_URL);
+  // Without a handshake timeout a black-holed network leaves the socket stuck in
+  // CONNECTING with no close event, and the retry loop never gets its turn.
+  const ws = new WebSocket(RELAY_URL, { handshakeTimeout: 15000 });
   relayWs = ws;
+  let missedPongs = 0;
 
   ws.on('open', () => {
     console.log('[RELAY] Connected, authenticating...');
@@ -391,7 +407,32 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
       deviceName: `XDECK Desktop (${os.hostname()})`,
       deviceId: DEVICE_ID,
     }));
+
+    stopRelayHeartbeat();
+    missedPongs = 0;
+    relayHeartbeat = setInterval(() => {
+      if (relayWs !== ws || ws.readyState !== WebSocket.OPEN) return;
+      if (missedPongs >= RELAY_MAX_MISSED_PONGS) {
+        console.warn('[RELAY] No reply to keepalive — link is dead, reconnecting.');
+        stopRelayHeartbeat();
+        // terminate() rather than close(): a half-open socket will never complete
+        // the closing handshake, and we need the close event now, not in minutes.
+        ws.terminate();
+        return;
+      }
+      missedPongs++;
+      try {
+        ws.send(JSON.stringify({ type: 'ping', ts: Date.now() } as WSMessage));
+      } catch {
+        missedPongs = RELAY_MAX_MISSED_PONGS;
+      }
+    }, RELAY_PING_INTERVAL);
   });
+
+  // Any inbound traffic proves the link is alive, whichever form it arrives in.
+  const markAlive = () => { missedPongs = 0; };
+  ws.on('pong', markAlive);
+  ws.on('ping', markAlive);
 
   const sendConfig = () => {
     if (ws.readyState !== WebSocket.OPEN) return;
@@ -403,6 +444,7 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
   };
 
   ws.on('message', async (data) => {
+    markAlive();
     try {
       const msg = JSON.parse(data.toString());
 
@@ -441,8 +483,9 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
         } else if (msg.error?.includes('Invalid license key')) {
           relayAuthFailed = true;
           relayLastError = msg.message || 'That license key is not valid. Enter the key from your purchase confirmation.';
-          // Don't keep an unusable key around pretending Cloud mode is configured.
-          clearLicenseKey();
+          // Deliberately keep the key on disk. A rejection can also mean the relay
+          // is misconfigured, and deleting the only copy the user has would cost
+          // them their purchase email to recover.
         } else if (msg.error === 'replaced') {
           relayLastError = 'This computer\'s session was taken over by another XDECK instance.';
         }
@@ -469,9 +512,12 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
       }
 
       if (msg.type === 'ping') {
-        ws.send(JSON.stringify({ type: 'pong' } as WSMessage));
+        ws.send(JSON.stringify({ type: 'pong', ts: msg.ts } as WSMessage));
         return;
       }
+
+      // Our own keepalive coming back; markAlive() above already recorded it.
+      if (msg.type === 'pong') return;
 
       // Forward to local processing
       if (msg.type === 'file_upload') {
@@ -536,6 +582,8 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
       return;
     }
     relayWs = null;
+    stopRelayHeartbeat();
+    serverEvents.emit('relay_status', false);
     if (relayDisabled) {
       console.log('[RELAY] Disconnected by request.');
       return;
@@ -572,6 +620,164 @@ function findButton(config: DeckConfig, buttonId: string): Button | null {
     if (btn) return btn;
   }
   return null;
+}
+
+/**
+ * Terminal emulators in the order we prefer them, with the flag that means
+ * "run the rest of this argv as a command". The command we hand over is always
+ * `bash <script>` so nothing has to survive a second round of shell quoting.
+ * Concrete terminals come first: the x-terminal-emulator alternative is a
+ * wrapper whose argument handling varies by distro, so it is a late fallback.
+ */
+const LINUX_TERMINALS: { bin: string; args: (script: string) => string[] }[] = [
+  { bin: 'gnome-terminal', args: (s) => ['--', 'bash', s] },
+  { bin: 'ptyxis', args: (s) => ['--', 'bash', s] },
+  { bin: 'konsole', args: (s) => ['-e', 'bash', s] },
+  { bin: 'xfce4-terminal', args: (s) => ['-x', 'bash', s] },
+  { bin: 'mate-terminal', args: (s) => ['-x', 'bash', s] },
+  { bin: 'tilix', args: (s) => ['-e', `bash ${s}`] },
+  { bin: 'terminator', args: (s) => ['-x', 'bash', s] },
+  { bin: 'kitty', args: (s) => ['bash', s] },
+  { bin: 'alacritty', args: (s) => ['-e', 'bash', s] },
+  { bin: 'wezterm', args: (s) => ['start', '--', 'bash', s] },
+  { bin: 'foot', args: (s) => ['bash', s] },
+  { bin: 'lxterminal', args: (s) => ['-e', `bash ${s}`] },
+  { bin: 'qterminal', args: (s) => ['-e', `bash ${s}`] },
+  { bin: 'deepin-terminal', args: (s) => ['-e', `bash ${s}`] },
+  { bin: 'urxvt', args: (s) => ['-e', 'bash', s] },
+  { bin: 'x-terminal-emulator', args: (s) => ['-e', 'bash', s] },
+  { bin: 'xterm', args: (s) => ['-e', 'bash', s] },
+];
+
+function hasBinary(bin: string): boolean {
+  try {
+    execFileSync('command', ['-v', bin], { shell: '/bin/sh', stdio: 'ignore' });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Removes scripts from earlier runs so tmp doesn't grow without bound. */
+function pruneCommandScripts(): void {
+  const dir = os.tmpdir();
+  const cutoff = Date.now() - 60 * 60 * 1000;
+  try {
+    for (const name of fs.readdirSync(dir)) {
+      if (!name.startsWith('xdeck-cmd-')) continue;
+      const full = path.join(dir, name);
+      try {
+        if (fs.statSync(full).mtimeMs < cutoff) fs.rmSync(full, { force: true });
+      } catch {}
+    }
+  } catch {}
+}
+
+/**
+ * Writes the user's command to a throwaway script that keeps the window open
+ * afterwards. Interactive commands are the whole point here — `sudo apt update`
+ * needs a tty to prompt for a password, which is exactly what running it
+ * headless through exec() could never give it.
+ */
+function writeCommandScript(command: string): string {
+  pruneCommandScripts();
+  const isWindows = process.platform === 'win32';
+  const file = path.join(os.tmpdir(), `xdeck-cmd-${uuidv4()}${isWindows ? '.cmd' : '.sh'}`);
+  const body = isWindows
+    ? [
+        '@echo off',
+        'title XDECK Command',
+        command,
+        'echo.',
+        'echo [XDECK] Command finished with exit code %ERRORLEVEL%.',
+        'pause',
+        '',
+      ].join('\r\n')
+    : [
+        '#!/usr/bin/env bash',
+        command,
+        'status=$?',
+        `printf '\\n[XDECK] Command finished with exit code %s. Press Enter to close…' "$status"`,
+        'read -r _',
+        '',
+      ].join('\n');
+  fs.writeFileSync(file, body, { mode: 0o700 });
+  return file;
+}
+
+/**
+ * Runs a command in a real terminal window. Resolves as soon as the terminal has
+ * been launched: the command itself may run for minutes or wait for input, and
+ * the phone must not sit there until a 30s timeout decides the trigger failed.
+ */
+function runInTerminal(command: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    const cmd = command.trim();
+    if (!cmd) { resolve(false); return; }
+
+    let script: string;
+    try {
+      script = writeCommandScript(cmd);
+    } catch (e: any) {
+      console.error('[XDECK] Could not stage command script:', e.message);
+      resolve(false);
+      return;
+    }
+
+    const launch = (bin: string, args: string[]) => {
+      try {
+        const child = spawn(bin, args, { detached: true, stdio: 'ignore' });
+        child.on('error', (err) => {
+          console.error(`[XDECK] Terminal "${bin}" failed to start:`, err.message);
+        });
+        child.unref();
+        console.log(`[XDECK] Running in ${bin}: ${cmd}`);
+        resolve(true);
+      } catch (e: any) {
+        console.error(`[XDECK] Terminal "${bin}" failed to start:`, e.message);
+        resolve(false);
+      }
+    };
+
+    if (process.platform === 'darwin') {
+      // Terminal.app is always present, and `do script` opens a visible window.
+      launch('osascript', [
+        '-e', `tell application "Terminal" to do script "bash ${script}"`,
+        '-e', 'tell application "Terminal" to activate',
+      ]);
+      return;
+    }
+
+    if (process.platform === 'win32') {
+      // The first quoted argument to `start` is the window title, so it must be
+      // supplied before the path or cmd.exe would treat the path as the title.
+      launch('cmd.exe', ['/c', 'start', 'XDECK Command', 'cmd.exe', '/k', script]);
+      return;
+    }
+
+    // $TERMINAL is the usual way to say "use this one"; honour it before guessing.
+    // If we know that terminal's argument style, reuse it rather than assuming -e.
+    const preferred = (process.env.TERMINAL || '').trim();
+    const known = preferred
+      ? LINUX_TERMINALS.find((t) => t.bin === path.basename(preferred))
+      : undefined;
+    const candidates = preferred
+      ? [known || { bin: preferred, args: (s: string) => ['-e', 'bash', s] }, ...LINUX_TERMINALS]
+      : LINUX_TERMINALS;
+    const terminal = candidates.find((t) => hasBinary(t.bin));
+    if (terminal) {
+      launch(terminal.bin, terminal.args(script));
+      return;
+    }
+
+    // Headless machine (or a stripped container): still run the command so the
+    // button does something, but say why there was no window.
+    console.warn('[XDECK] No terminal emulator found — running the command without a window.');
+    exec(cmd, { timeout: 30000 }, (err) => {
+      if (err) console.error('[XDECK] Command failed:', err.message);
+    });
+    resolve(true);
+  });
 }
 
 function launchTarget(action: { kind: string; target: string }): Promise<boolean> {
@@ -722,7 +928,7 @@ function launchTarget(action: { kind: string; target: string }): Promise<boolean
     }
 
     if (action.kind === 'run_command') {
-      exec(action.target, { timeout: 30000 }, (err) => resolve(!err));
+      runInTerminal(action.target).then(resolve);
       return;
     }
 
@@ -808,14 +1014,34 @@ export function startServer() {
 
   const connectedDevices = new Map<string, { ip: string; connectedAt: Date }>();
 
+  // Same reasoning as the relay keepalive: a phone that walks out of Wi-Fi range
+  // leaves a socket that stays OPEN on this side forever, so it keeps appearing in
+  // the device list and keeps its slot. Ping every 20s and reap what doesn't answer.
+  const lanHeartbeat = setInterval(() => {
+    wss.clients.forEach((client) => {
+      const sock = client as WebSocket & { xdeckAlive?: boolean };
+      if (sock.xdeckAlive === false) {
+        console.log('[XDECK] Dropping unresponsive client');
+        sock.terminate();
+        return;
+      }
+      sock.xdeckAlive = false;
+      try { sock.ping(); } catch {}
+    });
+  }, 20000);
+  wss.on('close', () => clearInterval(lanHeartbeat));
+
   wss.on('connection', (ws, req) => {
     const clientIp = req.socket.remoteAddress || 'unknown';
     const deviceId = `${clientIp}_${Date.now()}`;
+    (ws as WebSocket & { xdeckAlive?: boolean }).xdeckAlive = true;
+    ws.on('pong', () => { (ws as WebSocket & { xdeckAlive?: boolean }).xdeckAlive = true; });
     connectedDevices.set(deviceId, { ip: clientIp, connectedAt: new Date() });
     console.log(`[XDECK] Client connected from ${clientIp} (${connectedDevices.size} total)`);
     ws.send(JSON.stringify({ type: 'config_sync', pages: config.pages, layoutPreference: config.layoutPreference } as WSMessage));
 
     ws.on('message', async (data) => {
+      (ws as WebSocket & { xdeckAlive?: boolean }).xdeckAlive = true;
       try {
         const msg: WSMessage = JSON.parse(data.toString());
 
