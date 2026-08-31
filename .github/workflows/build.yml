@@ -81,8 +81,89 @@ jobs:
             desktop-app/release/*.yaml
           if-no-files-found: warn
 
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install PWA dependencies
+        working-directory: mobile-pwa
+        run: npm install
+
+      - name: Build PWA
+        working-directory: mobile-pwa
+        run: npm run build
+
+      - name: Install Capacitor
+        working-directory: mobile-pwa
+        run: npm install @capacitor/core @capacitor/cli @capacitor/android
+
+      - name: Sync Capacitor project
+        working-directory: mobile-pwa
+        run: |
+          npx cap init XDECK com.xdeck.mobile --web-dir=dist || true
+          npx cap add android || true
+          cat << 'EOF' > capacitor.config.json
+          {
+            "appId": "com.xdeck.mobile",
+            "appName": "XDECK",
+            "webDir": "dist",
+            "server": {
+              "cleartext": true,
+              "allowNavigation": ["192.168.1.*", "10.*", "172.16.*"]
+            }
+          }
+          EOF
+          npx cap sync
+
+      - name: Update JVM compatibility & Cleartext settings
+        working-directory: mobile-pwa/android
+        run: |
+          if ! grep -q "subprojects" build.gradle; then
+            cat << 'EOF' >> build.gradle
+          subprojects {
+              afterEvaluate { project ->
+                  if (project.hasProperty("android")) {
+                      project.android {
+                          compileOptions {
+                              sourceCompatibility = JavaVersion.VERSION_17
+                              targetCompatibility = JavaVersion.VERSION_17
+                          }
+                      }
+                  }
+              }
+          }
+          EOF
+          fi
+          MANIFEST="app/src/main/AndroidManifest.xml"
+          if ! grep -q "usesCleartextTraffic" "$MANIFEST"; then
+            sed -i 's/<application/<application android:usesCleartextTraffic="true"/g' "$MANIFEST"
+          fi
+
+      - name: Build Android APK
+        working-directory: mobile-pwa/android
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xdeck-android
+          path: mobile-pwa/android/app/build/outputs/apk/debug/app-debug.apk
+
   release:
-    needs: build
+    needs: [build, build-android]
     runs-on: ubuntu-latest
 
     steps:
@@ -102,7 +183,7 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/main')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
+         run: |
           gh release delete latest --yes --cleanup-tag || true
 
       - name: Create GitHub Release
@@ -118,5 +199,6 @@ jobs:
             artifacts/**/*.AppImage
             artifacts/**/*.exe
             artifacts/**/*.dmg
+            artifacts/**/*.apk
             artifacts/**/*.yml
             artifacts/**/*.yaml
