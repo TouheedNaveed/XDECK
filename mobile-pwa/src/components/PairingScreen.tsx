@@ -141,14 +141,6 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
               const url = new URL(code.data);
               if (url.hostname && (url.port || url.protocol === 'http:')) {
                 const scannedCode = url.searchParams.get('code') || '';
-                // If currently on HTTPS (pages.dev PWA), redirect to desktop-served PWA
-                if (location.protocol === 'https:' && location.hostname !== url.hostname) {
-                  active = false;
-                  stream.getTracks().forEach(t => t.stop());
-                  setQrActive(false);
-                  window.location.href = code.data;
-                  return;
-                }
                 setIp(url.hostname);
                 setPort(url.port || '8787');
                 setCode(scannedCode);
@@ -589,17 +581,16 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
               )}
             </button>
           </form>
-        ) : lanUnavailable ? (
-        /* LAN blocked on HTTPS — show message instead of useless form */
-        <div className="text-center py-4">
-          <p className="text-xs text-white/30">
-            Switch to <strong>Cloud</strong> mode above, or open XDECK directly from
-            your desktop's address on this phone's browser.
-          </p>
-        </div>
         ) : (
         /* Manual form */
         <form onSubmit={handleSubmit} className="space-y-3">
+          {lanUnavailable && (
+            <div className="glass-panel px-4 py-2.5 mb-2 border border-amber-500/20 bg-amber-500/5 rounded-xl">
+              <p className="text-[10px] text-amber-200/80 leading-normal text-center">
+                Note: Local LAN connections may be blocked in HTTPS web browsers. They will work normally in the native app or over HTTP.
+              </p>
+            </div>
+          )}
           <div>
             <label className="block text-xs text-white/50 mb-1.5">{t('pairing.manual_ip')}</label>
             <input
