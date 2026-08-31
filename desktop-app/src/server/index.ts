@@ -950,8 +950,22 @@ function launchTarget(action: { kind: string; target: string }): Promise<boolean
 
 function getPlatformInputCmds() {
   const platform = process.platform;
+  const isWayland = process.env.XDG_SESSION_TYPE === 'wayland';
 
   if (platform === 'linux') {
+    if (isWayland) {
+      return {
+        key: (key: string) => `ydotool key ${key}`,
+        type: (text: string) => `ydotool type -- ${JSON.stringify(text)}`,
+        mouseMove: (dx: number, dy: number) => `ydotool mousemove --relative ${dx} ${dy}`,
+        mouseClick: (button: number) => `ydotool click ${button === 3 ? 0x111 : 0x110}`,
+        mouseScroll: (dy: number) => {
+          const clicks = Math.min(Math.max(Math.round(dy), -10), 10);
+          if (clicks === 0) return '';
+          return `ydotool wheel ${clicks > 0 ? -1 : 1}`;
+        },
+      };
+    }
     return {
       key: (key: string) => `xdotool key ${key}`,
       type: (text: string) => `xdotool type --delay 0 -- ${JSON.stringify(text)}`,
