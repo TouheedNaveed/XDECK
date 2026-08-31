@@ -113,19 +113,7 @@ jobs:
       - name: Sync Capacitor project
         working-directory: mobile-pwa
         run: |
-          npx cap init XDECK com.xdeck.mobile --web-dir=dist || true
           npx cap add android || true
-          cat << 'EOF' > capacitor.config.json
-          {
-            "appId": "com.xdeck.mobile",
-            "appName": "XDECK",
-            "webDir": "dist",
-            "server": {
-              "cleartext": true,
-              "allowNavigation": ["192.168.1.*", "10.*", "172.16.*"]
-            }
-          }
-          EOF
           npx cap sync
 
       - name: Update JVM compatibility & Cleartext settings
