@@ -810,6 +810,23 @@ export function startServer() {
           return;
         }
 
+        if (msg.type === 'config_sync') {
+          if (msg.pages && Array.isArray(msg.pages)) {
+            config.pages = msg.pages;
+            if (msg.layoutPreference) {
+              config.layoutPreference = msg.layoutPreference;
+            }
+            saveConfig(config);
+            // Broadcast the sync to all other connected clients
+            const syncMsg: WSMessage = { type: 'config_sync', pages: config.pages, layoutPreference: config.layoutPreference };
+            broadcast(syncMsg);
+            if (relayWs?.readyState === WebSocket.OPEN) {
+              relayWs.send(JSON.stringify(syncMsg));
+            }
+          }
+          return;
+        }
+
         if (msg.type === 'ping') {
           ws.send(JSON.stringify({ type: 'pong' } as WSMessage));
           return;

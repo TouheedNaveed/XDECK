@@ -158,7 +158,7 @@ export function SettingsPanel({
   const [buttonForm, setButtonForm] = useState(() => {
     if (editingButtonId && editingButtonId !== 'new') {
       const btn = page.buttons.find((b) => b.id === editingButtonId);
-      return btn || { id: '', label: '', icon: '', iconSize: 'normal' as const, action: { kind: 'open_url' as const, target: '' }, position: { row: 0, col: 0 } };
+      return btn || { id: '', label: '', icon: '', iconSize: 'normal' as const, action: { kind: 'open_url' as const, target: '' }, position: { row: 0, col: 0 }, backgroundColor: '' };
     }
     const occupied = new Set(page.buttons.map((b) => `${b.position.row}-${b.position.col}`));
     let pos = { row: 0, col: 0 };
@@ -167,7 +167,7 @@ export function SettingsPanel({
         if (!occupied.has(`${r}-${c}`)) { pos = { row: r, col: c }; break; }
       }
     }
-    return { id: '', label: '', icon: '', iconSize: 'normal' as const, action: { kind: 'open_url' as const, target: '' }, position: pos };
+    return { id: '', label: '', icon: '', iconSize: 'normal' as const, action: { kind: 'open_url' as const, target: '' }, position: pos, backgroundColor: '' };
   });
 
   const [gridForm, setGridForm] = useState(page.grid);
@@ -447,6 +447,34 @@ export function SettingsPanel({
                   placeholder="Button name"
                   className="w-full px-4 py-2.5 glass-panel text-white placeholder-white/30 outline-none"
                 />
+              </div>
+
+              {/* Button Background Color */}
+              <div>
+                <label className="block text-xs text-white/50 mb-1.5">Button Background Color</label>
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="color"
+                    value={buttonForm.backgroundColor || '#2a2a3e'}
+                    onChange={(e) => setButtonForm((prev) => ({ ...prev, backgroundColor: e.target.value }))}
+                    className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0 shrink-0"
+                  />
+                  <input
+                    type="text"
+                    value={buttonForm.backgroundColor || ''}
+                    onChange={(e) => setButtonForm((prev) => ({ ...prev, backgroundColor: e.target.value }))}
+                    placeholder="Default (Semi-transparent Glass)"
+                    className="w-full px-4 py-2 rounded-xl glass-panel text-white placeholder-white/30 outline-none text-xs"
+                  />
+                  {buttonForm.backgroundColor && (
+                    <button
+                      onClick={() => setButtonForm((prev) => ({ ...prev, backgroundColor: '' }))}
+                      className="px-3 py-2 rounded-xl bg-red-500/20 text-red-400 text-xs border border-red-500/30 font-medium"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
               </div>
 
               {/* Action type */}

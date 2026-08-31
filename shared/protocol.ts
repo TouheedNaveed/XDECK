@@ -17,6 +17,7 @@ export interface Button {
   icon: string;
   iconSize: 'normal' | 'full';
   action: Action;
+  backgroundColor?: string;
 }
 
 // Background

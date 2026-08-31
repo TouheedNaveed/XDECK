@@ -42,7 +42,7 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
 
   useEffect(() => {
     if (!(window as any).Capacitor) return;
-    const APP_VERSION = 'v1.1.8';
+    const APP_VERSION = 'v1.2.0';
     fetch('https://api.github.com/repos/TouheedNaveed/XDECK/releases/latest')
       .then(res => res.json())
       .then(data => {
@@ -680,12 +680,12 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
         </p>
 
         <div className="text-[10px] text-white/10 text-center mt-4 font-mono">
-          v1.1.9
+          v1.2.0
         </div>
 
         {apkUpdateUrl && (
           <button
-            onClick={() => window.open(apkUpdateUrl, '_blank')}
+            onClick={() => { window.location.href = apkUpdateUrl; }}
             className="w-full py-2.5 mt-3 rounded-2xl text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 transition-all text-center animate-pulse"
           >
             New APK update available — tap to install

@@ -152,6 +152,8 @@ function SortableCell({ slot, editMode, onTrigger, onEdit, onAdd, triggerResult,
     transition: isDragging ? 'none' : transition,
     zIndex: isDragging ? 50 : undefined,
     opacity: isDragging ? 0.9 : 1,
+    background: slot.button?.backgroundColor || undefined,
+    borderColor: slot.button?.backgroundColor ? `${slot.button.backgroundColor}80` : undefined,
   };
 
   const handlePointerDown = useCallback(() => {
