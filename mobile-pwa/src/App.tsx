@@ -359,7 +359,7 @@ export function App() {
     if (commit({ type: 'page_update', page: newPage }, (c) => ({ ...c, pages: [...c.pages, newPage] }))) {
       setCurrentPageIndex(config.pages.length);
     }
-  }, [config.pages.length, commit]);
+  }, [config.pages, commit]);
 
   const handleDeletePage = useCallback(() => {
     if (config.pages.length <= 1) {
@@ -425,7 +425,7 @@ export function App() {
       <header className="relative z-10 flex items-center justify-between px-4 py-2 shrink-0">
         <div className="flex items-center gap-2">
           <ConnectionIndicator state={connectionState} />
-          <span className="text-[9px] text-white/20 font-mono">v1.2.1</span>
+          <span className="text-[9px] text-white/20 font-mono">v1.2.2</span>
         </div>
         <div className="flex items-center gap-2">
           <button

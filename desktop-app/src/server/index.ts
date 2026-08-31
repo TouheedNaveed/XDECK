@@ -454,6 +454,20 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
         return;
       }
 
+      if (msg.type === 'config_sync') {
+        if (msg.pages && Array.isArray(msg.pages)) {
+          config.pages = msg.pages;
+          if (msg.layoutPreference) {
+            config.layoutPreference = msg.layoutPreference;
+          }
+          saveConfig(config);
+          const syncMsg: WSMessage = { type: 'config_sync', pages: config.pages, layoutPreference: config.layoutPreference };
+          broadcast(syncMsg);
+          ws.send(JSON.stringify(syncMsg));
+        }
+        return;
+      }
+
       if (msg.type === 'ping') {
         ws.send(JSON.stringify({ type: 'pong' } as WSMessage));
         return;
