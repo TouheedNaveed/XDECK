@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - XDECK</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="description" content="Get in touch with the XDECK team. We're here to help with technical support, billing, feature requests, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['Space Grotesk', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+          },
+          colors: {
+            dark: { 950: '#080d1a', 900: '#0F172A', 800: '#1E293B', 700: '#334155' },
+            accent: { DEFAULT: '#6366f1', light: '#818cf8', dark: '#4f46e5' },
+            cta: { DEFAULT: '#22C55E', hover: '#16A34A' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #080d1a; color: #F8FAFC; overflow-x: hidden; }
+    .font-heading { font-family: 'Space Grotesk', sans-serif; }
+    .glass { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+    .glass-card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.06); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .glass-card:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(99,102,241,0.15); }
+    .gradient-text { background: linear-gradient(135deg, #818cf8, #a78bfa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .btn-cta { background: linear-gradient(135deg, #22C55E, #16A34A); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(34,197,94,0.4); }
+    .btn-outline { border: 1px solid rgba(255,255,255,0.15); transition: all 0.3s ease; }
+    .btn-outline:hover { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.1); }
+    .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
+    .scroll-reveal { opacity: 0; transform: translateY(40px); }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .scroll-reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="fixed top-4 left-4 right-4 z-50 glass rounded-2xl px-6 py-3 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="logo.png" alt="XDECK" class="w-8 h-8 rounded-lg">
+      <span class="font-heading font-bold text-lg">XDECK</span>
+    </a>
+    <div class="flex items-center gap-4">
+      <a href="index.html#features" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">Features</a>
+      <a href="index.html#how-it-works" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">How It Works</a>
+      <a href="index.html#pricing" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">Pricing</a>
+      <a href="index.html#download" class="btn-cta px-4 py-2 rounded-xl text-sm font-semibold text-white">Download</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-16 px-6">
+    <div class="max-w-4xl mx-auto text-center scroll-reveal">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">CONTACT</div>
+      <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+        Get in <span class="gradient-text">Touch</span>
+      </h1>
+      <p class="text-lg text-white/40 max-w-xl mx-auto leading-relaxed">
+        Have a question, need support, or want to share feedback? We'd love to hear from you.
+      </p>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- Contact Form + Info -->
+  <section class="py-24 sm:py-32 px-6">
+    <div class="max-w-6xl mx-auto grid lg:grid-cols-5 gap-12">
+
+      <!-- Form -->
+      <div class="lg:col-span-3 scroll-reveal">
+        <div class="glass-card rounded-2xl p-8 sm:p-10">
+          <h2 class="font-heading text-2xl font-bold mb-2">Send Us a Message</h2>
+          <p class="text-sm text-white/40 mb-8">Fill out the form below and we'll get back to you within 24 hours.</p>
+          <form id="contact-form" class="space-y-6">
+            <div class="grid sm:grid-cols-2 gap-6">
+              <div>
+                <label for="name" class="block text-sm font-medium text-white/60 mb-2">Name</label>
+                <input type="text" id="name" name="name" required placeholder="Your name" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 text-sm focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-colors">
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-medium text-white/60 mb-2">Email</label>
+                <input type="email" id="email" name="email" required placeholder="you@example.com" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 text-sm focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-colors">
+              </div>
+            </div>
+            <div>
+              <label for="subject" class="block text-sm font-medium text-white/60 mb-2">Subject</label>
+              <select id="subject" name="subject" required class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-colors appearance-none cursor-pointer">
+                <option value="" disabled selected class="bg-dark-900">Select a subject</option>
+                <option value="general" class="bg-dark-900">General Inquiry</option>
+                <option value="technical" class="bg-dark-900">Technical Support</option>
+                <option value="billing" class="bg-dark-900">Billing / License</option>
+                <option value="feature" class="bg-dark-900">Feature Request</option>
+                <option value="bug" class="bg-dark-900">Bug Report</option>
+              </select>
+            </div>
+            <div>
+              <label for="message" class="block text-sm font-medium text-white/60 mb-2">Message</label>
+              <textarea id="message" name="message" rows="5" required placeholder="How can we help?" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 text-sm focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-colors resize-none"></textarea>
+            </div>
+            <button type="submit" class="btn-cta w-full sm:w-auto px-8 py-3 rounded-xl text-white font-semibold text-sm cursor-pointer">Send Message</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Info Sidebar -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+          <div class="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Email Us</h3>
+          <p class="text-white/40 text-sm leading-relaxed mb-3">For any questions, issues, or feedback:</p>
+          <a href="mailto:support@xdeck.app" class="text-accent-light text-sm font-medium hover:underline">support@xdeck.app</a>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+          <div class="w-12 h-12 rounded-2xl bg-green-500/20 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Response Time</h3>
+          <p class="text-white/40 text-sm leading-relaxed">We aim to respond to all inquiries within <span class="text-white/70 font-medium">24 hours</span>. Most messages are answered much sooner.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+          <div class="w-12 h-12 rounded-2xl bg-purple-500/20 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-lg mb-2">Remote Team</h3>
+          <p class="text-white/40 text-sm leading-relaxed">XDECK is built and maintained remotely by a small, focused team. We work across time zones to keep things running smoothly.</p>
+        </div>
+
+        <!-- Social -->
+        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+          <h3 class="font-heading font-semibold text-lg mb-4">Follow Us</h3>
+          <div class="flex items-center gap-3">
+            <a href="#" aria-label="Facebook" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+              <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+              <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="#" aria-label="Twitter" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+              <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- FAQ Teaser -->
+  <section class="py-24 sm:py-32 px-6">
+    <div class="max-w-3xl mx-auto text-center scroll-reveal">
+      <div class="glass-card rounded-3xl p-10 sm:p-14">
+        <div class="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center mx-auto mb-6">
+          <svg class="w-8 h-8 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h2 class="font-heading text-2xl sm:text-3xl font-bold mb-4">Looking for Quick Answers?</h2>
+        <p class="text-white/40 mb-8 max-w-lg mx-auto">Browse our comprehensive FAQ for instant answers to common questions about installation, features, pricing, and troubleshooting.</p>
+        <a href="help.html" class="btn-cta inline-block px-8 py-3 rounded-xl text-white font-semibold text-sm">Visit Help & Support</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 px-6 border-t border-white/5">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div>
+          <a href="index.html" class="flex items-center gap-3 mb-4">
+            <img src="logo.png" alt="XDECK" class="w-7 h-7 rounded-md">
+            <span class="font-heading font-bold text-lg">XDECK</span>
+          </a>
+          <p class="text-sm text-white/30 leading-relaxed">Turn your phone into a powerful Stream Deck. Control your PC from anywhere.</p>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Product</h4>
+          <ul class="space-y-2">
+            <li><a href="index.html#features" class="text-sm text-white/30 hover:text-white transition-colors">Features</a></li>
+            <li><a href="index.html#pricing" class="text-sm text-white/30 hover:text-white transition-colors">Pricing</a></li>
+            <li><a href="index.html#download" class="text-sm text-white/30 hover:text-white transition-colors">Download</a></li>
+            <li><a href="index.html#how-it-works" class="text-sm text-white/30 hover:text-white transition-colors">How It Works</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Legal</h4>
+          <ul class="space-y-2">
+            <li><a href="privacy.html" class="text-sm text-white/30 hover:text-white transition-colors">Privacy Policy</a></li>
+            <li><a href="terms.html" class="text-sm text-white/30 hover:text-white transition-colors">Terms & Conditions</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Support</h4>
+          <ul class="space-y-2">
+            <li><a href="help.html" class="text-sm text-white/30 hover:text-white transition-colors">Help & FAQ</a></li>
+            <li><a href="contact.html" class="text-sm text-white/30 hover:text-white transition-colors">Contact Us</a></li>
+            <li><a href="about.html" class="text-sm text-white/30 hover:text-white transition-colors">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-divider mb-8"></div>
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <img src="logo.png" alt="XDECK" class="w-5 h-5 rounded-md">
+          <span class="text-sm text-white/30">&copy; 2026 XDECK. All rights reserved.</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="#" aria-label="Twitter" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Contact form handler
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert("Thank you! We'll get back to you within 24 hours.");
+      this.reset();
+    });
+
+    // GSAP ScrollTrigger animations
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.utils.toArray('.scroll-reveal').forEach(function(el) {
+      gsap.fromTo(el, { opacity: 0, y: 40 }, {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 85%', once: true }
+      });
+    });
+  </script>
+</body>
+</html>

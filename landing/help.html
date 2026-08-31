@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help & Support - XDECK</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="description" content="XDECK help center. Find answers to frequently asked questions about installation, features, pricing, troubleshooting, and cloud relay.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['Space Grotesk', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+          },
+          colors: {
+            dark: { 950: '#080d1a', 900: '#0F172A', 800: '#1E293B', 700: '#334155' },
+            accent: { DEFAULT: '#6366f1', light: '#818cf8', dark: '#4f46e5' },
+            cta: { DEFAULT: '#22C55E', hover: '#16A34A' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #080d1a; color: #F8FAFC; overflow-x: hidden; }
+    .font-heading { font-family: 'Space Grotesk', sans-serif; }
+    .glass { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+    .glass-card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.06); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .glass-card:hover { border-color: rgba(99,102,241,0.3); }
+    .gradient-text { background: linear-gradient(135deg, #818cf8, #a78bfa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .btn-cta { background: linear-gradient(135deg, #22C55E, #16A34A); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(34,197,94,0.4); }
+    .btn-outline { border: 1px solid rgba(255,255,255,0.15); transition: all 0.3s ease; }
+    .btn-outline:hover { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.1); }
+    .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
+    .scroll-reveal { opacity: 0; transform: translateY(40px); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+    .faq-item.active .faq-answer { max-height: 300px; padding-top: 16px; }
+    .faq-item.active .faq-chevron { transform: rotate(180deg); }
+    .faq-chevron { transition: transform 0.3s ease; }
+    .faq-item.hidden { display: none; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .scroll-reveal { opacity: 1; transform: none; }
+      .faq-answer { transition: none; }
+      .faq-chevron { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="fixed top-4 left-4 right-4 z-50 glass rounded-2xl px-6 py-3 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="logo.png" alt="XDECK" class="w-8 h-8 rounded-lg">
+      <span class="font-heading font-bold text-lg">XDECK</span>
+    </a>
+    <div class="flex items-center gap-4">
+      <a href="index.html#features" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">Features</a>
+      <a href="index.html#how-it-works" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">How It Works</a>
+      <a href="index.html#pricing" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">Pricing</a>
+      <a href="index.html#download" class="btn-cta px-4 py-2 rounded-xl text-sm font-semibold text-white">Download</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-16 px-6">
+    <div class="max-w-4xl mx-auto text-center scroll-reveal">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">SUPPORT</div>
+      <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+        Help & <span class="gradient-text">Support</span>
+      </h1>
+      <p class="text-lg text-white/40 max-w-xl mx-auto leading-relaxed mb-10">
+        Find answers to common questions or reach out to our team for personalized help.
+      </p>
+
+      <!-- Search Bar -->
+      <div class="max-w-xl mx-auto relative">
+        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="faq-search" placeholder="Search for answers..." class="w-full pl-12 pr-4 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/30 text-sm focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-colors">
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- FAQ Categories -->
+  <section class="py-24 sm:py-32 px-6">
+    <div class="max-w-3xl mx-auto space-y-16">
+
+      <!-- Getting Started -->
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-xl font-bold mb-6 flex items-center gap-3">
+          <span class="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center text-sm text-accent-light font-bold">1</span>
+          Getting Started
+        </h2>
+        <div class="space-y-3 faq-category" data-category="getting-started">
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">What is XDECK?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              XDECK is an open-source application that turns your phone into a customizable Stream Deck. It lets you create custom buttons on your phone to control your PC &mdash; trigger hotkeys, launch apps, control media playback, and more. It works over WiFi for low-latency local control, or via cloud relay so you can control your PC from anywhere in the world.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">What devices are supported?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              The desktop app runs on Windows 10+, macOS 12+ (Apple Silicon), and Linux (.deb and .AppImage). On the phone side, any device with a modern web browser works &mdash; just scan the QR code or enter the IP address. There's also a native Android APK available, and iPhone users can install the PWA directly from Safari. No app store download needed for iOS.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">How do I install the desktop app?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Head to the <a href="index.html#download" class="text-accent-light hover:underline">Download</a> section and grab the installer for your operating system. Run the installer and XDECK will start automatically, displaying a QR code and local IP address. The whole process takes about 30 seconds. No account creation is required.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">How do I connect my phone to my PC?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Open the XDECK desktop app on your PC. It will show a QR code and an IP address. On your phone, scan the QR code with your camera app, or manually enter the IP address in your browser. The web app will install as a PWA. Make sure both devices are on the same WiFi network for local connections. For remote access, enable cloud relay in the desktop app settings.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">Do I need to create an account?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              No. XDECK requires no account, no sign-up, and no cloud account to use locally. Simply install the desktop app, pair your phone, and start using it. If you want to use cloud relay (control from anywhere over the internet), you'll need to purchase a license key, but that's it &mdash; no account creation required.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-xl font-bold mb-6 flex items-center gap-3">
+          <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-sm text-green-400 font-bold">2</span>
+          Features
+        </h2>
+        <div class="space-y-3 faq-category" data-category="features">
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">What button types are supported?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              XDECK supports several button types: <strong class="text-white/70">Hotkeys</strong> (trigger any keyboard shortcut like Ctrl+C, Alt+Tab, or media keys), <strong class="text-white/70">Text</strong> (type text snippets instantly), <strong class="text-white/70">URL</strong> (open a website in your browser), <strong class="text-white/70">App Launcher</strong> (start any application with optional command-line arguments), and <strong class="text-white/70">Media Controls</strong> (play, pause, skip, volume). Each button can have a custom icon, label, and background color or image.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">Can I use custom images for buttons?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Yes. You can set a custom image as the button icon or as the button's background. You can also use emojis as button icons. Background images can be set per-button or as a grid/page background, giving your deck a fully personalized look.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">How do hotkeys work?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              When you create a Hotkey button, you press the key combination you want to trigger (e.g., Ctrl+Shift+M) on the button configuration screen. When you tap that button on your phone, XDECK sends the exact key combination to your PC. This works with any shortcut &mdash; system-wide hotkeys, app-specific shortcuts, media keys, function keys, and more. The action fires instantly over WiFi with sub-50ms latency.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">Can I control media playback?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Absolutely. XDECK has built-in media control buttons for play/pause, next track, previous track, volume up, volume down, and mute. These use standard system media keys and work with Spotify, YouTube, Apple Music, VLC, and any other media player running on your PC. You can also create custom hotkey buttons mapped to specific media shortcuts.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">How does the cloud relay work?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Cloud relay lets you control your PC from anywhere, not just your local WiFi network. When enabled, your desktop app connects to our relay server, and your phone connects through it. Commands are forwarded in real-time. This means you can trigger a hotkey on your home PC while you're at a coffee shop. Cloud relay requires a valid license key. All communication is encrypted end-to-end.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">Can I launch applications from my phone?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Yes. The App Launcher button type lets you start any application or executable on your PC. You can also pass custom command-line arguments &mdash; for example, open a specific Chrome PWA, run a script with flags, or launch an app in a specific mode. Just provide the path to the executable and any arguments you need.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Pricing & License -->
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-xl font-bold mb-6 flex items-center gap-3">
+          <span class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-sm text-amber-400 font-bold">3</span>
+          Pricing & License
+        </h2>
+        <div class="space-y-3 faq-category" data-category="pricing">
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">How much does XDECK cost?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              XDECK costs $10 as a one-time purchase. There are no subscriptions, no recurring fees, and no hidden costs. Your purchase includes a lifetime license for one computer and one phone, plus all future updates at no extra charge.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">What does the license include?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Your license unlocks: unlimited buttons and pages, cloud relay access (control from anywhere), all button types (hotkeys, app launcher, media, text, URL), custom layouts and backgrounds, and free updates forever. The license is tied to one computer and one phone.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">Can I use XDECK on multiple computers?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              The standard license covers one computer and one phone. If you need to use XDECK on additional computers, you can purchase additional licenses. Contact us at <a href="mailto:support@xdeck.app" class="text-accent-light hover:underline">support@xdeck.app</a> for multi-device pricing options.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">How do I activate my license key?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              After purchase, you'll receive a license key via email. Open the XDECK desktop app, go to Settings, and enter your license key in the activation field. Click Activate and you're done. The license will be validated instantly and cloud relay will be enabled. You only need to activate once per computer.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">What is your refund policy?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              We offer a full refund within 30 days of purchase if you're not satisfied. Just email us at <a href="mailto:support@xdeck.app" class="text-accent-light hover:underline">support@xdeck.app</a> with your order details and we'll process it promptly. No questions asked.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Troubleshooting -->
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-xl font-bold mb-6 flex items-center gap-3">
+          <span class="w-8 h-8 rounded-lg bg-rose-500/20 flex items-center justify-center text-sm text-rose-400 font-bold">4</span>
+          Troubleshooting
+        </h2>
+        <div class="space-y-3 faq-category" data-category="troubleshooting">
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">My phone can't connect to the desktop app</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Make sure both your phone and computer are connected to the same WiFi network. Check that no firewall is blocking the connection on port 9000. Try restarting both the desktop app and your browser. If the issue persists, try entering the IP address manually instead of scanning the QR code. You can also check the desktop app's status indicator to confirm the server is running.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">The QR code isn't working</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Try using your phone's native camera app to scan the QR code &mdash; it should open the URL in your browser. If that doesn't work, manually type the IP address shown below the QR code into your phone's browser. Make sure you're on the same WiFi network. If the QR code appears distorted, try resizing the desktop app window or restarting the app.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">Hotkeys don't work on my system</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              On Windows, some hotkeys require the desktop app to run with elevated privileges. Try right-clicking the XDECK app and selecting "Run as administrator." On macOS, you may need to grant accessibility permissions in System Preferences > Security & Privacy > Privacy > Accessibility. On Linux, ensure your desktop environment supports global hotkeys (most X11 and Wayland environments do).
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">Cloud relay keeps disconnecting</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Check your internet connection on both your phone and PC. If your PC's connection is unstable, the relay may drop. Ensure your license key is active and hasn't expired. You can check the relay connection status in the desktop app's settings. If the relay server itself is temporarily down, the app will automatically reconnect when it comes back online.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">How do I update the app?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              XDECK checks for updates automatically when the desktop app starts. If an update is available, you'll see a notification in the app. You can also manually check by going to Settings > About > Check for Updates. Download the latest version from the <a href="index.html#download" class="text-accent-light hover:underline">Download</a> page and install it over your existing installation &mdash; your settings and configuration will be preserved.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Cloud Relay -->
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-xl font-bold mb-6 flex items-center gap-3">
+          <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-sm text-purple-400 font-bold">5</span>
+          Cloud Relay
+        </h2>
+        <div class="space-y-3 faq-category" data-category="cloud-relay">
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">What is cloud relay?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Cloud relay is a feature that allows your phone to communicate with your PC over the internet, not just over your local WiFi network. When enabled, your desktop app maintains a persistent connection to our relay server. Your phone connects through the relay, and commands are forwarded in real-time. This lets you control your PC from anywhere &mdash; while traveling, from another room, or from a different city.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">Do I need a license key for cloud relay?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Yes. Cloud relay is a premium feature included with your $10 license. Local WiFi control works without any license. Once you activate your license key in the desktop app, cloud relay is automatically available in the settings.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">Is my data secure?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Yes. All communication between your phone, the relay server, and your PC is encrypted. The relay server only forwards command data &mdash; it does not store your button configurations, usage data, or any personal information. XDECK is also open source, so you can verify the security implementation yourself.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">What happens if the relay server is down?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              If the relay server experiences downtime, cloud relay connections will temporarily fail. Your local WiFi control will continue to work normally. The desktop app will automatically attempt to reconnect when the relay comes back online. In the meantime, you can still use XDECK over your local network without any interruption.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- Download CTA -->
+  <section class="py-24 sm:py-32 px-6">
+    <div class="max-w-3xl mx-auto text-center scroll-reveal">
+      <div class="glass-card rounded-3xl p-10 sm:p-14">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">DOWNLOAD</div>
+        <h2 class="font-heading text-2xl sm:text-3xl font-bold mb-4">Ready to Get Started?</h2>
+        <p class="text-white/40 mb-8 max-w-lg mx-auto">Download XDECK and turn your phone into a powerful controller in under 30 seconds.</p>
+        <a href="index.html#download" class="btn-cta inline-block px-8 py-3 rounded-xl text-white font-semibold text-sm">Download XDECK</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- Still Need Help -->
+  <section class="py-24 sm:py-32 px-6">
+    <div class="max-w-3xl mx-auto text-center scroll-reveal">
+      <div class="glass-card rounded-3xl p-10 sm:p-14">
+        <div class="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center mx-auto mb-6">
+          <svg class="w-8 h-8 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        </div>
+        <h2 class="font-heading text-2xl sm:text-3xl font-bold mb-4">Still Need Help?</h2>
+        <p class="text-white/40 mb-8 max-w-lg mx-auto">Can't find what you're looking for? Our team is ready to assist you personally.</p>
+        <a href="contact.html" class="btn-cta inline-block px-8 py-3 rounded-xl text-white font-semibold text-sm">Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 px-6 border-t border-white/5">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div>
+          <a href="index.html" class="flex items-center gap-3 mb-4">
+            <img src="logo.png" alt="XDECK" class="w-7 h-7 rounded-md">
+            <span class="font-heading font-bold text-lg">XDECK</span>
+          </a>
+          <p class="text-sm text-white/30 leading-relaxed">Turn your phone into a powerful Stream Deck. Control your PC from anywhere.</p>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Product</h4>
+          <ul class="space-y-2">
+            <li><a href="index.html#features" class="text-sm text-white/30 hover:text-white transition-colors">Features</a></li>
+            <li><a href="index.html#pricing" class="text-sm text-white/30 hover:text-white transition-colors">Pricing</a></li>
+            <li><a href="index.html#download" class="text-sm text-white/30 hover:text-white transition-colors">Download</a></li>
+            <li><a href="index.html#how-it-works" class="text-sm text-white/30 hover:text-white transition-colors">How It Works</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Legal</h4>
+          <ul class="space-y-2">
+            <li><a href="privacy.html" class="text-sm text-white/30 hover:text-white transition-colors">Privacy Policy</a></li>
+            <li><a href="terms.html" class="text-sm text-white/30 hover:text-white transition-colors">Terms & Conditions</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Support</h4>
+          <ul class="space-y-2">
+            <li><a href="help.html" class="text-sm text-white/30 hover:text-white transition-colors">Help & FAQ</a></li>
+            <li><a href="contact.html" class="text-sm text-white/30 hover:text-white transition-colors">Contact Us</a></li>
+            <li><a href="about.html" class="text-sm text-white/30 hover:text-white transition-colors">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-divider mb-8"></div>
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <img src="logo.png" alt="XDECK" class="w-5 h-5 rounded-md">
+          <span class="text-sm text-white/30">&copy; 2026 XDECK. All rights reserved.</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="#" aria-label="Twitter" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ accordion toggle
+    function toggleFaq(item) {
+      var wasActive = item.classList.contains('active');
+      // Close all items in the same category
+      var category = item.closest('.faq-category');
+      if (category) {
+        var items = category.querySelectorAll('.faq-item');
+        for (var i = 0; i < items.length; i++) {
+          items[i].classList.remove('active');
+        }
+      }
+      // Toggle the clicked item
+      if (!wasActive) {
+        item.classList.add('active');
+      }
+    }
+
+    // Client-side FAQ search
+    var searchInput = document.getElementById('faq-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', function() {
+        var query = this.value.toLowerCase().trim();
+        var allItems = document.querySelectorAll('.faq-item');
+        var allCategories = document.querySelectorAll('.faq-category');
+
+        if (query === '') {
+          // Show everything
+          for (var i = 0; i < allItems.length; i++) {
+            allItems[i].classList.remove('hidden');
+          }
+          for (var j = 0; j < allCategories.length; j++) {
+            allCategories[j].closest('.scroll-reveal').style.display = '';
+          }
+          return;
+        }
+
+        // Filter FAQ items
+        for (var k = 0; k < allItems.length; k++) {
+          var question = allItems[k].querySelector('.faq-item > div:first-child span') || allItems[k].querySelector('div > span');
+          var answer = allItems[k].querySelector('.faq-answer');
+          var text = (question ? question.textContent : '') + ' ' + (answer ? answer.textContent : '');
+          if (text.toLowerCase().indexOf(query) !== -1) {
+            allItems[k].classList.remove('hidden');
+          } else {
+            allItems[k].classList.add('hidden');
+          }
+        }
+
+        // Show/hide category headers based on whether they have visible items
+        for (var m = 0; m < allCategories.length; m++) {
+          var visibleItems = allCategories[m].querySelectorAll('.faq-item:not(.hidden)');
+          var parent = allCategories[m].closest('.scroll-reveal');
+          if (parent) {
+            parent.style.display = visibleItems.length === 0 ? 'none' : '';
+          }
+        }
+      });
+    }
+
+    // GSAP ScrollTrigger animations
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.utils.toArray('.scroll-reveal').forEach(function(el) {
+      gsap.fromTo(el, { opacity: 0, y: 40 }, {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 85%', once: true }
+      });
+    });
+  </script>
+</body>
+</html>

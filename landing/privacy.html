@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - XDECK</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="description" content="XDECK privacy policy. Learn how we handle your data.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['Space Grotesk', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+          },
+          colors: {
+            dark: { 950: '#080d1a', 900: '#0F172A', 800: '#1E293B', 700: '#334155' },
+            accent: { DEFAULT: '#6366f1', light: '#818cf8', dark: '#4f46e5' },
+            cta: { DEFAULT: '#22C55E', hover: '#16A34A' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #080d1a; color: #F8FAFC; overflow-x: hidden; }
+    .font-heading { font-family: 'Space Grotesk', sans-serif; }
+    .glass { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+    .glass-card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.06); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .glass-card:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(99,102,241,0.15); }
+    .gradient-text { background: linear-gradient(135deg, #818cf8, #a78bfa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .gradient-text-green { background: linear-gradient(135deg, #22C55E, #4ade80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .glow { box-shadow: 0 0 80px rgba(99,102,241,0.25); }
+    .btn-cta { background: linear-gradient(135deg, #22C55E, #16A34A); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(34,197,94,0.4); }
+    .btn-outline { border: 1px solid rgba(255,255,255,0.15); transition: all 0.3s ease; }
+    .btn-outline:hover { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.1); }
+    .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
+    .scroll-reveal { opacity: 0; transform: translateY(40px); }
+    @media (prefers-reduced-motion: reduce) {
+      *, .float-phone { animation: none !important; transition: none !important; }
+      .scroll-reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="fixed top-4 left-4 right-4 z-50 glass rounded-2xl px-6 py-3 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-3">
+      <img src="logo.png" alt="XDECK" class="w-8 h-8 rounded-lg">
+      <span class="font-heading font-bold text-lg">XDECK</span>
+    </a>
+    <div class="flex items-center gap-4">
+      <a href="index.html#features" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">Features</a>
+      <a href="index.html#how-it-works" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">How It Works</a>
+      <a href="index.html#pricing" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">Pricing</a>
+      <a href="index.html#download" class="btn-cta px-4 py-2 rounded-xl text-sm font-semibold text-white">Download</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-16 px-6">
+    <div class="max-w-4xl mx-auto text-center scroll-reveal">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">LEGAL</div>
+      <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">Privacy Policy</h1>
+      <p class="text-white/40 text-lg">Last updated: August 2026</p>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- Content -->
+  <section class="py-16 px-6">
+    <div class="max-w-4xl mx-auto space-y-12">
+
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-2xl font-bold mb-4">Overview</h2>
+        <p class="text-white/50 leading-relaxed">
+          XDECK is a tool that turns your phone into a Stream Deck, giving you instant control over your PC. We built it with a simple principle: your data stays yours. This policy explains exactly what we collect, what we don't, and why.
+        </p>
+      </div>
+
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-2xl font-bold mb-4">What Data XDECK Collects</h2>
+        <p class="text-white/50 leading-relaxed mb-4">XDECK collects the absolute minimum data required to make the service function:</p>
+        <ul class="space-y-3 ml-6">
+          <li class="text-white/50 leading-relaxed">
+            <strong class="text-white/70">Pairing codes:</strong> Temporary, randomly generated codes used to connect your phone to your desktop. These codes are ephemeral and are not stored after pairing is complete.
+          </li>
+          <li class="text-white/50 leading-relaxed">
+            <strong class="text-white/70">License keys:</strong> If you purchase XDECK, a license key is generated. On the desktop app, the key is stored locally on your device. It is only transmitted to our servers during the initial activation via Stripe, where it is verified against your purchase.
+          </li>
+          <li class="text-white/50 leading-relaxed">
+            <strong class="text-white/70">Connection metadata:</strong> During cloud relay usage, WebSocket connection state (connected/disconnected) is tracked to manage active sessions. No button presses, layouts, or personal data are transmitted through or stored on relay servers.
+          </li>
+        </ul>
+      </div>
+
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-2xl font-bold mb-4">How Data Is Used</h2>
+        <p class="text-white/50 leading-relaxed">
+          Every piece of data we handle serves one purpose: providing the XDECK service to you. We do not sell, rent, or share your data with any third party for advertising, analytics, or profiling purposes. We have no interest in what buttons you press or what apps you launch.
+        </p>
+      </div>
+
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-2xl font-bold mb-4">Cloud Relay Data Handling</h2>
+        <p class="text-white/50 leading-relaxed mb-4">
+          When you use XDECK over the internet (rather than local WiFi), your phone connects to our cloud relay server. Here is exactly what happens:
+        </p>
+        <ul class="space-y-3 ml-6">
+          <li class="text-white/50 leading-relaxed">
+            <strong class="text-white/70">End-to-end encrypted:</strong> All communication between your phone and desktop is relayed through encrypted WebSocket connections. The relay server acts as a tunnel, not a listener.
+          </li>
+          <li class="text-white/50 leading-relaxed">
+            <strong class="text-white/70">Not stored:</strong> The relay does not log, store, or record any of the data being transmitted. Once the connection ends, the data is gone.
+          </li>
+          <li class="text-white/50 leading-relaxed">
+            <strong class="text-white/70">No message inspection:</strong> The relay server forwards encrypted data between your devices without decrypting or inspecting it. It cannot see your button layouts, hotkeys, or any personal information.
+          </li>
+        </ul>
+      </div>
+
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-2xl font-bold mb-4">Local Network Mode</h2>
+        <p class="text-white/50 leading-relaxed">
+          When both your phone and desktop are on the same WiFi network, XDECK communicates directly between devices over your local network. In this mode, no data leaves your network at all. There are no external servers involved, no cloud components, and no internet connection required.
+        </p>
+      </div>
+
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-2xl font-bold mb-4">License Key Handling</h2>
+        <p class="text-white/50 leading-relaxed">
+          Your license key is stored locally on your device in the application's local storage. We do not maintain a centralized database of license keys. During activation, the key is sent to our server once via Stripe's secure infrastructure to validate the purchase. After validation, the key resides solely on your device. You are free to back it up or remove it at any time.
+        </p>
+      </div>
+
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-2xl font-bold mb-4">No Tracking, No Analytics, No Cookies</h2>
+        <p class="text-white/50 leading-relaxed">
+          XDECK does not use any analytics tools, tracking scripts, advertising pixels, or cookies. The only cookies that exist are those technically necessary for your browser to maintain the WebSocket connection during active use. We do not use Google Analytics, Facebook Pixel, Mixpanel, or any other third-party tracking service. We have no interest in profiling our users.
+        </p>
+      </div>
+
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-2xl font-bold mb-4">Third-Party Services</h2>
+        <p class="text-white/50 leading-relaxed mb-4">XDECK uses a limited set of third-party services, each for a specific and necessary purpose:</p>
+        <ul class="space-y-3 ml-6">
+          <li class="text-white/50 leading-relaxed">
+            <strong class="text-white/70">Stripe:</strong> Handles all payment processing. We never see or store your credit card information. Stripe's privacy policy governs how your payment data is handled.
+          </li>
+          <li class="text-white/50 leading-relaxed">
+            <strong class="text-white/70">Cloudflare:</strong> Hosts our PWA (progressive web app) and landing pages. Cloudflare's CDN infrastructure ensures fast global access.
+          </li>
+          <li class="text-white/50 leading-relaxed">
+            <strong class="text-white/70">Render:</strong> Hosts our cloud relay server. The relay processes WebSocket connections in real-time and does not persist any data.
+          </li>
+        </ul>
+      </div>
+
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-2xl font-bold mb-4">User Rights and Data Deletion</h2>
+        <p class="text-white/50 leading-relaxed mb-4">
+          You have full control over your data. Because XDECK is designed to store minimal data, exercising your rights is straightforward:
+        </p>
+        <ul class="space-y-3 ml-6">
+          <li class="text-white/50 leading-relaxed">
+            <strong class="text-white/70">Access:</strong> Since we store virtually no personal data, there is little to request. Your license key lives on your device, not on our servers.
+          </li>
+          <li class="text-white/50 leading-relaxed">
+            <strong class="text-white/70">Deletion:</strong> Uninstall XDECK from your device. This removes all locally stored data, including your license key, button layouts, and settings. If you used a cloud relay session, the session data is automatically discarded when the connection closes.
+          </li>
+          <li class="text-white/50 leading-relaxed">
+            <strong class="text-white/70">Portability:</strong> Your button layouts and configurations are stored as local files you can export and back up at any time.
+          </li>
+        </ul>
+      </div>
+
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-2xl font-bold mb-4">Children's Privacy</h2>
+        <p class="text-white/50 leading-relaxed">
+          XDECK is not directed at children under 13. We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, please contact us and we will delete it promptly.
+        </p>
+      </div>
+
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-2xl font-bold mb-4">Changes to This Policy</h2>
+        <p class="text-white/50 leading-relaxed">
+          If we make material changes to this privacy policy, we will update the "Last updated" date at the top of this page. Continued use of XDECK after changes constitutes acceptance of the updated policy. We will not use your data in ways not described in the policy without informing you.
+        </p>
+      </div>
+
+      <div class="scroll-reveal">
+        <h2 class="font-heading text-2xl font-bold mb-4">Contact Us</h2>
+        <p class="text-white/50 leading-relaxed">
+          If you have any questions about this privacy policy or how your data is handled, reach out to us at
+          <a href="mailto:support@xdeck.app" class="text-accent-light hover:underline">support@xdeck.app</a>.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- Footer -->
+  <footer class="py-16 px-6 border-t border-white/5">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div>
+          <a href="/" class="flex items-center gap-3 mb-4">
+            <img src="logo.png" alt="XDECK" class="w-7 h-7 rounded-md">
+            <span class="font-heading font-bold text-lg">XDECK</span>
+          </a>
+          <p class="text-sm text-white/30 leading-relaxed">Turn your phone into a powerful Stream Deck. Control your PC from anywhere.</p>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Product</h4>
+          <ul class="space-y-2">
+            <li><a href="index.html#features" class="text-sm text-white/30 hover:text-white transition-colors">Features</a></li>
+            <li><a href="index.html#pricing" class="text-sm text-white/30 hover:text-white transition-colors">Pricing</a></li>
+            <li><a href="index.html#download" class="text-sm text-white/30 hover:text-white transition-colors">Download</a></li>
+            <li><a href="index.html#how-it-works" class="text-sm text-white/30 hover:text-white transition-colors">How It Works</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Legal</h4>
+          <ul class="space-y-2">
+            <li><a href="privacy.html" class="text-sm text-white/30 hover:text-white transition-colors">Privacy Policy</a></li>
+            <li><a href="terms.html" class="text-sm text-white/30 hover:text-white transition-colors">Terms & Conditions</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Support</h4>
+          <ul class="space-y-2">
+            <li><a href="help.html" class="text-sm text-white/30 hover:text-white transition-colors">Help & FAQ</a></li>
+            <li><a href="contact.html" class="text-sm text-white/30 hover:text-white transition-colors">Contact Us</a></li>
+            <li><a href="about.html" class="text-sm text-white/30 hover:text-white transition-colors">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-divider mb-8"></div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <img src="logo.png" alt="XDECK" class="w-5 h-5 rounded-md">
+          <span class="text-sm text-white/30">&copy; 2026 XDECK. All rights reserved.</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="#" aria-label="Twitter" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.utils.toArray('.scroll-reveal').forEach((el) => {
+      gsap.fromTo(el, { opacity: 0, y: 40 }, {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 85%', once: true }
+      });
+    });
+  </script>
+</body>
+</html>

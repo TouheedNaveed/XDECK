@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - XDECK</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="description" content="Learn about XDECK — the open-source, privacy-first alternative to expensive Stream Decks.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['Space Grotesk', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+          },
+          colors: {
+            dark: { 950: '#080d1a', 900: '#0F172A', 800: '#1E293B', 700: '#334155' },
+            accent: { DEFAULT: '#6366f1', light: '#818cf8', dark: '#4f46e5' },
+            cta: { DEFAULT: '#22C55E', hover: '#16A34A' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #080d1a; color: #F8FAFC; overflow-x: hidden; }
+    .font-heading { font-family: 'Space Grotesk', sans-serif; }
+    .glass { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+    .glass-card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.06); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .glass-card:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(99,102,241,0.15); }
+    .gradient-text { background: linear-gradient(135deg, #818cf8, #a78bfa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .gradient-text-green { background: linear-gradient(135deg, #22C55E, #4ade80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .glow { box-shadow: 0 0 80px rgba(99,102,241,0.25); }
+    .glow-green { box-shadow: 0 0 60px rgba(34,197,94,0.2); }
+    .btn-cta { background: linear-gradient(135deg, #22C55E, #16A34A); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(34,197,94,0.4); }
+    .btn-outline { border: 1px solid rgba(255,255,255,0.15); transition: all 0.3s ease; }
+    .btn-outline:hover { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.1); }
+    .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
+    .scroll-reveal { opacity: 0; transform: translateY(40px); }
+    @media (prefers-reduced-motion: reduce) {
+      *, .float-phone { animation: none !important; transition: none !important; }
+      .scroll-reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="fixed top-4 left-4 right-4 z-50 glass rounded-2xl px-6 py-3 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-3">
+      <img src="logo.png" alt="XDECK" class="w-8 h-8 rounded-lg">
+      <span class="font-heading font-bold text-lg">XDECK</span>
+    </a>
+    <div class="flex items-center gap-4">
+      <a href="index.html#features" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">Features</a>
+      <a href="index.html#how-it-works" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">How It Works</a>
+      <a href="index.html#pricing" class="text-sm text-white/60 hover:text-white transition-colors hidden sm:block">Pricing</a>
+      <a href="index.html#download" class="btn-cta px-4 py-2 rounded-xl text-sm font-semibold text-white">Download</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="pt-32 pb-16 px-6">
+    <div class="max-w-4xl mx-auto text-center scroll-reveal">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">ABOUT</div>
+      <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+        Built for People Who <span class="gradient-text">Actually Build Things</span>
+      </h1>
+      <p class="text-white/40 text-lg max-w-2xl mx-auto">XDECK exists because control should be simple, accessible, and fair.</p>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- Mission -->
+  <section class="py-24 sm:py-32 px-6">
+    <div class="max-w-4xl mx-auto scroll-reveal">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">MISSION</div>
+      <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-8">Our Mission</h2>
+      <p class="text-white/50 text-lg leading-relaxed mb-6">
+        We believe everyone deserves instant, tactile control over their computer without spending hundreds of dollars on proprietary hardware. XDECK exists to bridge the gap between your phone and your PC, giving you a powerful, customizable control surface that fits in your pocket.
+      </p>
+      <p class="text-white/50 text-lg leading-relaxed">
+        Not everyone needs a $250 Stream Deck. Some people just want a quick way to mute their mic, switch scenes, or launch an app. XDECK gives you that power with the device you already carry everywhere.
+      </p>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- Story -->
+  <section class="py-24 sm:py-32 px-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="scroll-reveal">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">OUR STORY</div>
+          <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-8">How It Started</h2>
+          <div class="space-y-6 text-white/50 leading-relaxed">
+            <p>
+              XDECK started because I wanted a Stream Deck. The idea of pressing a button and having a shortcut fire instantly felt like the missing piece in my workflow. But then I looked at the options.
+            </p>
+            <p>
+              Hardware Stream Decks are great, but they cost $150-$250, sit permanently on your desk, and have a fixed number of buttons. Software alternatives either required subscriptions, were bloated with features I didn't need, or simply didn't work well enough to be reliable.
+            </p>
+            <p>
+              So I built what I actually wanted: an app that turns your phone into a Stream Deck, with no subscription, no account required, and the freedom to customize everything. One purchase, lifetime access, works over WiFi or from anywhere in the world via cloud.
+            </p>
+          </div>
+        </div>
+        <div class="flex justify-center scroll-reveal">
+          <div class="relative">
+            <!-- Decorative grid of buttons -->
+            <div class="w-64 h-64 rounded-3xl glass p-6 relative overflow-hidden">
+              <div class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-purple-500/5"></div>
+              <div class="grid grid-cols-3 gap-3 relative z-10">
+                <div class="aspect-square rounded-xl bg-white/5 border border-white/8 flex items-center justify-center"><span class="text-xl">🎮</span></div>
+                <div class="aspect-square rounded-xl bg-white/5 border border-white/8 flex items-center justify-center"><span class="text-xl">🎬</span></div>
+                <div class="aspect-square rounded-xl bg-white/5 border border-white/8 flex items-center justify-center"><span class="text-xl">🎵</span></div>
+                <div class="aspect-square rounded-xl bg-white/5 border border-white/8 flex items-center justify-center"><span class="text-xl">⚡</span></div>
+                <div class="aspect-square rounded-xl bg-white/5 border border-white/8 flex items-center justify-center"><span class="text-xl">📺</span></div>
+                <div class="aspect-square rounded-xl bg-white/5 border border-white/8 flex items-center justify-center"><span class="text-xl">🔧</span></div>
+                <div class="aspect-square rounded-xl bg-white/5 border border-white/8 flex items-center justify-center"><span class="text-xl">💬</span></div>
+                <div class="aspect-square rounded-xl bg-white/5 border border-white/8 flex items-center justify-center"><span class="text-xl">🎯</span></div>
+                <div class="aspect-square rounded-xl bg-white/5 border border-white/8 flex items-center justify-center"><span class="text-xl">🚀</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- What Makes XDECK Different -->
+  <section class="py-24 sm:py-32 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-20 scroll-reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">WHY XDECK</div>
+        <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">What Makes XDECK Different</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+          <div class="w-14 h-14 rounded-2xl bg-accent/20 flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-xl mb-3">Open Source</h3>
+          <p class="text-sm text-white/40 leading-relaxed">XDECK is built in the open. You can see the code, contribute, and trust that there are no hidden surprises.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+          <div class="w-14 h-14 rounded-2xl bg-green-500/20 flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-xl mb-3">One-Time Purchase</h3>
+          <p class="text-sm text-white/40 leading-relaxed">$10, once. Lifetime access. Free updates forever. No subscriptions, no credits, no BS.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+          <div class="w-14 h-14 rounded-2xl bg-purple-500/20 flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-xl mb-3">Works Over WiFi & Cloud</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Use it on your home network for zero latency, or over the internet via cloud relay. Your choice.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+          <div class="w-14 h-14 rounded-2xl bg-amber-500/20 flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-xl mb-3">No Account Required</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Download, install, pair. No email, no signup, no cloud account. Just works.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+          <div class="w-14 h-14 rounded-2xl bg-rose-500/20 flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-xl mb-3">Highly Customizable</h3>
+          <p class="text-sm text-white/40 leading-relaxed">Any grid size, custom icons, backgrounds, drag-to-reorder. Make it yours.</p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+          <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 flex items-center justify-center mb-6">
+            <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <h3 class="font-heading font-semibold text-xl mb-3">Privacy First</h3>
+          <p class="text-sm text-white/40 leading-relaxed">No analytics, no tracking, no data harvesting. Your data stays on your devices.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- Tech Stack -->
+  <section class="py-24 sm:py-32 px-6">
+    <div class="max-w-4xl mx-auto scroll-reveal">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">TECHNOLOGY</div>
+      <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-8">Built with Modern Tech</h2>
+      <p class="text-white/50 text-lg leading-relaxed mb-10">
+        XDECK is built on a stack of modern, proven technologies chosen for reliability, performance, and cross-platform compatibility.
+      </p>
+      <div class="grid sm:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-heading font-semibold text-lg mb-2">Electron</h3>
+          <p class="text-sm text-white/40">Cross-platform desktop app for Windows, macOS, and Linux from a single codebase.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-heading font-semibold text-lg mb-2">React</h3>
+          <p class="text-sm text-white/40">The mobile PWA interface, built with React for a fast, responsive experience.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-heading font-semibold text-lg mb-2">WebSocket</h3>
+          <p class="text-sm text-white/40">Real-time, bidirectional communication between your phone and PC with sub-50ms latency.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="font-heading font-semibold text-lg mb-2">Progressive Web App</h3>
+          <p class="text-sm text-white/40">Installable from any browser. No app store required. Works on iOS, Android, and desktop.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- Team -->
+  <section class="py-24 sm:py-32 px-6">
+    <div class="max-w-4xl mx-auto text-center scroll-reveal">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">TEAM</div>
+      <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-8">Who's Behind This?</h2>
+      <p class="text-white/50 text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
+        XDECK is built by a solo developer passionate about productivity tools. There's no corporate team, no venture funding, and no marketing department. Just one person who wanted a better tool and decided to build it for everyone.
+      </p>
+      <div class="glass-card rounded-3xl p-10 max-w-lg mx-auto glow">
+        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-accent to-purple-500 mx-auto mb-6 flex items-center justify-center">
+          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        </div>
+        <p class="text-white/50 leading-relaxed">
+          "I built XDECK because I needed it. I figured if I'm going to spend my time building something, I might as well share it with others who feel the same way."
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- Values -->
+  <section class="py-24 sm:py-32 px-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-16 scroll-reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">VALUES</div>
+        <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-6">What We Stand For</h2>
+      </div>
+
+      <div class="space-y-6">
+        <div class="glass-card rounded-2xl p-8 flex items-start gap-6 scroll-reveal">
+          <div class="w-12 h-12 rounded-2xl bg-green-500/20 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-heading font-semibold text-lg mb-2">Privacy First</h3>
+            <p class="text-sm text-white/40 leading-relaxed">We don't track you. We don't sell your data. We don't even collect analytics. Your computer is yours, and your control over it should stay that way.</p>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8 flex items-start gap-6 scroll-reveal">
+          <div class="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-heading font-semibold text-lg mb-2">Fair Pricing</h3>
+            <p class="text-sm text-white/40 leading-relaxed">One price, one purchase, lifetime access. No subscriptions that drain your bank account. No "pro" tiers with artificial limitations.</p>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8 flex items-start gap-6 scroll-reveal">
+          <div class="w-12 h-12 rounded-2xl bg-purple-500/20 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+          </div>
+          <div>
+            <h3 class="font-heading font-semibold text-lg mb-2">Open Source</h3>
+            <p class="text-sm text-white/40 leading-relaxed">The code is open for anyone to inspect, modify, and contribute to. Trust is built in the open, not behind closed doors.</p>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-8 flex items-start gap-6 scroll-reveal">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center shrink-0">
+            <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-heading font-semibold text-lg mb-2">Simplicity</h3>
+            <p class="text-sm text-white/40 leading-relaxed">No accounts, no signups, no bloat. Download, install, and start using it in 30 seconds. Good software doesn't need a tutorial.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- CTA -->
+  <section class="py-24 sm:py-32 px-6">
+    <div class="max-w-3xl mx-auto text-center scroll-reveal">
+      <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Ready to Take Control?</h2>
+      <p class="text-white/40 text-lg mb-10">Download XDECK for free. No account needed.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="index.html#download" class="btn-cta px-8 py-4 rounded-2xl text-white font-semibold text-center text-lg">
+          Download Free
+        </a>
+        <a href="index.html#pricing" class="btn-outline px-8 py-4 rounded-2xl text-white/70 font-semibold hover:text-white text-center">
+          View Pricing &mdash; $10
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 px-6 border-t border-white/5">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div>
+          <a href="/" class="flex items-center gap-3 mb-4">
+            <img src="logo.png" alt="XDECK" class="w-7 h-7 rounded-md">
+            <span class="font-heading font-bold text-lg">XDECK</span>
+          </a>
+          <p class="text-sm text-white/30 leading-relaxed">Turn your phone into a powerful Stream Deck. Control your PC from anywhere.</p>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Product</h4>
+          <ul class="space-y-2">
+            <li><a href="index.html#features" class="text-sm text-white/30 hover:text-white transition-colors">Features</a></li>
+            <li><a href="index.html#pricing" class="text-sm text-white/30 hover:text-white transition-colors">Pricing</a></li>
+            <li><a href="index.html#download" class="text-sm text-white/30 hover:text-white transition-colors">Download</a></li>
+            <li><a href="index.html#how-it-works" class="text-sm text-white/30 hover:text-white transition-colors">How It Works</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Legal</h4>
+          <ul class="space-y-2">
+            <li><a href="privacy.html" class="text-sm text-white/30 hover:text-white transition-colors">Privacy Policy</a></li>
+            <li><a href="terms.html" class="text-sm text-white/30 hover:text-white transition-colors">Terms & Conditions</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Support</h4>
+          <ul class="space-y-2">
+            <li><a href="help.html" class="text-sm text-white/30 hover:text-white transition-colors">Help & FAQ</a></li>
+            <li><a href="contact.html" class="text-sm text-white/30 hover:text-white transition-colors">Contact Us</a></li>
+            <li><a href="about.html" class="text-sm text-white/30 hover:text-white transition-colors">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-divider mb-8"></div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <img src="logo.png" alt="XDECK" class="w-5 h-5 rounded-md">
+          <span class="text-sm text-white/30">&copy; 2026 XDECK. All rights reserved.</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </a>
+          <a href="#" aria-label="Twitter" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+            <svg class="w-4 h-4 text-white/40" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.utils.toArray('.scroll-reveal').forEach((el) => {
+      gsap.fromTo(el, { opacity: 0, y: 40 }, {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 85%', once: true }
+      });
+    });
+  </script>
+</body>
+</html>
