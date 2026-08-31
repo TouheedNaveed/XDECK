@@ -47,6 +47,7 @@ function Trackpad({ sendMessage }: { sendMessage: (msg: WSMessage) => boolean })
   const [tapping, setTapping] = useState(false);
 
   const sendMouse = useCallback((action: string, params: Record<string, any>) => {
+    console.log('[XDECK] Send mouse:', action, params);
     sendMessage({ type: 'mouse_event', action, ...params } as any);
   }, [sendMessage]);
 
@@ -153,13 +154,16 @@ function Keyboard({ sendMessage }: { sendMessage: (msg: WSMessage) => boolean })
   const sendKey = useCallback((key: string) => {
     if (activeMods.size > 0) {
       const combo = [...activeMods, key].join('+');
+      console.log('[XDECK] Send key:', combo);
       sendMessage({ type: 'keyboard_event', action: 'key', value: combo });
     } else {
+      console.log('[XDECK] Send key:', key);
       sendMessage({ type: 'keyboard_event', action: 'key', value: key });
     }
   }, [activeMods, sendMessage]);
 
   const sendText = useCallback((text: string) => {
+    console.log('[XDECK] Send text:', text);
     sendMessage({ type: 'keyboard_event', action: 'text', value: text });
   }, [sendMessage]);
 
