@@ -43,7 +43,7 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
 
   function checkForUpdates() {
     if (!(window as any).Capacitor) return;
-    const APP_VERSION = 'v1.2.3';
+    const APP_VERSION = 'v1.3.0';
 
     function isNewer(latest: string, current: string): boolean {
       const l = latest.replace(/^v/, '').split('.').map(Number);
@@ -709,7 +709,7 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
         </p>
 
         <div className="text-[10px] text-white/10 text-center mt-4 font-mono">
-          v1.2.3
+          v1.3.0
         </div>
 
         {(window as any).Capacitor && updateStatus === 'idle' && (

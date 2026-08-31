@@ -954,20 +954,26 @@ function getPlatformInputCmds(): { keyDown: (key: string) => string; keyUp: (key
   const isWayland = sessionType === 'wayland';
 
   if (platform === 'linux') {
-    const tool = isWayland ? 'ydotool' : 'xdotool';
+    const isXdotool = !isWayland;
     return {
-      keyDown: (key: string) => `${tool} key --down ${key}`,
-      keyUp: (key: string) => `${tool} key --up ${key}`,
-      type: (text: string) => `${tool} type -- ${JSON.stringify(text)}`,
-      mouseMove: (dx: number, dy: number) => `${tool} mousemove -- ${dx >= 0 ? '+' : ''}${dx} ${dy >= 0 ? '+' : ''}${dy}`,
-      mouseClick: (button: number, down: boolean) => {
-        if (down) return `${tool} click --${button}`;
-        return `${tool} click --${button}`;
+      keyDown: (key: string) => `xdotool key --down ${key}`,
+      keyUp: (key: string) => `xdotool key --up ${key}`,
+      type: (text: string) => `xdotool type -- ${JSON.stringify(text)}`,
+      mouseMove: (dx: number, dy: number) => isXdotool
+        ? `xdotool mousemove_relative -- ${dx} ${dy}`
+        : `ydotool mousemove -- ${dx} ${dy}`,
+      mouseClick: (button: number, _down: boolean) => {
+        const btn = button === 3 ? 3 : 1;
+        return `xdotool click ${btn}`;
       },
       mouseScroll: (dy: number) => {
-        const btn = dy > 0 ? '5' : '4';
-        const count = Math.min(Math.abs(dy), 10);
-        return `${tool} click ${btn} ${' '.repeat(0)}`.trim() + (count > 1 ? ` && repeat ${count} ${tool} click ${btn}` : '');
+        const clicks = Math.min(Math.max(Math.round(dy), -10), 10);
+        const cmds: string[] = [];
+        const scrollBtn = clicks > 0 ? 5 : 4;
+        for (let i = 0; i < Math.abs(clicks); i++) {
+          cmds.push(isXdotool ? `xdotool click ${scrollBtn}` : `ydotool click ${scrollBtn}`);
+        }
+        return cmds.join(' && ');
       },
     };
   }
