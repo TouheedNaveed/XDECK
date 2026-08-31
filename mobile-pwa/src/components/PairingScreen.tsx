@@ -39,8 +39,9 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
   const lanUnavailable = location.protocol === 'https:' && location.hostname !== 'localhost' && !discovered && !(window as any).Capacitor;
 
   const [apkUpdateUrl, setApkUpdateUrl] = useState<string | null>(null);
+  const [updateStatus, setUpdateStatus] = useState<'idle' | 'checking' | 'latest' | 'update'>('idle');
 
-  useEffect(() => {
+  function checkForUpdates() {
     if (!(window as any).Capacitor) return;
     const APP_VERSION = 'v1.2.3';
 
@@ -60,10 +61,15 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
       return /^v?\d+\.\d+\.\d+/.test(tag);
     }
 
+    setUpdateStatus('checking');
+
     fetch('https://api.github.com/repos/TouheedNaveed/XDECK/releases')
       .then(res => res.json())
       .then((releases: any[]) => {
-        if (!Array.isArray(releases) || !releases.length) return;
+        if (!Array.isArray(releases) || !releases.length) {
+          setUpdateStatus('latest');
+          return;
+        }
         for (const release of releases) {
           const tag = release.tag_name;
           if (!tag || release.draft) continue;
@@ -71,16 +77,19 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
           if (!apk) continue;
           if (isSemver(tag) && isNewer(tag, APP_VERSION)) {
             setApkUpdateUrl(apk.browser_download_url);
+            setUpdateStatus('update');
             return;
           }
           if (!isSemver(tag)) {
             setApkUpdateUrl(apk.browser_download_url);
+            setUpdateStatus('update');
             return;
           }
         }
+        setUpdateStatus('latest');
       })
-      .catch(() => {});
-  }, []);
+      .catch(() => { setUpdateStatus('latest'); });
+  }
 
   useEffect(() => {
     if (connectionError) setError(connectionError);
@@ -708,13 +717,34 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
           v1.2.3
         </div>
 
-        {apkUpdateUrl && (
+        {(window as any).Capacitor && updateStatus === 'idle' && (
+          <button
+            onClick={checkForUpdates}
+            className="w-full py-2.5 mt-3 rounded-2xl text-xs font-semibold bg-white/5 text-white/40 border border-white/10 hover:bg-white/10 hover:text-white/60 transition-all text-center"
+          >
+            Check for Updates
+          </button>
+        )}
+
+        {(window as any).Capacitor && updateStatus === 'checking' && (
+          <div className="w-full py-2.5 mt-3 rounded-2xl text-xs font-semibold bg-white/5 text-white/30 border border-white/10 text-center animate-pulse">
+            Checking for updates...
+          </div>
+        )}
+
+        {updateStatus === 'update' && apkUpdateUrl && (
           <button
             onClick={() => { window.location.href = apkUpdateUrl; }}
             className="w-full py-2.5 mt-3 rounded-2xl text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 transition-all text-center animate-pulse"
           >
-            New APK update available — tap to install
+            New update available — tap to install
           </button>
+        )}
+
+        {updateStatus === 'latest' && (
+          <div className="w-full py-2.5 mt-3 rounded-2xl text-xs font-medium bg-green-500/10 text-green-400/60 border border-green-500/15 text-center">
+            You're running the latest version
+          </div>
         )}
 
         {showUpdate && (
