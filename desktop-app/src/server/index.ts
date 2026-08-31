@@ -1220,8 +1220,6 @@ export function startServer() {
           handleMouseEvent(msg.action, { dx: msg.dx, dy: msg.dy, button: msg.button, scrollY: msg.scrollY, down: msg.down });
           return;
         }
-          return;
-        }
 
         if (CONFIG_MUTATIONS.has(msg.type)) {
           if (applyConfigMutation(config, msg)) {
