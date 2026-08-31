@@ -1,6 +1,6 @@
 {
   "name": "xdeck-mobile",
-  "version": "1.0.0",
+  "version": "1.2.3",
   "description": "XDECK - Mobile PWA Deck Controller",
   "type": "module",
   "scripts": {
