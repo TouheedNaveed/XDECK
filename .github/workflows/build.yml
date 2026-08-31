@@ -158,6 +158,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Get version from package.json
+        id: version
+        run: echo "tag=v$(node -p "require('./desktop-app/package.json').version")" >> "$GITHUB_OUTPUT"
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
@@ -167,21 +171,22 @@ jobs:
       - name: List artifacts
         run: find artifacts -type f
 
-      - name: Delete old release
+      - name: Delete old latest release
         if: startsWith(github.ref, 'refs/heads/main')
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release delete latest --yes --cleanup-tag || true
 
-      - name: Create GitHub Release
+      - name: Create latest release (rolling)
+        if: startsWith(github.ref, 'refs/heads/main')
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
           name: Latest Build
           draft: false
           prerelease: false
-          generate_release_notes: true
+          generate_release_notes: false
           files: |
             artifacts/**/*.deb
             artifacts/**/*.AppImage
@@ -190,3 +195,15 @@ jobs:
             artifacts/**/*.apk
             artifacts/**/*.yml
             artifacts/**/*.yaml
+
+      - name: Create versioned release (for APK update check)
+        if: startsWith(github.ref, 'refs/heads/main')
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            artifacts/**/*.apk

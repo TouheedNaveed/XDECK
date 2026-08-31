@@ -72,15 +72,10 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
         }
         for (const release of releases) {
           const tag = release.tag_name;
-          if (!tag || release.draft) continue;
+          if (!tag || !isSemver(tag) || release.draft) continue;
           const apk = (release.assets || []).find((a: any) => a.name.endsWith('.apk'));
           if (!apk) continue;
-          if (isSemver(tag) && isNewer(tag, APP_VERSION)) {
-            setApkUpdateUrl(apk.browser_download_url);
-            setUpdateStatus('update');
-            return;
-          }
-          if (!isSemver(tag)) {
+          if (isNewer(tag, APP_VERSION)) {
             setApkUpdateUrl(apk.browser_download_url);
             setUpdateStatus('update');
             return;
