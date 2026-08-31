@@ -196,7 +196,7 @@ jobs:
             artifacts/**/*.yml
             artifacts/**/*.yaml
 
-      - name: Create versioned release (for APK update check)
+      - name: Create versioned release (for APK + desktop auto-update)
         if: startsWith(github.ref, 'refs/heads/main')
         uses: softprops/action-gh-release@v2
         with:
@@ -206,4 +206,10 @@ jobs:
           prerelease: false
           generate_release_notes: true
           files: |
+            artifacts/**/*.deb
+            artifacts/**/*.AppImage
+            artifacts/**/*.exe
+            artifacts/**/*.dmg
             artifacts/**/*.apk
+            artifacts/**/*.yml
+            artifacts/**/*.yaml

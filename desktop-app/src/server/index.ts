@@ -948,89 +948,80 @@ function launchTarget(action: { kind: string; target: string }): Promise<boolean
   });
 }
 
-function getPlatformInputCmds(): { keyDown: (key: string) => string; keyUp: (key: string) => string; type: (text: string) => string; mouseMove: (dx: number, dy: number) => string; mouseClick: (button: number, down: boolean) => string; mouseScroll: (dy: number) => string } {
+function getPlatformInputCmds() {
   const platform = process.platform;
-  const sessionType = process.env.XDG_SESSION_TYPE || '';
-  const isWayland = sessionType === 'wayland';
 
   if (platform === 'linux') {
-    const isXdotool = !isWayland;
     return {
-      keyDown: (key: string) => `xdotool key --down ${key}`,
-      keyUp: (key: string) => `xdotool key --up ${key}`,
-      type: (text: string) => `xdotool type -- ${JSON.stringify(text)}`,
-      mouseMove: (dx: number, dy: number) => isXdotool
-        ? `xdotool mousemove_relative -- ${dx} ${dy}`
-        : `ydotool mousemove -- ${dx} ${dy}`,
-      mouseClick: (button: number, _down: boolean) => {
-        const btn = button === 3 ? 3 : 1;
-        return `xdotool click ${btn}`;
-      },
+      key: (key: string) => `xdotool key ${key}`,
+      type: (text: string) => `xdotool type --delay 0 -- ${JSON.stringify(text)}`,
+      mouseMove: (dx: number, dy: number) => `xdotool mousemove_relative -- ${dx} ${dy}`,
+      mouseClick: (button: number) => `xdotool click ${button === 3 ? 3 : 1}`,
       mouseScroll: (dy: number) => {
         const clicks = Math.min(Math.max(Math.round(dy), -10), 10);
         const cmds: string[] = [];
-        const scrollBtn = clicks > 0 ? 5 : 4;
         for (let i = 0; i < Math.abs(clicks); i++) {
-          cmds.push(isXdotool ? `xdotool click ${scrollBtn}` : `ydotool click ${scrollBtn}`);
+          cmds.push(`xdotool click ${clicks > 0 ? 5 : 4}`);
         }
-        return cmds.join(' && ');
+        return cmds.join(' ');
       },
     };
   }
 
   if (platform === 'win32') {
     return {
-      keyDown: (key: string) => `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('${key.replace(/'/g, "''")}')`,
-      keyUp: (_key: string) => '',
-      type: (text: string) => `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('${text.replace(/'/g, "''").replace(/\{/g, '{').replace(/\}/g, '}')}')"`,
+      key: (key: string) => {
+        const map: Record<string, string> = {
+          'Return': '{ENTER}', 'Tab': '{TAB}', 'Escape': '{ESC}', 'BackSpace': '{BS}',
+          'Delete': '{DELETE}', 'space': ' ', 'Up': '{UP}', 'Down': '{DOWN}',
+          'Left': '{LEFT}', 'Right': '{RIGHT}',
+        };
+        const psKey = map[key] || key;
+        return `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('${psKey.replace(/'/g, "''")}')`;
+      },
+      type: (text: string) => `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('${text.replace(/'/g, "''")}')`,
       mouseMove: (dx: number, dy: number) => `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; \$c=[System.Windows.Forms.Cursor]; \$c::Position=[System.Drawing.Point]::new(\$c::Position.X+${dx},\$c::Position.Y+${dy})"`,
-      mouseClick: (button: number, _down: boolean) => `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('${button === 3 ? '{RIGHT}' : '{ENTER}'}')"`,
+      mouseClick: (button: number) => `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('${button === 3 ? '{RIGHT}' : '{ENTER}'}')"`,
       mouseScroll: (dy: number) => `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('${dy > 0 ? '{PGUP}' : '{PGDN}'}')"`,
     };
   }
 
   if (platform === 'darwin') {
     return {
-      keyDown: (key: string) => `osascript -e 'tell application "System Events" to key down "${key}"'`,
-      keyUp: (key: string) => `osascript -e 'tell application "System Events" to key up "${key}"'`,
+      key: (key: string) => {
+        const combo = key.split('+');
+        const mods = combo.slice(0, -1).map(m => ` ${m}`).join('');
+        const k = combo[combo.length - 1];
+        if (mods) return `osascript -e 'tell application "System Events" to keystroke "${k}"{${mods.trim()}}'`;
+        return `osascript -e 'tell application "System Events" to keystroke "${k}"'`;
+      },
       type: (text: string) => `osascript -e 'tell application "System Events" to keystroke "${text.replace(/"/g, '\\"')}"'`,
       mouseMove: (dx: number, dy: number) => `osascript -e 'tell application "System Events" to set p to get position of mouse; set position of mouse to {item 1 of p + ${dx}, item 2 of p + ${dy}}'`,
-      mouseClick: (button: number, _down: boolean) => `osascript -e 'tell application "System Events" to click at {100, 100}'`,
+      mouseClick: (button: number) => `osascript -e 'tell application "System Events" to click at {100, 100}'`,
       mouseScroll: (dy: number) => `osascript -e 'tell application "System Events" to scroll area {0, ${dy > 0 ? 3 : -3}}'`,
     };
   }
 
-  // Fallback
-  return {
-    keyDown: () => '',
-    keyUp: () => '',
-    type: () => '',
-    mouseMove: () => '',
-    mouseClick: () => '',
-    mouseScroll: () => '',
-  };
+  return { key: () => '', type: () => '', mouseMove: () => '', mouseClick: () => '', mouseScroll: () => '' };
 }
 
 function handleKeyboardEvent(action: string, value: string): boolean {
   const cmds = getPlatformInputCmds();
   let cmd = '';
   if (action === 'key') {
-    // xdotool-style key combos: ctrl+c, Return, alt+Tab, etc.
-    // Map common names to platform keys
     const keyMap: Record<string, string> = {
       'enter': 'Return', 'return': 'Return', 'tab': 'Tab', 'escape': 'Escape', 'esc': 'Escape',
       'backspace': 'BackSpace', 'delete': 'Delete', 'space': 'space',
       'up': 'Up', 'down': 'Down', 'left': 'Left', 'right': 'Right',
       'home': 'Home', 'end': 'End', 'pageup': 'Page_Up', 'pagedown': 'Page_Down',
-      'f1': 'F1', 'f2': 'F2', 'f3': 'F3', 'f4': 'F4', 'f5': 'F5', 'f6': 'F6',
-      'f7': 'F7', 'f8': 'F8', 'f9': 'F9', 'f10': 'F10', 'f11': 'F11', 'f12': 'F12',
     };
     const parts = value.toLowerCase().split('+').map(s => keyMap[s.trim()] || s.trim());
     const combo = parts.join('+');
-    cmd = cmds.keyDown(combo);
+    cmd = cmds.key(combo);
     if (cmd) {
+      console.log(`[XDECK] Keyboard: ${cmd}`);
       exec(cmd, (err) => {
-        if (err) console.error(`[XDECK] Keyboard key error:`, err.message);
+        if (err) console.error(`[XDECK] Keyboard error:`, err.message);
       });
       return true;
     }
@@ -1038,8 +1029,9 @@ function handleKeyboardEvent(action: string, value: string): boolean {
   if (action === 'text') {
     cmd = cmds.type(value);
     if (cmd) {
+      console.log(`[XDECK] Type text: ${cmd}`);
       exec(cmd, (err) => {
-        if (err) console.error(`[XDECK] Keyboard text error:`, err.message);
+        if (err) console.error(`[XDECK] Type text error:`, err.message);
       });
       return true;
     }
@@ -1052,12 +1044,13 @@ function handleMouseEvent(action: string, params: { dx?: number; dy?: number; bu
   let cmd = '';
   if (action === 'move' && params.dx !== undefined && params.dy !== undefined) {
     cmd = cmds.mouseMove(params.dx, params.dy);
-  } else if (action === 'click' && params.button !== undefined && params.down !== undefined) {
-    cmd = cmds.mouseClick(params.button, params.down);
+  } else if (action === 'click' && params.button !== undefined) {
+    cmd = cmds.mouseClick(params.button);
   } else if (action === 'scroll' && params.scrollY !== undefined) {
     cmd = cmds.mouseScroll(params.scrollY);
   }
   if (cmd) {
+    console.log(`[XDECK] Mouse ${action}: ${cmd}`);
     exec(cmd, (err) => {
       if (err) console.error(`[XDECK] Mouse ${action} error:`, err.message);
     });
