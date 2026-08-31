@@ -40,6 +40,7 @@ export interface Page {
   grid: GridConfig;
   background: Background;
   buttons: Button[];
+  textColor?: string;
 }
 
 // Layout preference

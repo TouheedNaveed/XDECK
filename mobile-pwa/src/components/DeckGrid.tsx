@@ -104,6 +104,7 @@ export function DeckGrid({ page, onTrigger, onEditButton, onAddButton, onReorder
               onEdit={onEditButton}
               onAdd={onAddButton}
               triggerResult={slot.button ? triggerResults?.get(slot.button.id) : undefined}
+              textColor={page.textColor}
             />
           ))}
         </div>
@@ -126,9 +127,10 @@ interface SortableCellProps {
   onEdit: (id: string) => void;
   onAdd: () => void;
   triggerResult?: { ok: boolean; time: number };
+  textColor?: string;
 }
 
-function SortableCell({ slot, editMode, onTrigger, onEdit, onAdd, triggerResult }: SortableCellProps) {
+function SortableCell({ slot, editMode, onTrigger, onEdit, onAdd, triggerResult, textColor }: SortableCellProps) {
   const longPressTimer = useRef<ReturnType<typeof setTimeout>>();
   const pressing = useRef(false);
   const [triggered, setTriggered] = useState(false);
@@ -220,13 +222,19 @@ function SortableCell({ slot, editMode, onTrigger, onEdit, onAdd, triggerResult 
         )
       ) : (
         <div className={`${isFullSize ? 'cell-img-full bg-white/10 flex items-center justify-center rounded-[var(--btn-radius)]' : 'cell-img rounded-xl bg-white/10 flex items-center justify-center'}`}>
-          <span className={`${isFullSize ? 'text-2xl' : 'text-sm'} font-bold text-white/60 pointer-events-none`}>
+          <span 
+            className={`${isFullSize ? 'text-2xl' : 'text-sm'} font-bold pointer-events-none`}
+            style={textColor ? { color: textColor } : { color: 'rgba(255,255,255,0.6)' }}
+          >
             {slot.button.label.charAt(0).toUpperCase()}
           </span>
         </div>
       )}
       {!isFullSize && (
-        <span className="cell-label pointer-events-none">
+        <span 
+          className="cell-label pointer-events-none"
+          style={textColor ? { color: textColor } : undefined}
+        >
           {slot.button.label}
         </span>
       )}

@@ -290,12 +290,18 @@ export function App() {
     setEditingButton(null);
   }, [commit]);
 
-  const handleUpdateBackground = useCallback((pageId: string, background: any) => {
-    commit({ type: 'background_update', pageId, background }, (c) => ({
+  const handleUpdatePageProperties = useCallback((pageId: string, background: any, name: string, textColor: string) => {
+    const nextPages = config.pages.map((p) => p.id !== pageId ? p : { ...p, background, name, textColor });
+    commit({ type: 'config_sync', pages: nextPages, layoutPreference: layout }, (c) => ({
       ...c,
-      pages: c.pages.map((p) => p.id !== pageId ? p : { ...p, background }),
-    }), 'Background updated');
-  }, [commit]);
+      pages: nextPages,
+    }), 'Page properties updated');
+  }, [config.pages, layout, commit]);
+
+  const handleUpdateBackground = useCallback((pageId: string, background: any) => {
+    const pageObj = config.pages.find((p) => p.id === pageId);
+    handleUpdatePageProperties(pageId, background, pageObj?.name || 'Main', pageObj?.textColor || '#ffffff');
+  }, [config.pages, handleUpdatePageProperties]);
 
   const handleUpdateGrid = useCallback((pageId: string, grid: any) => {
     commit({ type: 'grid_update', pageId, grid }, (c) => ({
@@ -475,6 +481,7 @@ export function App() {
           onSaveButton={handleSaveButton}
           onDeleteButton={handleDeleteButton}
           onUpdateBackground={handleUpdateBackground}
+          onUpdatePageProperties={handleUpdatePageProperties}
           onUpdateGrid={handleUpdateGrid}
           onUpdateLayout={handleUpdateLayout}
           onPreviewBackground={setPreviewBg}

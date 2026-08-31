@@ -56,7 +56,10 @@ export function PageNav({ pages, currentPageIndex, onPageChange, onAddPage, onDe
           </button>
         )}
 
-        <span className="text-xs text-white/40 font-medium min-w-[60px] text-center">
+        <span 
+          className="text-xs font-medium min-w-[60px] text-center"
+          style={pages[currentPageIndex]?.textColor ? { color: pages[currentPageIndex].textColor } : { color: 'rgba(255,255,255,0.4)' }}
+        >
           {pages[currentPageIndex]?.name || 'Untitled'}
         </span>
 

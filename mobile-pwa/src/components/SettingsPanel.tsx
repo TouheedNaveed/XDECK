@@ -17,6 +17,7 @@ interface SettingsPanelProps {
   onSaveButton: (pageId: string, button: Button) => void;
   onDeleteButton: (pageId: string, buttonId: string) => void;
   onUpdateBackground: (pageId: string, background: Background) => void;
+  onUpdatePageProperties?: (pageId: string, background: Background, name: string, textColor: string) => void;
   onUpdateGrid: (pageId: string, grid: GridConfig) => void;
   onUpdateLayout: (layout: LayoutPreference) => void;
   onPreviewBackground?: (background: Background | null) => void;
@@ -104,6 +105,7 @@ export function SettingsPanel({
   onSaveButton,
   onDeleteButton,
   onUpdateBackground,
+  onUpdatePageProperties,
   onUpdateGrid,
   onUpdateLayout,
   onPreviewBackground,
@@ -170,6 +172,8 @@ export function SettingsPanel({
 
   const [gridForm, setGridForm] = useState(page.grid);
   const [bgForm, setBgForm] = useState(page.background);
+  const [pageName, setPageName] = useState(page.name || 'Main');
+  const [textColorForm, setTextColorForm] = useState(page.textColor || '#ffffff');
   const [layoutForm, setLayoutForm] = useState(layoutPreference);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
@@ -182,7 +186,9 @@ export function SettingsPanel({
     seededPageId.current = page.id;
     setGridForm(page.grid);
     setBgForm(page.background);
-  }, [page.id, page.grid, page.background]);
+    setPageName(page.name || 'Main');
+    setTextColorForm(page.textColor || '#ffffff');
+  }, [page.id, page.grid, page.background, page.name, page.textColor]);
 
   const uploadFile = useCallback(async (file: File, kind: 'icon' | 'background'): Promise<string | null> => {
     setUploadError(null);
@@ -230,10 +236,14 @@ export function SettingsPanel({
   }, [page.id, gridForm, onUpdateGrid, onPreviewGrid, onClose]);
 
   const handleSaveBackground = useCallback(() => {
-    onUpdateBackground(page.id, bgForm);
+    if (onUpdatePageProperties) {
+      onUpdatePageProperties(page.id, bgForm, pageName, textColorForm);
+    } else {
+      onUpdateBackground(page.id, bgForm);
+    }
     onPreviewBackground?.(null);
     onClose();
-  }, [page.id, bgForm, onUpdateBackground, onPreviewBackground, onClose]);
+  }, [page.id, bgForm, pageName, textColorForm, onUpdatePageProperties, onUpdateBackground, onPreviewBackground, onClose]);
 
   // Live preview: emit background and grid changes as user edits
   useEffect(() => {
@@ -638,6 +648,36 @@ export function SettingsPanel({
 
           {tab === 'background' && (
             <>
+              {/* Page Name & Text Color */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs text-white/50 mb-1.5">Page Name</label>
+                  <input
+                    type="text"
+                    value={pageName}
+                    onChange={(e) => setPageName(e.target.value)}
+                    className="w-full px-4 py-2 rounded-xl glass-panel text-white placeholder-white/30 outline-none text-xs"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-white/50 mb-1.5">Text/Label Color</label>
+                  <div className="flex gap-2 items-center">
+                    <input
+                      type="color"
+                      value={textColorForm}
+                      onChange={(e) => setTextColorForm(e.target.value)}
+                      className="w-8 h-8 rounded-lg cursor-pointer bg-transparent border-0 shrink-0"
+                    />
+                    <input
+                      type="text"
+                      value={textColorForm}
+                      onChange={(e) => setTextColorForm(e.target.value)}
+                      className="w-full px-2 py-1.5 glass-panel text-white placeholder-white/30 outline-none font-mono text-[10px] rounded-lg"
+                    />
+                  </div>
+                </div>
+              </div>
+
               {/* Background preview */}
               <div
                 className="w-full h-32 rounded-2xl border border-white/10 overflow-hidden"
@@ -789,7 +829,7 @@ export function SettingsPanel({
                 className="w-full py-3 rounded-xl font-semibold text-white"
                 style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(12px) saturate(150%)', WebkitBackdropFilter: 'blur(12px) saturate(150%)', border: '1px solid rgba(255,255,255,0.3)' }}
               >
-                Apply Background
+                Apply Page Settings
               </button>
             </>
           )}

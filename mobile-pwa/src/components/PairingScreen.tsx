@@ -38,6 +38,25 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
   // ws:// to a LAN IP is blocked from an https page, and the hosted PWA is https.
   const lanUnavailable = location.protocol === 'https:' && location.hostname !== 'localhost' && !discovered && !(window as any).Capacitor;
 
+  const [apkUpdateUrl, setApkUpdateUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!(window as any).Capacitor) return;
+    const APP_VERSION = 'v1.1.8';
+    fetch('https://api.github.com/repos/TouheedNaveed/XDECK/releases/latest')
+      .then(res => res.json())
+      .then(data => {
+        const latestTag = data.tag_name;
+        if (latestTag && latestTag !== APP_VERSION) {
+          const apkAsset = (data.assets || []).find((a: any) => a.name.endsWith('.apk'));
+          if (apkAsset) {
+            setApkUpdateUrl(apkAsset.browser_download_url);
+          }
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   useEffect(() => {
     if (connectionError) setError(connectionError);
   }, [connectionError]);
@@ -661,8 +680,17 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
         </p>
 
         <div className="text-[10px] text-white/10 text-center mt-4 font-mono">
-          v1.1.8
+          v1.1.9
         </div>
+
+        {apkUpdateUrl && (
+          <button
+            onClick={() => window.open(apkUpdateUrl, '_blank')}
+            className="w-full py-2.5 mt-3 rounded-2xl text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 transition-all text-center animate-pulse"
+          >
+            New APK update available — tap to install
+          </button>
+        )}
 
         {showUpdate && (
           <button
