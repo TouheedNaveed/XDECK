@@ -43,11 +43,24 @@ export function PairingScreen({ onConnect, isConnecting, isLoading, error: conne
   useEffect(() => {
     if (!(window as any).Capacitor) return;
     const APP_VERSION = 'v1.2.0';
+
+    function isNewer(latest: string, current: string): boolean {
+      const l = latest.replace(/^v/, '').split('.').map(Number);
+      const c = current.replace(/^v/, '').split('.').map(Number);
+      for (let i = 0; i < Math.max(l.length, c.length); i++) {
+        const lVal = l[i] || 0;
+        const cVal = c[i] || 0;
+        if (lVal > cVal) return true;
+        if (lVal < cVal) return false;
+      }
+      return false;
+    }
+
     fetch('https://api.github.com/repos/TouheedNaveed/XDECK/releases/latest')
       .then(res => res.json())
       .then(data => {
         const latestTag = data.tag_name;
-        if (latestTag && latestTag !== APP_VERSION) {
+        if (latestTag && isNewer(latestTag, APP_VERSION)) {
           const apkAsset = (data.assets || []).find((a: any) => a.name.endsWith('.apk'));
           if (apkAsset) {
             setApkUpdateUrl(apkAsset.browser_download_url);
