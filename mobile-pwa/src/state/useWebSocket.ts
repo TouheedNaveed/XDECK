@@ -39,7 +39,7 @@ function lanTarget(info: ConnectionInfo): { url: string } | { error: string } {
   if (sameHost) {
     return { url: `${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}/deck` };
   }
-  if (location.protocol === 'https:') {
+  if (location.protocol === 'https:' && !(globalThis as any).Capacitor) {
     return {
       error:
         'LAN mode blocked by browser security on HTTPS. Use Cloud mode instead.',
