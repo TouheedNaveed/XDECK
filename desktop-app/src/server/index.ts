@@ -1069,7 +1069,62 @@ function handleKeyboardEvent(action: string, value: string): boolean {
   return false;
 }
 
+import { spawn, ChildProcess } from 'child_process';
+
+let uinputProcess: ChildProcess | null = null;
+let uinputReady = false;
+
+function initLinuxUinput(): void {
+  if (process.platform !== 'linux') return;
+  try {
+    const candidatePaths = [
+      path.join(__dirname, 'uinput-driver.py'),
+      path.join(__dirname, '../src/server/uinput-driver.py'),
+      path.join(process.cwd(), 'src/server/uinput-driver.py'),
+      path.join(process.cwd(), 'dist/desktop-app/src/server/uinput-driver.py'),
+    ];
+    const finalPath = candidatePaths.find((p) => fs.existsSync(p));
+    if (finalPath && fs.existsSync('/dev/uinput')) {
+      console.log(`[XDECK] Spawning native Linux uinput driver from ${finalPath}`);
+      const proc = spawn('python3', [finalPath], { stdio: ['pipe', 'pipe', 'inherit'] });
+      uinputProcess = proc;
+      proc.stdout?.on('data', (data) => {
+        if (data.toString().includes('READY')) {
+          uinputReady = true;
+          console.log('[XDECK] Linux native uinput driver READY');
+        }
+      });
+      proc.on('exit', () => {
+        uinputReady = false;
+        uinputProcess = null;
+      });
+    }
+  } catch (e) {
+    console.warn('[XDECK] Could not initialize uinput driver:', e);
+  }
+}
+
 function handleMouseEvent(action: string, params: { dx?: number; dy?: number; button?: number; scrollY?: number; down?: boolean }): boolean {
+  if (uinputReady && uinputProcess && uinputProcess.stdin && !uinputProcess.killed) {
+    try {
+      if (action === 'move' && params.dx !== undefined && params.dy !== undefined) {
+        uinputProcess.stdin.write(`M ${params.dx} ${params.dy}\n`);
+        return true;
+      }
+      if (action === 'click' && params.button !== undefined) {
+        const downParam = params.down !== undefined ? (params.down ? ' 1' : ' 0') : '';
+        uinputProcess.stdin.write(`C ${params.button}${downParam}\n`);
+        return true;
+      }
+      if (action === 'scroll' && params.scrollY !== undefined) {
+        uinputProcess.stdin.write(`S ${params.scrollY}\n`);
+        return true;
+      }
+    } catch (e) {
+      console.warn('[XDECK] uinput write error:', e);
+    }
+  }
+
   const cmds = getPlatformInputCmds();
   let cmd = '';
   if (action === 'move' && params.dx !== undefined && params.dy !== undefined) {
@@ -1080,7 +1135,6 @@ function handleMouseEvent(action: string, params: { dx?: number; dy?: number; bu
     cmd = cmds.mouseScroll(params.scrollY);
   }
   if (cmd) {
-    console.log(`[XDECK] Mouse ${action}: ${cmd}`);
     exec(cmd, (err) => {
       if (err) console.error(`[XDECK] Mouse ${action} error:`, err.message);
     });
@@ -1090,6 +1144,7 @@ function handleMouseEvent(action: string, params: { dx?: number; dy?: number; bu
 }
 
 export function startServer() {
+  initLinuxUinput();
   const config = loadConfig();
   let pairingCode = loadPairingCode();
   let licenseKey = loadLicenseKey();

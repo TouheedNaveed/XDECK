@@ -36,6 +36,15 @@ try {
     console.log('[BUILD] Icon assets copied successfully.');
   }
 
+  // Copy uinput-driver.py to dist/desktop-app/src/server
+  const destServer = path.join(__dirname, '../dist/desktop-app/src/server');
+  fs.mkdirSync(destServer, { recursive: true });
+  const uinputSrc = path.join(__dirname, '../src/server/uinput-driver.py');
+  if (fs.existsSync(uinputSrc)) {
+    fs.copyFileSync(uinputSrc, path.join(destServer, 'uinput-driver.py'));
+    console.log('[BUILD] uinput-driver.py copied successfully.');
+  }
+
   // 3. Clean assets/pwa and copy mobile-pwa/dist
   const destPwa = path.join(__dirname, '../assets/pwa');
   if (fs.existsSync(destPwa)) {
