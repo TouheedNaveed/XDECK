@@ -75,7 +75,9 @@ export type WSMessage =
   | LayoutUpdateMessage
   | FileUploadMessage
   | FileUploadResultMessage
-  | ConfigRequestMessage;
+  | ConfigRequestMessage
+  | KeyboardEventMessage
+  | MouseEventMessage;
 
 export interface TriggerMessage {
   type: 'trigger';
@@ -205,4 +207,29 @@ export interface RelayStatusMessage {
 export interface RelayErrorMessage {
   type: 'relay_error';
   error: string;
+}
+
+// Keyboard input from phone → desktop
+export interface KeyboardEventMessage {
+  type: 'keyboard_event';
+  /** 'key' for key combo press, 'text' for typing a string */
+  action: 'key' | 'text';
+  /** For 'key': xdotool-style combo like 'ctrl+c', 'Return', 'BackSpace' */
+  /** For 'text': the literal string to type */
+  value: string;
+}
+
+// Mouse/trackpad input from phone → desktop
+export interface MouseEventMessage {
+  type: 'mouse_event';
+  action: 'move' | 'click' | 'scroll' | 'drag';
+  /** For 'move'/'drag': relative delta pixels */
+  dx?: number;
+  dy?: number;
+  /** For 'click': button number (1=left, 2=middle, 3=right) */
+  button?: number;
+  /** For 'scroll': vertical scroll amount */
+  scrollY?: number;
+  /** For 'click': true = mouseDown, false = mouseUp */
+  down?: boolean;
 }

@@ -101,7 +101,7 @@
       .scroll-reveal { opacity: 1; transform: none; }
     }
     /* How It Works animation */
-    .hiw-track { position: relative; }
+    .hiw-track { position: relative; overflow: hidden; }
     .hiw-step { position: absolute; top: 0; left: 0; width: 100%; opacity: 0; transform: translateX(60px); transition: all 0.6s cubic-bezier(0.4,0,0.2,1); pointer-events: none; }
     .hiw-step.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
     .hiw-progress { height: 3px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
@@ -208,7 +208,7 @@
         <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Everything You Need</h2>
         <p class="text-white/40 max-w-xl mx-auto text-lg">One app to control your entire PC. No limits on what you can do.</p>
       </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
         <div class="glass-card rounded-2xl p-8 scroll-reveal cursor-default relative overflow-hidden">
           <div class="feature-glow bg-accent top-0 right-0"></div>
           <div class="w-14 h-14 rounded-2xl bg-accent/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
@@ -244,6 +244,18 @@
           <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z"/></svg></div>
           <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Custom Layouts</h3>
           <p class="text-sm text-white/40 leading-relaxed relative z-10">Drag to reorder, custom backgrounds, emoji or image icons, any grid size.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-8 scroll-reveal cursor-default relative overflow-hidden">
+          <div class="feature-glow bg-emerald-500 top-0 right-0"></div>
+          <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Keyboard & Trackpad</h3>
+          <p class="text-sm text-white/40 leading-relaxed relative z-10">Turn your phone into a full keyboard and mouse trackpad. Type, navigate, and control your PC from anywhere.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-8 scroll-reveal cursor-default relative overflow-hidden">
+          <div class="feature-glow bg-indigo-500 top-0 right-0"></div>
+          <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg></div>
+          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Run Terminal Commands</h3>
+          <p class="text-sm text-white/40 leading-relaxed relative z-10">Execute shell commands in a real terminal window. Interactive commands, sudo prompts, scripts &mdash; all from your phone.</p>
         </div>
       </div>
     </div>
@@ -285,13 +297,13 @@
               </button>
             </div>
             <!-- Demo viewport -->
-            <div class="hiw-track" style="min-height: 320px;">
+            <div class="hiw-track overflow-hidden" style="min-height: 320px;">
               <!-- Step 1: Install & Run Desktop App -->
               <div class="hiw-step active" data-step="0">
-                <div class="grid md:grid-cols-2 gap-8 items-center">
-                  <div>
-                    <h3 class="font-heading text-2xl font-bold mb-3">Install &amp; Run the Desktop App</h3>
-                    <p class="text-white/40 leading-relaxed mb-6">Download XDECK for your OS and run it. The server starts automatically and shows a QR code with your pairing code.</p>
+                <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-center overflow-hidden">
+                  <div class="min-w-0">
+                    <h3 class="font-heading text-xl sm:text-2xl font-bold mb-3 break-words">Install &amp; Run the Desktop App</h3>
+                    <p class="text-white/40 leading-relaxed mb-6 text-sm sm:text-base">Download XDECK for your OS and run it. The server starts automatically and shows a QR code with your pairing code.</p>
                     <div class="space-y-3">
                       <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Windows, macOS, or Linux</span></div>
                       <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Starts a local server on port 8787</span></div>
@@ -299,8 +311,8 @@
                     </div>
                   </div>
                   <!-- Desktop mockup -->
-                  <div class="flex justify-center">
-                    <div class="w-80 rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+                  <div class="flex justify-center overflow-hidden">
+                    <div class="w-64 sm:w-80 rounded-xl overflow-hidden border border-white/10 shadow-2xl">
                       <div class="bg-dark-800 px-3 py-2 flex items-center gap-2 border-b border-white/5">
                         <div class="flex gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-red-500/70"></div><div class="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></div><div class="w-2.5 h-2.5 rounded-full bg-green-500/70"></div></div>
                         <span class="text-[10px] text-white/30 ml-2">XDECK Desktop</span>
@@ -325,10 +337,10 @@
 
               <!-- Step 2: Open Phone & Scan QR -->
               <div class="hiw-step" data-step="1">
-                <div class="grid md:grid-cols-2 gap-8 items-center">
-                  <div>
-                    <h3 class="font-heading text-2xl font-bold mb-3">Open Phone &amp; Scan the QR Code</h3>
-                    <p class="text-white/40 leading-relaxed mb-6">Open your phone's camera or browser. Scan the QR code on your desktop screen. Your phone connects instantly over WiFi.</p>
+                <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-center overflow-hidden">
+                  <div class="min-w-0">
+                    <h3 class="font-heading text-xl sm:text-2xl font-bold mb-3 break-words">Open Phone &amp; Scan the QR Code</h3>
+                    <p class="text-white/40 leading-relaxed mb-6 text-sm sm:text-base">Open your phone's camera or browser. Scan the QR code on your desktop screen. Your phone connects instantly over WiFi.</p>
                     <div class="space-y-3">
                       <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Works with any phone browser</span></div>
                       <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Or enter IP + pairing code manually</span></div>
@@ -336,10 +348,10 @@
                     </div>
                   </div>
                   <!-- Phone scanning animation -->
-                  <div class="flex justify-center relative">
+                  <div class="flex justify-center relative overflow-hidden">
                     <!-- Animated scan line -->
                     <div class="relative">
-                      <div class="phone-mockup w-52 relative z-10">
+                      <div class="phone-mockup w-40 sm:w-52 relative z-10">
                         <div class="bg-dark-900 rounded-[18px] p-3">
                           <div class="bg-dark-800 rounded-lg p-4 text-center mb-2">
                             <div class="w-20 h-20 mx-auto bg-white rounded-lg p-1 relative overflow-hidden mb-2">
@@ -364,10 +376,10 @@
 
               <!-- Step 3: Tap Buttons, Action Fires -->
               <div class="hiw-step" data-step="2">
-                <div class="grid md:grid-cols-2 gap-8 items-center">
-                  <div>
-                    <h3 class="font-heading text-2xl font-bold mb-3">Tap &amp; It Happens Instantly</h3>
-                    <p class="text-white/40 leading-relaxed mb-6">Every button on your phone triggers an action on your PC in real-time. Hotkeys, media, app launches &mdash; zero latency over WiFi.</p>
+                <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-center overflow-hidden">
+                  <div class="min-w-0">
+                    <h3 class="font-heading text-xl sm:text-2xl font-bold mb-3 break-words">Tap &amp; It Happens Instantly</h3>
+                    <p class="text-white/40 leading-relaxed mb-6 text-sm sm:text-base">Every button on your phone triggers an action on your PC in real-time. Hotkeys, media, app launches &mdash; zero latency over WiFi.</p>
                     <div class="space-y-3">
                       <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Sub-50ms response over WiFi</span></div>
                       <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Live button press feedback</span></div>
@@ -375,9 +387,9 @@
                     </div>
                   </div>
                   <!-- Phone tapping + Desktop reacting -->
-                  <div class="flex justify-center items-center gap-6">
-                    <div class="relative">
-                      <div class="phone-mockup w-44">
+                  <div class="flex justify-center items-center gap-3 sm:gap-6 overflow-hidden">
+                    <div class="relative shrink-0">
+                      <div class="phone-mockup w-32 sm:w-44">
                         <div class="bg-dark-900 rounded-[18px] p-2.5">
                           <div class="grid grid-cols-2 gap-2">
                             <div class="grid-btn aspect-square flex items-center justify-center" id="tap-btn-1"><svg class="grid-btn-icon w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3"/></svg></div>
@@ -395,7 +407,7 @@
                       <svg class="w-4 h-4 text-accent/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </div>
                     <!-- Desktop notification -->
-                    <div class="w-64 rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+                    <div class="w-48 sm:w-64 rounded-xl overflow-hidden border border-white/10 shadow-2xl shrink-0">
                       <div class="bg-dark-800 px-3 py-2 flex items-center gap-2 border-b border-white/5">
                         <div class="flex gap-1.5"><div class="w-2 h-2 rounded-full bg-red-500/70"></div><div class="w-2 h-2 rounded-full bg-yellow-500/70"></div><div class="w-2 h-2 rounded-full bg-green-500/70"></div></div>
                         <span class="text-[10px] text-white/30 ml-2">Desktop</span>

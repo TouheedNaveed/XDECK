@@ -559,6 +559,18 @@ function connectToRelay(licenseKey: string, config: DeckConfig, broadcast: (msg:
         return;
       }
 
+      if (msg.type === 'keyboard_event') {
+        console.log(`[RELAY] Keyboard: ${msg.action} → ${msg.value}`);
+        handleKeyboardEvent(msg.action, msg.value);
+        return;
+      }
+
+      if (msg.type === 'mouse_event') {
+        console.log(`[RELAY] Mouse: ${msg.action}`);
+        handleMouseEvent(msg.action, { dx: msg.dx, dy: msg.dy, button: msg.button, scrollY: msg.scrollY, down: msg.down });
+        return;
+      }
+
       // Config changes from the phone, via the relay
       if (CONFIG_MUTATIONS.has(msg.type)) {
         if (applyConfigMutation(config, msg)) {
@@ -936,6 +948,118 @@ function launchTarget(action: { kind: string; target: string }): Promise<boolean
   });
 }
 
+function getPlatformInputCmds(): { keyDown: (key: string) => string; keyUp: (key: string) => string; type: (text: string) => string; mouseMove: (dx: number, dy: number) => string; mouseClick: (button: number, down: boolean) => string; mouseScroll: (dy: number) => string } {
+  const platform = process.platform;
+  const sessionType = process.env.XDG_SESSION_TYPE || '';
+  const isWayland = sessionType === 'wayland';
+
+  if (platform === 'linux') {
+    const tool = isWayland ? 'ydotool' : 'xdotool';
+    return {
+      keyDown: (key: string) => `${tool} key --down ${key}`,
+      keyUp: (key: string) => `${tool} key --up ${key}`,
+      type: (text: string) => `${tool} type -- ${JSON.stringify(text)}`,
+      mouseMove: (dx: number, dy: number) => `${tool} mousemove -- ${dx >= 0 ? '+' : ''}${dx} ${dy >= 0 ? '+' : ''}${dy}`,
+      mouseClick: (button: number, down: boolean) => {
+        if (down) return `${tool} click --${button}`;
+        return `${tool} click --${button}`;
+      },
+      mouseScroll: (dy: number) => {
+        const btn = dy > 0 ? '5' : '4';
+        const count = Math.min(Math.abs(dy), 10);
+        return `${tool} click ${btn} ${' '.repeat(0)}`.trim() + (count > 1 ? ` && repeat ${count} ${tool} click ${btn}` : '');
+      },
+    };
+  }
+
+  if (platform === 'win32') {
+    return {
+      keyDown: (key: string) => `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('${key.replace(/'/g, "''")}')`,
+      keyUp: (_key: string) => '',
+      type: (text: string) => `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('${text.replace(/'/g, "''").replace(/\{/g, '{').replace(/\}/g, '}')}')"`,
+      mouseMove: (dx: number, dy: number) => `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; \$c=[System.Windows.Forms.Cursor]; \$c::Position=[System.Drawing.Point]::new(\$c::Position.X+${dx},\$c::Position.Y+${dy})"`,
+      mouseClick: (button: number, _down: boolean) => `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('${button === 3 ? '{RIGHT}' : '{ENTER}'}')"`,
+      mouseScroll: (dy: number) => `powershell -Command "Add-Type -AssemblyName System.Windows.Forms; [System.Windows.Forms.SendKeys]::SendWait('${dy > 0 ? '{PGUP}' : '{PGDN}'}')"`,
+    };
+  }
+
+  if (platform === 'darwin') {
+    return {
+      keyDown: (key: string) => `osascript -e 'tell application "System Events" to key down "${key}"'`,
+      keyUp: (key: string) => `osascript -e 'tell application "System Events" to key up "${key}"'`,
+      type: (text: string) => `osascript -e 'tell application "System Events" to keystroke "${text.replace(/"/g, '\\"')}"'`,
+      mouseMove: (dx: number, dy: number) => `osascript -e 'tell application "System Events" to set p to get position of mouse; set position of mouse to {item 1 of p + ${dx}, item 2 of p + ${dy}}'`,
+      mouseClick: (button: number, _down: boolean) => `osascript -e 'tell application "System Events" to click at {100, 100}'`,
+      mouseScroll: (dy: number) => `osascript -e 'tell application "System Events" to scroll area {0, ${dy > 0 ? 3 : -3}}'`,
+    };
+  }
+
+  // Fallback
+  return {
+    keyDown: () => '',
+    keyUp: () => '',
+    type: () => '',
+    mouseMove: () => '',
+    mouseClick: () => '',
+    mouseScroll: () => '',
+  };
+}
+
+function handleKeyboardEvent(action: string, value: string): boolean {
+  const cmds = getPlatformInputCmds();
+  let cmd = '';
+  if (action === 'key') {
+    // xdotool-style key combos: ctrl+c, Return, alt+Tab, etc.
+    // Map common names to platform keys
+    const keyMap: Record<string, string> = {
+      'enter': 'Return', 'return': 'Return', 'tab': 'Tab', 'escape': 'Escape', 'esc': 'Escape',
+      'backspace': 'BackSpace', 'delete': 'Delete', 'space': 'space',
+      'up': 'Up', 'down': 'Down', 'left': 'Left', 'right': 'Right',
+      'home': 'Home', 'end': 'End', 'pageup': 'Page_Up', 'pagedown': 'Page_Down',
+      'f1': 'F1', 'f2': 'F2', 'f3': 'F3', 'f4': 'F4', 'f5': 'F5', 'f6': 'F6',
+      'f7': 'F7', 'f8': 'F8', 'f9': 'F9', 'f10': 'F10', 'f11': 'F11', 'f12': 'F12',
+    };
+    const parts = value.toLowerCase().split('+').map(s => keyMap[s.trim()] || s.trim());
+    const combo = parts.join('+');
+    cmd = cmds.keyDown(combo);
+    if (cmd) {
+      exec(cmd, (err) => {
+        if (err) console.error(`[XDECK] Keyboard key error:`, err.message);
+      });
+      return true;
+    }
+  }
+  if (action === 'text') {
+    cmd = cmds.type(value);
+    if (cmd) {
+      exec(cmd, (err) => {
+        if (err) console.error(`[XDECK] Keyboard text error:`, err.message);
+      });
+      return true;
+    }
+  }
+  return false;
+}
+
+function handleMouseEvent(action: string, params: { dx?: number; dy?: number; button?: number; scrollY?: number; down?: boolean }): boolean {
+  const cmds = getPlatformInputCmds();
+  let cmd = '';
+  if (action === 'move' && params.dx !== undefined && params.dy !== undefined) {
+    cmd = cmds.mouseMove(params.dx, params.dy);
+  } else if (action === 'click' && params.button !== undefined && params.down !== undefined) {
+    cmd = cmds.mouseClick(params.button, params.down);
+  } else if (action === 'scroll' && params.scrollY !== undefined) {
+    cmd = cmds.mouseScroll(params.scrollY);
+  }
+  if (cmd) {
+    exec(cmd, (err) => {
+      if (err) console.error(`[XDECK] Mouse ${action} error:`, err.message);
+    });
+    return true;
+  }
+  return false;
+}
+
 export function startServer() {
   const config = loadConfig();
   let pairingCode = loadPairingCode();
@@ -1077,13 +1201,25 @@ export function startServer() {
           console.log(`[XDECK] Trigger: ${msg.buttonId}, found: ${!!btn}, action: ${btn?.action.kind} → ${btn?.action.target}`);
           if (btn) {
             const ok = await launchTarget(btn.action);
-            console.log(`[XDECK] Trigger result: ok=${ok}`);
+            console.log(`[XDECK] Trigger result: ${msg.buttonId}, ok=${ok}`);
             ws.send(JSON.stringify({ type: 'trigger_result', buttonId: msg.buttonId, ok } as WSMessage));
           } else {
-            console.log(`[XDECK] Trigger: button not found — resyncing client`);
+            console.log(`[XDECK] Trigger: ${msg.buttonId} not found — phone is out of sync, resending config`);
             ws.send(JSON.stringify({ type: 'trigger_result', buttonId: msg.buttonId, ok: false, error: 'Not found' } as WSMessage));
             ws.send(JSON.stringify({ type: 'config_sync', pages: config.pages, layoutPreference: config.layoutPreference } as WSMessage));
           }
+          return;
+        }
+
+        if (msg.type === 'keyboard_event') {
+          handleKeyboardEvent(msg.action, msg.value);
+          return;
+        }
+
+        if (msg.type === 'mouse_event') {
+          handleMouseEvent(msg.action, { dx: msg.dx, dy: msg.dy, button: msg.button, scrollY: msg.scrollY, down: msg.down });
+          return;
+        }
           return;
         }
 

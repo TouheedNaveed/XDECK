@@ -5,6 +5,7 @@ import { PageNav } from './components/PageNav';
 import { SettingsPanel } from './components/SettingsPanel';
 import { PairingScreen } from './components/PairingScreen';
 import { ConnectionIndicator } from './components/ConnectionIndicator';
+import InputTab from './components/InputTab';
 import { useTranslation } from './i18n';
 import toast, { Toaster } from 'react-hot-toast';
 import type { Button, LayoutPreference, WSMessage, DeckConfig } from '@shared/protocol';
@@ -29,6 +30,7 @@ export function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [editingButton, setEditingButton] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
+  const [showInput, setShowInput] = useState(false);
   const [deviceIsLandscape, setDeviceIsLandscape] = useState(() => window.matchMedia('(orientation: landscape)').matches);
 
   const [triggerResults, setTriggerResults] = useState<Map<string, { ok: boolean; time: number }>>(new Map());
@@ -442,6 +444,15 @@ export function App() {
           >
             {editMode ? 'Done' : 'Edit'}
           </button>
+          {!editMode && (
+            <button
+              onClick={() => setShowInput(true)}
+              className="glass-panel px-3 py-1.5 text-xs font-medium opacity-70 hover:opacity-100 transition-opacity flex items-center gap-1.5"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              Input
+            </button>
+          )}
           <button
             onClick={() => setShowSettings(true)}
             className="glass-panel px-3 py-1.5 text-xs font-medium opacity-70 hover:opacity-100 transition-opacity"
@@ -509,6 +520,14 @@ export function App() {
             setShowSettings(false);
             setEditingButton(null);
           }}
+        />
+      )}
+
+      {/* Input tab overlay */}
+      {showInput && (
+        <InputTab
+          sendMessage={sendMessage}
+          onBack={() => setShowInput(false)}
         />
       )}
     </div>
