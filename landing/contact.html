@@ -20,25 +20,9 @@
   <meta name="description" content="Get in touch with the XDECK team. We're here to help with technical support, billing, feature requests, and more.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="styles.min.css">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            heading: ['Space Grotesk', 'sans-serif'],
-            body: ['DM Sans', 'sans-serif'],
-          },
-          colors: {
-            dark: { 950: '#080d1a', 900: '#0F172A', 800: '#1E293B', 700: '#334155' },
-            accent: { DEFAULT: '#6366f1', light: '#818cf8', dark: '#4f46e5' },
-            cta: { DEFAULT: '#22C55E', hover: '#16A34A' },
-          }
-        }
-      }
-    }
-  </script>
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'DM Sans', sans-serif; background: #080d1a; color: #F8FAFC; overflow-x: hidden; }
@@ -52,11 +36,10 @@
     .btn-outline { border: 1px solid rgba(255,255,255,0.15); transition: all 0.3s ease; }
     .btn-outline:hover { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.1); }
     .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
-    .scroll-reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1); }
-    .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
+    .sr-ready .scroll-reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1); }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
-      .scroll-reveal { opacity: 1; transform: none; }
+      .sr-ready .scroll-reveal { opacity: 1; transform: none; }
     }
   </style>
   <!-- Google tag (gtag.js) -->
@@ -267,6 +250,7 @@
   </footer>
 
   <script>
+    document.documentElement.classList.add('sr-ready');
     const RELAY_URL = 'https://xdeck-relay.onrender.com';
 
     (function() {

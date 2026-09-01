@@ -44,7 +44,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="styles.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -68,8 +68,8 @@
     .grid-btn-icon { position: relative; z-index: 1; }
     .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
     .feature-glow { position: absolute; width: 200px; height: 200px; border-radius: 50%; filter: blur(80px); opacity: 0.15; pointer-events: none; }
-    .scroll-reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1); }
-    .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
+    .sr-ready .scroll-reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1); }
+    .sr-ready .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
     @keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.5); opacity: 0; } }
     .pulse-ring { animation: pulse-ring 2s ease-out infinite; }
     @keyframes float-phone { 0%, 100% { transform: translateY(0px) rotateY(-5deg); } 50% { transform: translateY(-16px) rotateY(5deg); } }
@@ -80,7 +80,7 @@
     .toast-error{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5}
     @media (prefers-reduced-motion: reduce) {
       *, .float-phone { animation: none !important; transition: none !important; }
-      .scroll-reveal { opacity: 1; transform: none; }
+      .sr-ready .scroll-reveal { opacity: 1; transform: none; }
     }
     .hiw-track { position: relative; overflow: hidden; }
     .hiw-step { position: absolute; top: 0; left: 0; width: 100%; opacity: 0; transform: translateX(60px); transition: all 0.6s cubic-bezier(0.4,0,0.2,1); pointer-events: none; }
@@ -102,7 +102,7 @@
 <body>
   <div id="toast" class="toast"></div>
 
-  <!-- Nav — Codelab style: clean, centered links -->
+  <!-- Nav -->
   <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5" style="background: rgba(8,13,26,0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);">
     <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
       <a href="/" class="flex items-center gap-3">
@@ -255,7 +255,7 @@
 
   <div class="section-divider max-w-6xl mx-auto"></div>
 
-  <!-- How It Works — Animated Visual Demo -->
+  <!-- How It Works -->
   <section id="how-it-works" class="py-24 sm:py-32 px-6">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-20 scroll-reveal">
@@ -264,16 +264,13 @@
         <p class="text-white/40 max-w-xl mx-auto text-lg">No account needed. Install, pair, and start controlling.</p>
       </div>
 
-      <!-- Interactive Demo — Phone + Desktop + Signal Animation -->
       <div class="scroll-reveal">
         <div class="glass-card rounded-3xl p-6 sm:p-10 lg:p-14 max-w-5xl mx-auto relative overflow-hidden">
           <div class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-purple-500/5"></div>
           <div class="relative z-10">
-            <!-- Progress bar -->
             <div class="hiw-progress mb-10">
               <div class="hiw-progress-bar" id="hiw-bar" style="width: 33%"></div>
             </div>
-            <!-- Step indicators -->
             <div class="flex items-center justify-between mb-10 px-4">
               <button class="hiw-indicator flex items-center gap-2 text-sm font-semibold text-accent-light cursor-pointer" data-step="0">
                 <span class="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-xs font-bold text-accent-light border border-accent/30">1</span>
@@ -288,9 +285,7 @@
                 <span class="hidden sm:inline">Start Controlling</span>
               </button>
             </div>
-            <!-- Demo viewport -->
             <div class="hiw-track overflow-hidden" style="min-height: 320px;">
-              <!-- Step 1: Install & Run Desktop App -->
               <div class="hiw-step active" data-step="0">
                 <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-center overflow-hidden">
                   <div class="min-w-0">
@@ -302,7 +297,6 @@
                       <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">QR code &amp; pairing code generated</span></div>
                     </div>
                   </div>
-                  <!-- Desktop mockup -->
                   <div class="flex justify-center overflow-hidden">
                     <div class="w-64 sm:w-80 rounded-xl overflow-hidden border border-white/10 shadow-2xl">
                       <div class="bg-dark-800 px-3 py-2 flex items-center gap-2 border-b border-white/5">
@@ -327,7 +321,6 @@
                 </div>
               </div>
 
-              <!-- Step 2: Open Phone & Scan QR -->
               <div class="hiw-step" data-step="1">
                 <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-center overflow-hidden">
                   <div class="min-w-0">
@@ -339,9 +332,7 @@
                       <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Install as PWA for app-like experience</span></div>
                     </div>
                   </div>
-                  <!-- Phone scanning animation -->
                   <div class="flex justify-center relative overflow-hidden">
-                    <!-- Animated scan line -->
                     <div class="relative">
                       <div class="phone-mockup w-40 sm:w-52 relative z-10">
                         <div class="bg-dark-900 rounded-[18px] p-3">
@@ -357,7 +348,6 @@
                           </div>
                         </div>
                       </div>
-                      <!-- Signal waves -->
                       <div class="absolute -left-8 top-1/2 -translate-y-1/2">
                         <div class="w-4 h-4 border-2 border-accent/40 rounded-full" style="animation: ping 1.5s infinite;"></div>
                       </div>
@@ -366,7 +356,6 @@
                 </div>
               </div>
 
-              <!-- Step 3: Tap Buttons, Action Fires -->
               <div class="hiw-step" data-step="2">
                 <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-center overflow-hidden">
                   <div class="min-w-0">
@@ -378,7 +367,6 @@
                       <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Cloud relay for remote control</span></div>
                     </div>
                   </div>
-                  <!-- Phone tapping + Desktop reacting -->
                   <div class="flex justify-center items-center gap-3 sm:gap-6 overflow-hidden">
                     <div class="relative shrink-0">
                       <div class="phone-mockup w-32 sm:w-44">
@@ -392,13 +380,11 @@
                         </div>
                       </div>
                     </div>
-                    <!-- Animated signal -->
                     <div class="flex flex-col items-center gap-1">
                       <div class="w-2 h-2 rounded-full bg-accent animate-ping"></div>
                       <div class="w-0.5 h-16 bg-gradient-to-b from-accent/60 to-transparent"></div>
                       <svg class="w-4 h-4 text-accent/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </div>
-                    <!-- Desktop notification -->
                     <div class="w-48 sm:w-64 rounded-xl overflow-hidden border border-white/10 shadow-2xl shrink-0">
                       <div class="bg-dark-800 px-3 py-2 flex items-center gap-2 border-b border-white/5">
                         <div class="flex gap-1.5"><div class="w-2 h-2 rounded-full bg-red-500/70"></div><div class="w-2 h-2 rounded-full bg-yellow-500/70"></div><div class="w-2 h-2 rounded-full bg-green-500/70"></div></div>
@@ -422,7 +408,6 @@
               </div>
             </div>
 
-            <!-- Auto-play controls -->
             <div class="flex items-center justify-center gap-4 mt-8">
               <button id="hiw-prev" class="w-10 h-10 rounded-full glass flex items-center justify-center text-white/40 hover:text-white transition-colors cursor-pointer">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
@@ -492,7 +477,7 @@
           <p class="text-xs text-white/30">macOS 12+</p>
         </a>
         <a href="javascript:void(0)" onclick="downloadRelease('linux')" class="glass-card rounded-2xl p-6 text-center cursor-pointer group">
-          <svg class="w-10 h-10 mx-auto mb-3 text-white/50 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.368 1.884 1.43.199.025.363-.155.363-.334 0-.06-.028-.12-.043-.199-.063-.199-.127-.299-.163-.466-.04-.199.012-.535.012-.535s.07-.334.07-.667c0-.466-.07-.865-.333-1.465.535-.4.975-1.065 1.175-1.865.082-.319.149-.639.149-.968 0-.478-.095-.956-.344-1.377.463-.265.782-.798.782-1.367 0-.334-.095-.667-.299-.933.232-.465.339-.996.295-1.565-.038-.334-.265-.6-.595-.732a5.35 5.35 0 00-.546-.167 13.15 13.15 0 00-.334-.064c-.134-.025-.265-.049-.4-.069-.09-.012-.174-.023-.268-.029a4.03 4.03 0 00-.363-.018c-.143 0-.285.006-.424.022z"/></svg>
+          <svg class="w-10 h-10 mx-auto mb-3 text-white/50 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.156 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.368 1.884 1.43.199.025.363-.155.363-.334 0-.06-.028-.12-.043-.199-.063-.199-.127-.299-.163-.466-.04-.199.012-.535.012-.535s.07-.334.07-.667c0-.466-.07-.865-.333-1.465.535-.4.975-1.065 1.175-1.865.082-.319.149-.639.149-.968 0-.478-.095-.956-.344-1.377.463-.265.782-.798.782-1.367 0-.334-.095-.667-.299-.933.232-.465.339-.996.295-1.565-.038-.334-.265-.6-.595-.732a5.35 5.35 0 00-.546-.167 13.15 13.15 0 00-.334-.064c-.134-.025-.265-.049-.4-.069-.09-.012-.174-.023-.268-.029a4.03 4.03 0 00-.363-.018c-.143 0-.285.006-.424.022z"/></svg>
           <h3 class="font-heading font-semibold mb-1">Linux</h3>
           <p class="text-xs text-white/30">.deb / .AppImage</p>
         </a>
@@ -502,7 +487,6 @@
           <p class="text-xs text-white/30">Native APK</p>
         </a>
       </div>
-      <!-- iOS PWA -->
       <div class="mt-16 max-w-2xl mx-auto glass-card rounded-3xl p-8 text-left border border-white/5 scroll-reveal">
         <h3 class="font-heading font-bold text-xl mb-4 text-center">Using an iPhone? Install as PWA</h3>
         <p class="text-xs text-white/40 text-center mb-6">Install the app directly via Safari:</p>
@@ -566,35 +550,35 @@
   </footer>
 
   <script>
-    // CSS-only scroll reveal (Intersection Observer)
-    document.addEventListener('DOMContentLoaded', () => {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+    document.documentElement.classList.add('sr-ready');
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
             observer.unobserve(entry.target);
           }
         });
       }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-      document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+      document.querySelectorAll('.scroll-reveal').forEach(function(el) { observer.observe(el); });
     });
 
-    // How It Works auto-cycle
     (function() {
-      let current = 0, playing = true, timer;
-      const steps = document.querySelectorAll('.hiw-step');
-      const indicators = document.querySelectorAll('.hiw-indicator');
-      const bar = document.getElementById('hiw-bar');
-      const pauseIcon = document.getElementById('hiw-pause-icon');
-      const playIcon = document.getElementById('hiw-play-icon');
-      const toggleText = document.getElementById('hiw-toggle-text');
+      var current = 0, playing = true, timer;
+      var steps = document.querySelectorAll('.hiw-step');
+      var indicators = document.querySelectorAll('.hiw-indicator');
+      var bar = document.getElementById('hiw-bar');
+      var pauseIcon = document.getElementById('hiw-pause-icon');
+      var playIcon = document.getElementById('hiw-play-icon');
+      var toggleText = document.getElementById('hiw-toggle-text');
 
       function goTo(i) {
         current = ((i % 3) + 3) % 3;
-        steps.forEach(s => s.classList.remove('active'));
+        steps.forEach(function(s) { s.classList.remove('active'); });
         steps[current].classList.add('active');
-        indicators.forEach((ind, idx) => {
-          const span = ind.querySelector('span:first-child');
+        indicators.forEach(function(ind, idx) {
+          var span = ind.querySelector('span:first-child');
           if (idx === current) {
             ind.classList.remove('text-white/30');
             ind.classList.add('text-accent-light');
@@ -614,26 +598,51 @@
       function startAuto() { stopAuto(); timer = setInterval(next, 4000); playing = true; pauseIcon.classList.remove('hidden'); playIcon.classList.add('hidden'); toggleText.textContent = 'Pause'; }
       function stopAuto() { clearInterval(timer); playing = false; pauseIcon.classList.add('hidden'); playIcon.classList.remove('hidden'); toggleText.textContent = 'Play'; }
 
-      document.getElementById('hiw-next').addEventListener('click', () => { next(); if (playing) startAuto(); });
-      document.getElementById('hiw-prev').addEventListener('click', () => { goTo(current - 1); if (playing) startAuto(); });
-      document.getElementById('hiw-toggle').addEventListener('click', () => { playing ? stopAuto() : startAuto(); });
-      indicators.forEach(ind => ind.addEventListener('click', () => { goTo(+ind.dataset.step); if (playing) startAuto(); }));
+      document.getElementById('hiw-next').addEventListener('click', function() { next(); if (playing) startAuto(); });
+      document.getElementById('hiw-prev').addEventListener('click', function() { goTo(current - 1); if (playing) startAuto(); });
+      document.getElementById('hiw-toggle').addEventListener('click', function() { playing ? stopAuto() : startAuto(); });
+      indicators.forEach(function(ind) { ind.addEventListener('click', function() { goTo(+ind.dataset.step); if (playing) startAuto(); }); });
 
       startAuto();
     })();
 
-    // Toast
-    function showToast(msg, type='error') { const t=document.getElementById('toast'); t.textContent=msg; t.className='toast toast-'+type+' show'; setTimeout(()=>t.classList.remove('show'),4000); }
+    function showToast(msg, type) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast toast-' + (type || 'error') + ' show';
+      setTimeout(function() { t.classList.remove('show'); }, 4000);
+    }
 
-    const RELAY_URL = (location.hostname==='localhost'||location.protocol==='file:') ? 'http://localhost:9000' : 'https://xdeck-relay.onrender.com';
+    var RELAY_URL = (location.hostname === 'localhost' || location.protocol === 'file:') ? 'http://localhost:9000' : 'https://xdeck-relay.onrender.com';
 
-    document.getElementById('buy-btn').addEventListener('click', async e => {
-      e.preventDefault(); const btn=e.target; btn.textContent='Redirecting to checkout...'; btn.style.pointerEvents='none';
-      try { const res=await fetch(RELAY_URL+'/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})}); const data=await res.json(); if(data.url)location.href=data.url; else { showToast('Checkout failed: '+(data.error||'Unknown'),'error'); btn.textContent='Get XDECK \u2014 $10'; btn.style.pointerEvents=''; } } catch { showToast('Could not connect to checkout.','error'); btn.textContent='Get XDECK \u2014 $10'; btn.style.pointerEvents=''; }
+    document.getElementById('buy-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      var btn = e.target;
+      btn.textContent = 'Redirecting to checkout...';
+      btn.style.pointerEvents = 'none';
+      fetch(RELAY_URL + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data.url) { location.href = data.url; }
+          else { showToast('Checkout failed: ' + (data.error || 'Unknown'), 'error'); btn.textContent = 'Get XDECK \u2014 $10'; btn.style.pointerEvents = ''; }
+        })
+        .catch(function() { showToast('Could not connect to checkout.', 'error'); btn.textContent = 'Get XDECK \u2014 $10'; btn.style.pointerEvents = ''; });
     });
 
-    async function downloadRelease(p) {
-      try { const res=await fetch('https://api.github.com/repos/TouheedNaveed/XDECK/releases/latest'); const data=await res.json(); const a=data.assets||[]; let f; if(p==='win')f=a.find(x=>x.name.endsWith('.exe')&&!x.name.includes('blockmap')); else if(p==='mac')f=a.find(x=>x.name.endsWith('.dmg')); else if(p==='linux')f=a.find(x=>x.name.endsWith('.AppImage')); else if(p==='android')f=a.find(x=>x.name.endsWith('.apk')); if(f)location.href=f.browser_download_url; else showToast('Build not ready yet.','error'); } catch { showToast('Could not fetch release.','error'); }
+    function downloadRelease(p) {
+      fetch('https://api.github.com/repos/TouheedNaveed/XDECK/releases/latest')
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          var a = data.assets || [];
+          var f;
+          if (p === 'win') f = a.find(function(x) { return x.name.endsWith('.exe') && !x.name.includes('blockmap'); });
+          else if (p === 'mac') f = a.find(function(x) { return x.name.endsWith('.dmg'); });
+          else if (p === 'linux') f = a.find(function(x) { return x.name.endsWith('.AppImage'); });
+          else if (p === 'android') f = a.find(function(x) { return x.name.endsWith('.apk'); });
+          if (f) location.href = f.browser_download_url;
+          else showToast('Build not ready yet.', 'error');
+        })
+        .catch(function() { showToast('Could not fetch release.', 'error'); });
     }
   </script>
 </body>
