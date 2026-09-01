@@ -9,6 +9,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "resend": "^6.25.0",
     "stripe": "^14.0.0",
     "ws": "^8.16.0"
   },

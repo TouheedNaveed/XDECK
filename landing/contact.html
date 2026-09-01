@@ -260,12 +260,55 @@
   </footer>
 
   <script>
-    // Contact form handler
-    document.getElementById('contact-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      alert("Thank you! We'll get back to you within 24 hours.");
-      this.reset();
-    });
+    const RELAY_URL = 'https://xdeck-relay.onrender.com';
+
+    (function() {
+      const form = document.getElementById('contact-form');
+      const btn = form.querySelector('button[type="submit"]');
+      const originalText = btn.textContent;
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(form));
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="inline-flex items-center gap-2"><svg class="animate-spin h-4 w-4" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg> Sending...</span>';
+        btn.style.opacity = '0.7';
+
+        try {
+          const res = await fetch(RELAY_URL + '/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          });
+          const result = await res.json();
+
+          if (result.success) {
+            form.innerHTML = '<div class="text-center py-12"><div class="w-16 h-16 rounded-2xl bg-green-500/20 flex items-center justify-center mx-auto mb-6"><svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div><h3 class="font-heading text-2xl font-bold mb-3">Message Sent!</h3><p class="text-white/40 mb-6">Thanks for reaching out. We\'ll get back to you within 24 hours.</p><a href="index.html" class="btn-cta inline-block px-6 py-2.5 rounded-xl text-white font-semibold text-sm">Back to Home</a></div>';
+          } else {
+            throw new Error(result.error || 'Failed to send');
+          }
+        } catch (err) {
+          btn.disabled = false;
+          btn.textContent = originalText;
+          btn.style.opacity = '1';
+          showToast('Failed to send message. Please try again or email us directly.');
+        }
+      });
+    })();
+
+    function showToast(msg) {
+      let t = document.getElementById('toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'toast';
+        t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1E293B;color:#F8FAFC;padding:12px 24px;border-radius:12px;border:1px solid rgba(255,255,255,0.1);font-size:14px;z-index:9999;transition:opacity 0.3s;backdrop-filter:blur(12px);';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.opacity = '1';
+      setTimeout(() => { t.style.opacity = '0'; }, 4000);
+    }
 
     // GSAP ScrollTrigger animations
     gsap.registerPlugin(ScrollTrigger);

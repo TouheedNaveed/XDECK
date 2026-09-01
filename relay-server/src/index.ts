@@ -3,6 +3,7 @@ import http from 'http';
 import crypto from 'crypto';
 import fs from 'fs';
 import Stripe from 'stripe';
+import { Resend } from 'resend';
 
 const PORT = parseInt(process.env.PORT || '9000');
 // 25s: two missed beats must still be well inside Render's ~100s idle-proxy timeout,
@@ -14,7 +15,11 @@ const LICENSE_DB = process.env.LICENSE_DB || 'licenses.json';
 const LICENSE_SIGNING_SECRET = process.env.LICENSE_SIGNING_SECRET || '';
 const STRIPE_SECRET = process.env.STRIPE_SECRET || '';
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
+const STRIPE_PRICE_ID = process.env.STRIPE_PRICE_ID || '';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://xdeck.app';
+const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
+
+const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 let stripe: Stripe | null = null;
 if (STRIPE_SECRET) {
@@ -232,16 +237,20 @@ const httpServer = http.createServer((req, res) => {
           return;
         }
 
+        const lineItem = STRIPE_PRICE_ID
+          ? [{ price: STRIPE_PRICE_ID, quantity: 1 }]
+          : [{
+              price_data: {
+                currency: 'usd',
+                product_data: { name: 'XDECK Lifetime License', description: 'Turn your phone into a stream deck' },
+                unit_amount: 1000,
+              },
+              quantity: 1,
+            }];
+
         const session = await stripe!.checkout.sessions.create({
           payment_method_types: ['card'],
-          line_items: [{
-            price_data: {
-              currency: 'usd',
-              product_data: { name: 'XDECK Lifetime License', description: 'Turn your phone into a stream deck' },
-              unit_amount: 1000,
-            },
-            quantity: 1,
-          }],
+          line_items: lineItem,
           mode: 'payment',
           customer_email: email || undefined,
           success_url: `${FRONTEND_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
@@ -329,6 +338,69 @@ const httpServer = http.createServer((req, res) => {
       console.error('[STRIPE] Session lookup error:', e.message);
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Failed to verify payment' }));
+    });
+    return;
+  }
+
+  // Contact form
+  if (req.url === '/api/contact' && req.method === 'POST') {
+    if (!resend) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Email service not configured' }));
+      return;
+    }
+    let body = '';
+    req.on('data', (chunk) => body += chunk);
+    req.on('end', async () => {
+      try {
+        const { name, email, subject, message } = JSON.parse(body);
+        if (!name || !email || !subject || !message) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'All fields are required' }));
+          return;
+        }
+
+        const subjectMap: Record<string, string> = {
+          general: 'General Inquiry',
+          technical: 'Technical Support',
+          billing: 'Billing / License',
+          feature: 'Feature Request',
+          bug: 'Bug Report',
+        };
+        const subjectLabel = subjectMap[subject] || subject;
+
+        await resend.emails.send({
+          from: 'XDECK Contact <onboarding@resend.dev>',
+          to: 'support@xdeck.app',
+          replyTo: email,
+          subject: `[XDECK ${subjectLabel}] ${name}`,
+          html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #0F172A; color: #F8FAFC;">
+              <div style="padding: 24px; background: rgba(30,41,59,0.6); border-radius: 16px; border: 1px solid rgba(255,255,255,0.08);">
+                <h2 style="color: #818cf8; margin: 0 0 16px;">New Contact Form Submission</h2>
+                <table style="width: 100%; border-collapse: collapse;">
+                  <tr><td style="padding: 8px 0; color: #94A3B8; font-weight: 600;">Name</td><td style="padding: 8px 0; color: #F8FAFC;">${name}</td></tr>
+                  <tr><td style="padding: 8px 0; color: #94A3B8; font-weight: 600;">Email</td><td style="padding: 8px 0; color: #F8FAFC;">${email}</td></tr>
+                  <tr><td style="padding: 8px 0; color: #94A3B8; font-weight: 600;">Subject</td><td style="padding: 8px 0; color: #F8FAFC;">${subjectLabel}</td></tr>
+                </table>
+                <div style="margin-top: 16px; padding: 16px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                  <p style="color: #94A3B8; font-weight: 600; margin: 0 0 8px;">Message</p>
+                  <p style="color: #F8FAFC; margin: 0; line-height: 1.6; white-space: pre-wrap;">${message}</p>
+                </div>
+                <p style="color: #475569; font-size: 12px; margin-top: 20px; text-align: center;">Reply to this email to respond directly to ${name}.</p>
+              </div>
+            </div>
+          `,
+        });
+
+        console.log(`[CONTACT] Message from ${name} <${email}>: ${subjectLabel}`);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true }));
+      } catch (e: any) {
+        console.error('[CONTACT] Error:', e.message);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Failed to send message' }));
+      }
     });
     return;
   }
