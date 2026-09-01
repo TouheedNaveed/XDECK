@@ -21,9 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link rel="stylesheet" href="styles.min.css">
   <script>
     tailwind.config = {
       theme: {
@@ -54,7 +52,8 @@
     .btn-outline { border: 1px solid rgba(255,255,255,0.15); transition: all 0.3s ease; }
     .btn-outline:hover { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.1); }
     .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
-    .scroll-reveal { opacity: 0; transform: translateY(40px); }
+    .scroll-reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1); }
+    .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
     .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
     .faq-item.active .faq-answer { max-height: 300px; padding-top: 16px; }
     .faq-item.active .faq-chevron { transform: rotate(180deg); }
@@ -82,7 +81,7 @@
   <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5" style="background: rgba(8,13,26,0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);">
     <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-3">
-        <img src="logo.png" alt="XDECK" class="w-8 h-8 rounded-lg">
+        <img src="logo.png" alt="XDECK" class="w-8 h-8 rounded-lg" width="32" height="32">
         <span class="font-heading font-bold text-lg">XDECK</span>
       </a>
       <div class="hidden md:flex items-center gap-8">
@@ -490,7 +489,7 @@
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
         <div>
           <a href="index.html" class="flex items-center gap-3 mb-4">
-            <img src="logo.png" alt="XDECK" class="w-7 h-7 rounded-md">
+            <img src="logo.png" alt="XDECK" class="w-7 h-7 rounded-md" width="28" height="28">
             <span class="font-heading font-bold text-lg">XDECK</span>
           </a>
           <p class="text-sm text-white/30 leading-relaxed">Turn your phone into a powerful Stream Deck. Control your PC from anywhere.</p>
@@ -523,7 +522,7 @@
       <div class="section-divider mb-8"></div>
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <img src="logo.png" alt="XDECK" class="w-5 h-5 rounded-md">
+          <img src="logo.png" alt="XDECK" class="w-5 h-5 rounded-md" width="20" height="20">
           <span class="text-sm text-white/30">&copy; 2026 XDECK. All rights reserved.</span>
         </div>
         <div class="flex items-center gap-4">
@@ -602,12 +601,17 @@
     }
 
     // GSAP ScrollTrigger animations
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.utils.toArray('.scroll-reveal').forEach(function(el) {
-      gsap.fromTo(el, { opacity: 0, y: 40 }, {
-        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 85%', once: true }
-      });
+    document.addEventListener('DOMContentLoaded', () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+      document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+    });
     });
   </script>
 </body>
