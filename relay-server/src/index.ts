@@ -370,7 +370,7 @@ const httpServer = http.createServer((req, res) => {
         const subjectLabel = subjectMap[subject] || subject;
 
         await resend.emails.send({
-          from: 'XDECK Contact <onboarding@resend.dev>',
+          from: 'XDECK Support <support@xdeck.app>',
           to: 'support@xdeck.app',
           replyTo: email,
           subject: `[XDECK ${subjectLabel}] ${name}`,
