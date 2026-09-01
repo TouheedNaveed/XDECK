@@ -811,7 +811,13 @@ function launchTarget(action: { kind: string; target: string }): Promise<boolean
         cmd = `open -a "${action.target}"`;
       }
       if (cmd) {
-        exec(cmd, (err) => resolve(!err));
+        console.log(`[XDECK] Open app: ${cmd}`);
+        exec(cmd, (err) => {
+          if (err) console.error(`[XDECK] Open app error:`, err.message);
+        });
+        // Resolve true immediately so the mobile deck gets instant green confirmation
+        // and doesn't hit a 5s timeout while the app remains open in the foreground.
+        resolve(true);
       } else {
         resolve(false);
       }
@@ -819,8 +825,14 @@ function launchTarget(action: { kind: string; target: string }): Promise<boolean
     }
 
     if (action.kind === 'start_app') {
-      const appPath = action.target;
-      const argsStr = (action as any).args || '';
+      let appPath = (action.target || '').trim();
+      const argsStr = ((action as any).args || '').trim();
+
+      // Automatically quote the executable path if it contains spaces and isn't already quoted
+      if (appPath.includes(' ') && !appPath.startsWith('"') && !appPath.endsWith('"')) {
+        appPath = `"${appPath}"`;
+      }
+
       const fullCmd = argsStr ? `${appPath} ${argsStr}` : appPath;
       console.log(`[XDECK] Start app: ${fullCmd}`);
 

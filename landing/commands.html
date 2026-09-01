@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XDECK App Commands, Startup Paths & Hotkeys Master Guide | Windows, Mac, Linux</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <meta name="description" content="Complete directory of application paths, command line arguments, multi-profile browser launch flags, system utilities, IDE commands, and hotkeys for XDECK on Windows, macOS, and Linux.">
+  <meta name="keywords" content="XDECK commands, stream deck commands, open chrome profile stream deck, launch app arguments windows mac linux, vs code stream deck button, hotkeys guide stream deck, terminal commands stream deck">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+  <link rel="canonical" href="https://xdeck.app/commands.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="XDECK App Commands & Quick Launch Master Guide">
+  <meta property="og:description" content="Find exact executable paths, launch arguments, browser profiles, IDE commands, and hotkeys for your XDECK buttons across Windows, macOS, and Linux.">
+  <meta property="og:url" content="https://xdeck.app/commands.html">
+  <meta property="og:site_name" content="XDECK">
+  <meta property="og:image" content="https://xdeck.app/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="XDECK App Commands & Quick Launch Master Guide">
+  <meta name="twitter:description" content="Searchable database of application paths, browser profiles, hotkeys, and commands for XDECK.">
+  <meta name="twitter:image" content="https://xdeck.app/logo.png">
+
+  <!-- Schema.org JSON-LD for Rich Results & AI Search -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        "headline": "XDECK Application Paths, Launch Arguments, and Command Guide",
+        "description": "Comprehensive reference guide for configuring XDECK buttons to launch applications, specific browser profiles, developer IDEs, terminals, media players, and system hotkeys on Windows, macOS, and Linux.",
+        "url": "https://xdeck.app/commands.html",
+        "publisher": {
+          "@type": "Organization",
+          "name": "XDECK",
+          "url": "https://xdeck.app",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://xdeck.app/logo.png"
+          }
+        },
+        "about": {
+          "@type": "SoftwareApplication",
+          "name": "XDECK",
+          "operatingSystem": "Windows, macOS, Linux"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How to open a specific Google Chrome profile using XDECK?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "In XDECK button settings, select Action: Start App. On Windows, set Application Path to \"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" and Arguments to --profile-directory=\"Profile 1\". On macOS, use Run Command with: open -na \"Google Chrome\" --args --profile-directory=\"Profile 1\". On Linux, use: google-chrome --profile-directory=\"Profile 1\"."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Why does a button show a red dot or Trigger Failed even when the app opened?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "If a button is configured as Open App instead of Start App, XDECK may wait for the process to exit before acknowledging. If the application remains running for more than 5 seconds, the mobile app hits its response timeout and displays a red indicator. To resolve this, use 'Start App' with the executable path and arguments, or update to XDECK v1.4.1+."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heading: ['Space Grotesk', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            dark: { 950: '#080d1a', 900: '#0F172A', 800: '#1E293B', 700: '#334155' },
+            accent: { DEFAULT: '#6366f1', light: '#818cf8', dark: '#4f46e5' },
+            cta: { DEFAULT: '#22C55E', hover: '#16A34A' },
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #080d1a; color: #F8FAFC; overflow-x: hidden; }
+    .font-heading { font-family: 'Space Grotesk', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .glass { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
+    .glass-card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.06); transition: all 0.25s cubic-bezier(0.4,0,0.2,1); }
+    .glass-card:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
+    .gradient-text { background: linear-gradient(135deg, #818cf8, #a78bfa, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .btn-cta { background: linear-gradient(135deg, #22C55E, #16A34A); transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(34,197,94,0.4); }
+    .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); }
+    .tab-btn.active { background: rgba(99,102,241,0.25); border-color: rgba(99,102,241,0.6); color: #fff; }
+    .cat-btn.active { background: #6366f1; color: #fff; border-color: #6366f1; }
+    .code-pill { background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255,255,255,0.08); }
+    .copy-btn:hover { background: rgba(99,102,241,0.3); color: #fff; }
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M6RQLWC2T"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5M6RQLWC2T');
+  </script>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5" style="background: rgba(8,13,26,0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <img src="logo.png" alt="XDECK" class="w-8 h-8 rounded-lg">
+        <span class="font-heading font-bold text-lg">XDECK</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="index.html#features" class="text-sm text-white/50 hover:text-white transition-colors">Features</a>
+        <a href="index.html#how-it-works" class="text-sm text-white/50 hover:text-white transition-colors">How It Works</a>
+        <a href="commands.html" class="text-sm text-accent-light font-medium transition-colors">Commands Guide</a>
+        <a href="index.html#pricing" class="text-sm text-white/50 hover:text-white transition-colors">Pricing</a>
+        <a href="help.html" class="text-sm text-white/50 hover:text-white transition-colors">Help & Support</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="https://github.com/TouheedNaveed/XDECK" target="_blank" rel="noopener" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-sm text-white/50 hover:text-white">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="index.html#download" class="btn-cta px-5 py-2 rounded-xl text-sm font-semibold text-white">Download</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="pt-28 pb-12 px-6">
+    <div class="max-w-5xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-accent-light mb-6 border border-accent/30">
+        <span>⚡</span> XDECK BUTTON & COMMAND DIRECTORY
+      </div>
+      <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+        Application Commands, Paths & <span class="gradient-text">Hotkeys Guide</span>
+      </h1>
+      <p class="text-lg text-white/50 max-w-2xl mx-auto leading-relaxed mb-8">
+        Search our complete reference guide for Windows, macOS, and Linux. Copy-paste executable paths, browser profile arguments, IDE triggers, system hotkeys, and terminal one-liners directly into your XDECK buttons.
+      </p>
+
+      <!-- Live Search Bar -->
+      <div class="max-w-2xl mx-auto relative mb-6">
+        <svg class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input 
+          type="text" 
+          id="cmd-search" 
+          placeholder="Search any app, browser profile, IDE, hotkey, or command (e.g., chrome profile, vs code, task manager, spotify)..." 
+          class="w-full pl-14 pr-4 py-4 rounded-2xl bg-white/5 border border-white/15 text-white placeholder-white/40 text-sm focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/30 transition-all shadow-xl"
+        >
+        <div id="search-count" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-white/40 bg-white/5 px-2.5 py-1 rounded-lg"></div>
+      </div>
+
+      <!-- OS Filter Tabs -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-4">
+        <button class="tab-btn active px-4 py-2 rounded-xl text-xs font-semibold border border-white/10 bg-white/5 transition-all" data-os="all">All Platforms</button>
+        <button class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold border border-white/10 bg-white/5 transition-all flex items-center gap-1.5" data-os="windows">
+          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.899"/></svg>
+          Windows
+        </button>
+        <button class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold border border-white/10 bg-white/5 transition-all flex items-center gap-1.5" data-os="macos">
+          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.61-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.61 1.34-.55.63-1.03 1.68-.9 2.7.99.08 2-.45 2.59-1.19z"/></svg>
+          macOS
+        </button>
+        <button class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold border border-white/10 bg-white/5 transition-all flex items-center gap-1.5" data-os="linux">
+          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.002 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.6.11.793-.26.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.84 1.238 1.84 1.238 1.07 1.834 2.807 1.304 3.493.996.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          Linux
+        </button>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex flex-wrap items-center justify-center gap-1.5">
+        <button class="cat-btn active px-3 py-1.5 rounded-lg text-xs border border-white/10 bg-white/5 text-white/70 hover:text-white transition-all" data-cat="all">All Categories</button>
+        <button class="cat-btn px-3 py-1.5 rounded-lg text-xs border border-white/10 bg-white/5 text-white/70 hover:text-white transition-all" data-cat="browsers">🌐 Browsers & Profiles</button>
+        <button class="cat-btn px-3 py-1.5 rounded-lg text-xs border border-white/10 bg-white/5 text-white/70 hover:text-white transition-all" data-cat="ides">💻 IDEs & Editors</button>
+        <button class="cat-btn px-3 py-1.5 rounded-lg text-xs border border-white/10 bg-white/5 text-white/70 hover:text-white transition-all" data-cat="terminals">🖥️ Terminals & Shells</button>
+        <button class="cat-btn px-3 py-1.5 rounded-lg text-xs border border-white/10 bg-white/5 text-white/70 hover:text-white transition-all" data-cat="windows-utils">⚙️ Windows Utilities</button>
+        <button class="cat-btn px-3 py-1.5 rounded-lg text-xs border border-white/10 bg-white/5 text-white/70 hover:text-white transition-all" data-cat="mac-linux-utils">🍎/🐧 Mac & Linux System</button>
+        <button class="cat-btn px-3 py-1.5 rounded-lg text-xs border border-white/10 bg-white/5 text-white/70 hover:text-white transition-all" data-cat="media">🎵 Media & Streaming</button>
+        <button class="cat-btn px-3 py-1.5 rounded-lg text-xs border border-white/10 bg-white/5 text-white/70 hover:text-white transition-all" data-cat="productivity">🎨 Creative & Work</button>
+        <button class="cat-btn px-3 py-1.5 rounded-lg text-xs border border-white/10 bg-white/5 text-white/70 hover:text-white transition-all" data-cat="hotkeys">⌨️ Global Hotkeys</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Special Guide Banner: Chrome Profiles & Red Dot Fix -->
+  <section class="py-6 px-6 max-w-5xl mx-auto">
+    <div class="glass-card rounded-2xl p-6 sm:p-8 border border-accent/40 bg-gradient-to-r from-accent/10 via-purple-500/5 to-transparent relative overflow-hidden">
+      <div class="flex items-start gap-4">
+        <div class="w-10 h-10 rounded-xl bg-accent/20 border border-accent/40 flex items-center justify-center shrink-0 text-accent-light text-xl">💡</div>
+        <div class="space-y-3">
+          <h2 class="font-heading text-lg sm:text-xl font-bold text-white">How to Properly Open Specific Chrome / Browser Profiles on XDECK</h2>
+          <p class="text-sm text-white/70 leading-relaxed">
+            When setting up browser profiles on Windows, always wrap file paths containing spaces in double quotes <code class="text-accent-light font-mono">"..."</code>. In XDECK, use the <strong class="text-white">Start App</strong> action kind:
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+            <div class="p-3.5 rounded-xl bg-black/40 border border-white/10 space-y-1">
+              <span class="text-emerald-400 font-bold">✅ WINDOWS (Start App):</span>
+              <div><span class="text-white/40">Path:</span> <span class="text-white">"C:\Program Files\Google\Chrome\Application\chrome.exe"</span></div>
+              <div><span class="text-white/40">Args:</span> <span class="text-white">--profile-directory="Profile 1"</span></div>
+            </div>
+            <div class="p-3.5 rounded-xl bg-black/40 border border-white/10 space-y-1">
+              <span class="text-blue-400 font-bold">🍎 macOS & 🐧 Linux:</span>
+              <div><span class="text-white/40">Mac (Run Command):</span> <span class="text-white">open -na "Google Chrome" --args --profile-directory="Profile 1"</span></div>
+              <div><span class="text-white/40">Linux (Start App):</span> <span class="text-white">google-chrome</span> | <span class="text-white/40">Args:</span> <span class="text-white">--profile-directory="Profile 1"</span></div>
+            </div>
+          </div>
+          <p class="text-xs text-white/50">
+            <strong>How to find your Profile directory name:</strong> Open Chrome &rarr; Navigate to <code class="text-white/70 font-mono">chrome://version</code> &rarr; Look at <em>Profile Path</em> (e.g., <code class="text-accent-light">Default</code>, <code class="text-accent-light">Profile 1</code>, <code class="text-accent-light">Profile 2</code>).
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Commands Database Grid -->
+  <section class="py-10 px-6 max-w-7xl mx-auto">
+    <div id="commands-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- ================= 1. BROWSERS & MULTI-PROFILES ================= -->
+      
+      <!-- Google Chrome Specific Profile (Windows) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="browsers" data-search="google chrome profile default profile 1 profile 2 browser web multi user">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🌐</span>
+              <h3 class="font-heading font-bold text-base text-white">Google Chrome (Profile 1)</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Launches Google Chrome directly into Profile 1 (or any specific profile directory).</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Start App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Application Path</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>"C:\Program Files\Google\Chrome\Application\chrome.exe"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\"')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Arguments</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>--profile-directory="Profile 1"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '--profile-directory=\"Profile 1\"')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Google Chrome Specific Profile (macOS) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="macos" data-cat="browsers" data-search="google chrome profile default profile 1 mac osx safari browser web">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🌐</span>
+              <h3 class="font-heading font-bold text-base text-white">Google Chrome (Profile)</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">macOS</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Opens Google Chrome with a designated user profile on macOS.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Run Command</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Shell Command</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>open -na "Google Chrome" --args --profile-directory="Profile 1"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'open -na \"Google Chrome\" --args --profile-directory=\"Profile 1\"')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Google Chrome Specific Profile (Linux) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="linux" data-cat="browsers" data-search="google chrome profile linux ubuntu debian arch fedora browser">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🌐</span>
+              <h3 class="font-heading font-bold text-base text-white">Google Chrome (Profile)</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">Linux</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Launches Google Chrome with a specific profile on Linux.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Start App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Application Path</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>google-chrome</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'google-chrome')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Arguments</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>--profile-directory="Profile 1"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '--profile-directory=\"Profile 1\"')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chrome PWA / App Mode (Web WhatsApp, ChatGPT, YouTube) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="browsers" data-search="chrome app pwa whatsapp chatgpt youtube web standalone window">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">💬</span>
+              <h3 class="font-heading font-bold text-base text-white">Chrome PWA / App Mode</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Opens any website as a dedicated standalone window without URL bar or tabs.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Start App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Application Path</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>"C:\Program Files\Google\Chrome\Application\chrome.exe"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\"')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Arguments</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>--app=https://web.whatsapp.com</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '--app=https://web.whatsapp.com')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Microsoft Edge Profile (Windows) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="browsers" data-search="microsoft edge profile inprivate msedge browser windows">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🌊</span>
+              <h3 class="font-heading font-bold text-base text-white">Microsoft Edge Profile</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Launches Microsoft Edge with a specific profile or InPrivate mode.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Start App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Application Path</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '\"C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe\"')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Arguments</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>--profile-directory="Profile 1"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '--profile-directory=\"Profile 1\"')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mozilla Firefox (Private / Specific Profile) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="browsers" data-search="mozilla firefox private profile developer edition browser">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🦊</span>
+              <h3 class="font-heading font-bold text-base text-white">Mozilla Firefox</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Opens Firefox in Private Browsing or with a designated profile.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Start App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Application Path</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>"C:\Program Files\Mozilla Firefox\firefox.exe"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '\"C:\\Program Files\\Mozilla Firefox\\firefox.exe\"')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Arguments</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>-private-window</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '-private-window')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Brave Browser (Windows/Mac/Linux) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="browsers" data-search="brave browser tor incognito private crypto web3">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🦁</span>
+              <h3 class="font-heading font-bold text-base text-white">Brave Browser</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Launches Brave browser with custom profile or Tor incognito mode.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Start App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Application Path</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '\"C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe\"')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Arguments</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>--profile-directory="Profile 1"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '--profile-directory=\"Profile 1\"')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 2. IDES & CODE EDITORS ================= -->
+
+      <!-- Visual Studio Code (Windows) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="ides" data-search="visual studio code vs code vscode code editor ide project">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">💙</span>
+              <h3 class="font-heading font-bold text-base text-white">Visual Studio Code</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Opens VS Code in a fresh new window or specific project folder.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Run Command</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Shell Command</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>code --new-window</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'code --new-window')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cursor AI Editor (Windows/Mac/Linux) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="ides" data-search="cursor ai code editor ide anthropic claude ai coding">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">⚡</span>
+              <h3 class="font-heading font-bold text-base text-white">Cursor AI Code Editor</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Launches Cursor AI code editor in a new window or project folder.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Run Command</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Shell Command</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>cursor --new-window</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'cursor --new-window')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- JetBrains IntelliJ IDEA / PyCharm / WebStorm -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="ides" data-search="jetbrains intellij idea pycharm webstorm clion rider goland android studio ide">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🧠</span>
+              <h3 class="font-heading font-bold text-base text-white">JetBrains IDEs (IntelliJ / PyCharm)</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Launches IntelliJ IDEA, PyCharm, WebStorm or Rider.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Start App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">IntelliJ Path</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>"C:\Program Files\JetBrains\IntelliJ IDEA\bin\idea64.exe"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '\"C:\\Program Files\\JetBrains\\IntelliJ IDEA\\bin\\idea64.exe\"')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">PyCharm Path</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>"C:\Program Files\JetBrains\PyCharm\bin\pycharm64.exe"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '\"C:\\Program Files\\JetBrains\\PyCharm\\bin\\pycharm64.exe\"')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Android Studio -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="ides" data-search="android studio google kotlin java flutter mobile ide">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🤖</span>
+              <h3 class="font-heading font-bold text-base text-white">Android Studio</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Starts Google Android Studio on Windows.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Start App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Application Path</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>"C:\Program Files\Android\Android Studio\bin\studio64.exe"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '\"C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe\"')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Xcode (macOS) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="macos" data-cat="ides" data-search="xcode apple swift ios mac ide simulator developer">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🛠️</span>
+              <h3 class="font-heading font-bold text-base text-white">Xcode (macOS)</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">macOS</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Launches Apple Xcode developer suite or iOS Simulator.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Open App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">App Name</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>Xcode</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'Xcode')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Simulator (Run Command)</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>open -a Simulator</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'open -a Simulator')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 3. TERMINALS & SHELLS ================= -->
+
+      <!-- Windows Terminal (wt.exe) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="terminals" data-search="windows terminal wt powershell cmd wsl bash prompt console">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">⬛</span>
+              <h3 class="font-heading font-bold text-base text-white">Windows Terminal</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Opens modern Windows Terminal with default profile or WSL.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Run Command</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Shell Command</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>wt</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'wt')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">WSL Tab</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>wt -p "Ubuntu"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'wt -p \"Ubuntu\"')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PowerShell as Administrator -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="terminals" data-search="powershell admin administrator elevated windows shell terminal">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🛡️</span>
+              <h3 class="font-heading font-bold text-base text-white">PowerShell (Admin)</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Spawns an elevated administrator PowerShell prompt.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Run Command</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Shell Command</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>powershell Start-Process powershell -Verb runAs</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'powershell Start-Process powershell -Verb runAs')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- iTerm2 / Terminal (macOS) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="macos" data-cat="terminals" data-search="iterm2 terminal mac zsh bash command prompt shell">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">💻</span>
+              <h3 class="font-heading font-bold text-base text-white">iTerm2 / Terminal (macOS)</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">macOS</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Opens iTerm2 or native Terminal application on Mac.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Open App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">App Name</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>iTerm</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'iTerm')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Native Terminal</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>Terminal</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'Terminal')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Linux Terminals (Alacritty, Kitty, GNOME Terminal) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="linux" data-cat="terminals" data-search="gnome-terminal alacritty kitty wezterm konsole linux bash zsh">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🐧</span>
+              <h3 class="font-heading font-bold text-base text-white">Linux Terminals</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">Linux</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Launches GNOME Terminal, Alacritty, Kitty, or Konsole.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Open App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">GNOME Terminal</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>gnome-terminal</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'gnome-terminal')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Alacritty / Kitty</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>alacritty</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'alacritty')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 4. WINDOWS INTERNAL & SYSTEM UTILITIES ================= -->
+
+      <!-- Windows Task Manager -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="windows-utils" data-search="task manager taskmgr kill processes cpu ram performance windows">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">📊</span>
+              <h3 class="font-heading font-bold text-base text-white">Task Manager</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Instantly launches Windows Task Manager to monitor CPU/RAM or kill frozen apps.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Run Command</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Shell Command</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>taskmgr</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'taskmgr')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Or Hotkey</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>ctrl+shift+esc</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'ctrl+shift+esc')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Snipping Tool / Screen Capture -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="windows-utils" data-search="snipping tool screenshot capture screen crop windows">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">✂️</span>
+              <h3 class="font-heading font-bold text-base text-white">Snipping Tool / Screenshot</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Triggers area screen clipping or opens the Windows Snipping Tool.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Run Command</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Shell Command (Direct Overlay)</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>explorer ms-screenclip:</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'explorer ms-screenclip:')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">App Launcher</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>snippingtool</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'snippingtool')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lock Workstation / Screen Lock (Windows) -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="windows-utils" data-search="lock computer screen sleep privacy lock workstation windows">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🔒</span>
+              <h3 class="font-heading font-bold text-base text-white">Lock PC Screen</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Instantly locks your Windows computer when you step away.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Run Command</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Shell Command</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>rundll32.exe user32.dll,LockWorkStation</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'rundll32.exe user32.dll,LockWorkStation')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Windows Settings & Control Panel -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="windows-utils" data-search="windows settings control panel ms-settings bluetooth sound display wifi">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">⚙️</span>
+              <h3 class="font-heading font-bold text-base text-white">Windows Settings</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Opens Windows Settings, Bluetooth, Sound, or classic Control Panel.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Run Command</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Settings</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>start ms-settings:</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'start ms-settings:')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Control Panel</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>control</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'control')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calculator, Notepad, Volume Mixer -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="windows-utils" data-search="calculator calc notepad text editor volume mixer sound audio windows">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🧮</span>
+              <h3 class="font-heading font-bold text-base text-white">Calculator & Volume Mixer</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Quick launch tools for daily Windows productivity.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Open App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Calculator</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>calc</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'calc')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Volume Mixer (Run Command)</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>sndvol</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'sndvol')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sleep & Shutdown Controls -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="windows-utils" data-search="sleep shutdown restart power reboot pc windows">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">⚡</span>
+              <h3 class="font-heading font-bold text-base text-white">Power (Sleep / Restart)</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Puts PC to sleep or restarts cleanly.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Run Command</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Sleep PC</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>rundll32.exe powrprof.dll,SetSuspendState 0,1,0</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'rundll32.exe powrprof.dll,SetSuspendState 0,1,0')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Restart PC (Instant)</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>shutdown /r /t 0</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'shutdown /r /t 0')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 5. MACOS & LINUX SYSTEM UTILITIES ================= -->
+
+      <!-- macOS Activity Monitor & Lock -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="macos" data-cat="mac-linux-utils" data-search="activity monitor task manager sleep lock screen spotlight mac osx">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🍎</span>
+              <h3 class="font-heading font-bold text-base text-white">macOS Activity Monitor & Lock</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">macOS</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Opens Activity Monitor or locks the Mac screen instantly.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Run Command</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Activity Monitor</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>open -a "Activity Monitor"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'open -a \"Activity Monitor\"')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Lock Mac Screen</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>pmset displaysleepnow</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'pmset displaysleepnow')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Linux System Monitor & Lock -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="linux" data-cat="mac-linux-utils" data-search="gnome system monitor lock screen sleep suspend linux ubuntu fedora">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🐧</span>
+              <h3 class="font-heading font-bold text-base text-white">Linux System Monitor & Lock</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">Linux</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Opens GNOME System Monitor or locks the session.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Run Command</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">System Monitor</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>gnome-system-monitor</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'gnome-system-monitor')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Lock Session</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>loginctl lock-session</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'loginctl lock-session')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 6. MEDIA, STREAMING & COMMUNICATION ================= -->
+
+      <!-- OBS Studio -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="media" data-search="obs studio stream record recording streaming twitch youtube virtual cam">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">📹</span>
+              <h3 class="font-heading font-bold text-base text-white">OBS Studio</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Launches OBS Studio or auto-starts recording / virtual camera.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Start App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Application Path</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>"C:\Program Files\obs-studio\bin\64bit\obs64.exe"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '\"C:\\Program Files\\obs-studio\\bin\\64bit\\obs64.exe\"')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Start Recording Argument</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>--startrecording --minimize-to-tray</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '--startrecording --minimize-to-tray')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spotify & Media Control -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="all" data-cat="media" data-search="spotify music songs play pause volume next prev track podcast audio">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🎵</span>
+              <h3 class="font-heading font-bold text-base text-white">Spotify & Media Controls</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">All Platforms</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Controls playback on Spotify, YouTube, Apple Music, and VLC.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Media Key</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Play / Pause</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>play</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'play')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Next Track</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>next</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'next')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Discord & Communication -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="media" data-search="discord slack telegram zoom teams voice mute deafen chat call">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🎮</span>
+              <h3 class="font-heading font-bold text-base text-white">Discord & Voice Mute</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Opens Discord or triggers global mute / deafen hotkeys.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Hotkey</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Toggle Mute Shortcut</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>ctrl+shift+m</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'ctrl+shift+m')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Toggle Deafen Shortcut</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>ctrl+shift+d</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'ctrl+shift+d')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Steam Games Launcher -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="all" data-cat="media" data-search="steam game launcher valve counter strike cs2 dota gta cyberpunk">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🚀</span>
+              <h3 class="font-heading font-bold text-base text-white">Steam Game Launcher</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">All Platforms</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Launches any installed Steam game directly via its AppID URL.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Open URL</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">URL Protocol</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>steam://rungameid/730</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'steam://rungameid/730')">Copy</button>
+              </div>
+            </div>
+            <p class="text-[10px] text-white/40">Replace 730 with your game's Steam App ID (found in store URL).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 7. CREATIVE & PRODUCTIVITY TOOLS ================= -->
+
+      <!-- Adobe Photoshop / Premiere Pro -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="productivity" data-search="adobe photoshop premiere pro after effects illustrator design video editing">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🎨</span>
+              <h3 class="font-heading font-bold text-base text-white">Adobe Creative Suite</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Launches Adobe Photoshop or Premiere Pro.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Start App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Photoshop Path</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>"C:\Program Files\Adobe\Adobe Photoshop 2024\Photoshop.exe"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '\"C:\\Program Files\\Adobe\\Adobe Photoshop 2024\\Photoshop.exe\"')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Premiere Pro Path</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>"C:\Program Files\Adobe\Adobe Premiere Pro 2024\Adobe Premiere Pro.exe"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '\"C:\\Program Files\\Adobe\\Adobe Premiere Pro 2024\\Adobe Premiere Pro.exe\"')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Blender / Figma / Notion -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="productivity" data-search="blender 3d figma notion obsidian postman docker desktop 3d modeling notes">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🖌️</span>
+              <h3 class="font-heading font-bold text-base text-white">Blender & Figma</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Starts Blender 3D, Figma Desktop, or Notion.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Start App</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Blender Path</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>"C:\Program Files\Blender Foundation\Blender 4.0\blender.exe"</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, '\"C:\\Program Files\\Blender Foundation\\Blender 4.0\\blender.exe\"')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Figma / Notion (Open App)</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>Figma</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'Figma')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Docker Desktop & Git Pull/Push -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="all" data-cat="productivity" data-search="docker container git pull push commit sync devops automation terminal">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🐳</span>
+              <h3 class="font-heading font-bold text-base text-white">Docker & Git Sync</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">All Platforms</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Runs quick dev automation scripts or container startups.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Run Command</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Git Sync Project</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>git pull --rebase &amp;&amp; git push</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'git pull --rebase && git push')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Docker Compose Up</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>docker compose up -d</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'docker compose up -d')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 8. GLOBAL HOTKEYS FORMAT & CHEATSHEET ================= -->
+
+      <!-- Windows Virtual Desktops & Window Management -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="windows" data-cat="hotkeys" data-search="hotkey shortcut virtual desktop window switch maximize minimize task view">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🪟</span>
+              <h3 class="font-heading font-bold text-base text-white">Virtual Desktops & Windows</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">Windows</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Switch virtual desktops, task view, or maximize windows with one tap.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Hotkey</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Switch Desktop Right</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>ctrl+win+right</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'ctrl+win+right')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Switch Desktop Left</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>ctrl+win+left</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'ctrl+win+left')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- macOS Mission Control & App Switcher -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="macos" data-cat="hotkeys" data-search="hotkey mission control spotlight app switcher mac cmd option">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">⌨️</span>
+              <h3 class="font-heading font-bold text-base text-white">macOS System Hotkeys</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">macOS</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">Trigger Spotlight, Mission Control, or screen capture.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Action Kind</span>
+              <div class="font-mono text-emerald-400">Hotkey</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Spotlight Search</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>cmd+space</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'cmd+space')">Copy</button>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Area Screenshot</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light flex items-center justify-between text-[11px] overflow-x-auto">
+                <span>cmd+shift+4</span>
+                <button class="copy-btn shrink-0 ml-2 px-2 py-1 rounded bg-white/5 text-white/60 text-[10px]" onclick="copyCode(this, 'cmd+shift+4')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- General Hotkey Syntax Reference -->
+      <div class="command-card glass-card rounded-2xl p-5 flex flex-col justify-between" data-os="all" data-cat="hotkeys" data-search="hotkey syntax modifiers keys ctrl alt shift cmd win meta F1 F12 return escape tab backspace">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">📖</span>
+              <h3 class="font-heading font-bold text-base text-white">XDECK Hotkey Syntax Rules</h3>
+            </div>
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Reference</span>
+          </div>
+          <p class="text-xs text-white/50 mb-4">How to write key combinations for XDECK buttons.</p>
+          
+          <div class="space-y-2 text-xs">
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Supported Modifiers</span>
+              <div class="font-mono text-emerald-400">ctrl, alt, shift, cmd (Mac), win (Windows)</div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Delimiter</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-white/90 text-[11px]">
+                Separate keys with a plus sign (<code class="text-accent-light">+</code>), e.g. <code class="text-emerald-400">ctrl+alt+delete</code>
+              </div>
+            </div>
+            <div>
+              <span class="text-[10px] text-white/40 uppercase font-semibold">Special Keys</span>
+              <div class="code-pill p-2 rounded-lg font-mono text-accent-light text-[11px]">
+                enter, return, tab, escape, backspace, space, up, down, left, right, f1-f12
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Empty search state -->
+    <div id="no-results" class="hidden text-center py-20">
+      <div class="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4 text-2xl">🔍</div>
+      <h3 class="font-heading text-lg font-bold text-white mb-2">No matching applications or commands found</h3>
+      <p class="text-sm text-white/40 max-w-md mx-auto">Try searching for the executable name, generic term (e.g. "browser", "editor", "screenshot"), or check your spelling.</p>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto my-12"></div>
+
+  <!-- FAQ Section for AI Search & SEO -->
+  <section class="py-12 px-6 max-w-4xl mx-auto">
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-4">FAQ & TROUBLESHOOTING</div>
+      <h2 class="font-heading text-3xl font-bold">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="space-y-4">
+      <div class="glass-card rounded-xl p-6 border border-white/10">
+        <h3 class="font-heading font-bold text-base text-white mb-2">Why did my button show a red dot or "Trigger Failed" even though the app opened?</h3>
+        <p class="text-sm text-white/60 leading-relaxed">
+          In older versions or when using <strong>Open App</strong>, XDECK waited for the application process to terminate before sending a response. If an application (like Chrome or VS Code) remained open for more than 5 seconds, your phone hit a response timeout and displayed a red indicator. In XDECK v1.4.1+, <strong>Start App</strong> and <strong>Open App</strong> acknowledge triggers immediately, ensuring an instant green confirmation dot.
+        </p>
+      </div>
+
+      <div class="glass-card rounded-xl p-6 border border-white/10">
+        <h3 class="font-heading font-bold text-base text-white mb-2">Why do paths with spaces fail if unquoted on Windows?</h3>
+        <p class="text-sm text-white/60 leading-relaxed">
+          On Windows, paths like <code class="text-accent-light font-mono">C:\Program Files\Google\Chrome\Application\chrome.exe</code> have a space between "Program" and "Files". If passed without quotes, the Windows command interpreter sees <code class="text-white font-mono">C:\Program</code> as the program name and fails with "command not recognized". Always wrap paths with spaces in double quotes: <code class="text-emerald-400 font-mono">"C:\Program Files\..."</code>.
+        </p>
+      </div>
+
+      <div class="glass-card rounded-xl p-6 border border-white/10">
+        <h3 class="font-heading font-bold text-base text-white mb-2">What is the difference between "Start App", "Open App", and "Run Command"?</h3>
+        <ul class="text-sm text-white/60 space-y-2 list-disc list-inside mt-2">
+          <li><strong>Start App:</strong> Ideal for launching executables with custom command line arguments (e.g., launching Chrome with <code class="font-mono text-accent-light">--profile-directory="Profile 1"</code>).</li>
+          <li><strong>Open App:</strong> Quick launch for system-registered apps by name (e.g. <code class="font-mono text-accent-light">spotify</code>, <code class="font-mono text-accent-light">notepad</code>, <code class="font-mono text-accent-light">calc</code>).</li>
+          <li><strong>Run Command:</strong> Runs any terminal/PowerShell script or command line tool directly with full shell capabilities.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="py-16 px-6 max-w-4xl mx-auto text-center">
+    <div class="glass-card rounded-3xl p-10 sm:p-14 border border-accent/30 bg-gradient-to-b from-accent/10 to-transparent">
+      <h2 class="font-heading text-3xl font-bold mb-4">Turn Your Phone Into a High-Speed Deck</h2>
+      <p class="text-white/50 mb-8 max-w-lg mx-auto">Get lifetime access to XDECK for only $10. No subscriptions, unlimited buttons and cloud relay included.</p>
+      <a href="index.html#download" class="btn-cta inline-block px-8 py-3.5 rounded-xl text-white font-semibold text-sm">Download XDECK Now</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/5 py-12 px-6 mt-16 bg-black/40">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <img src="logo.png" alt="XDECK" class="w-7 h-7 rounded-lg">
+        <span class="font-heading font-bold text-sm">XDECK</span>
+        <span class="text-xs text-white/30 ml-2">&copy; 2026 XDECK. All rights reserved.</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-6 text-xs text-white/50">
+        <a href="index.html" class="hover:text-white transition-colors">Home</a>
+        <a href="commands.html" class="text-accent-light hover:text-white transition-colors">Commands Guide</a>
+        <a href="help.html" class="hover:text-white transition-colors">Help & Support</a>
+        <a href="about.html" class="hover:text-white transition-colors">About</a>
+        <a href="contact.html" class="hover:text-white transition-colors">Contact</a>
+        <a href="privacy.html" class="hover:text-white transition-colors">Privacy</a>
+        <a href="terms.html" class="hover:text-white transition-colors">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive JavaScript for Live Search & OS/Category Filtering -->
+  <script>
+    const searchInput = document.getElementById('cmd-search');
+    const cards = document.querySelectorAll('.command-card');
+    const noResults = document.getElementById('no-results');
+    const searchCount = document.getElementById('search-count');
+    const osTabs = document.querySelectorAll('.tab-btn');
+    const catBtns = document.querySelectorAll('.cat-btn');
+
+    let currentOs = 'all';
+    let currentCat = 'all';
+
+    function updateCount(visible) {
+      if (searchCount) {
+        searchCount.textContent = `${visible} command${visible === 1 ? '' : 's'}`;
+      }
+    }
+
+    function filterCards() {
+      const query = (searchInput.value || '').toLowerCase().trim();
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardOs = card.getAttribute('data-os');
+        const cardCat = card.getAttribute('data-cat');
+        const cardSearch = (card.getAttribute('data-search') || '') + ' ' + card.innerText.toLowerCase();
+
+        const matchesOs = (currentOs === 'all' || cardOs === currentOs || cardOs === 'all');
+        const matchesCat = (currentCat === 'all' || cardCat === currentCat);
+        const matchesSearch = !query || cardSearch.includes(query);
+
+        if (matchesOs && matchesCat && matchesSearch) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (noResults) {
+        noResults.classList.toggle('hidden', visibleCount > 0);
+      }
+      updateCount(visibleCount);
+    }
+
+    searchInput.addEventListener('input', filterCards);
+
+    osTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        osTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentOs = tab.getAttribute('data-os');
+        filterCards();
+      });
+    });
+
+    catBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        catBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCat = btn.getAttribute('data-cat');
+        filterCards();
+      });
+    });
+
+    function copyCode(btn, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.style.background = 'rgba(34,197,94,0.3)';
+        btn.style.color = '#4ade80';
+        setTimeout(() => {
+          btn.textContent = original;
+          btn.style.background = '';
+          btn.style.color = '';
+        }, 1800);
+      });
+    }
+
+    filterCards();
+  </script>
+</body>
+</html>

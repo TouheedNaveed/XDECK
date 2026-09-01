@@ -88,6 +88,7 @@
       <div class="hidden md:flex items-center gap-8">
         <a href="index.html#features" class="text-sm text-white/50 hover:text-white transition-colors">Features</a>
         <a href="index.html#how-it-works" class="text-sm text-white/50 hover:text-white transition-colors">How It Works</a>
+        <a href="commands.html" class="text-sm text-white/50 hover:text-white transition-colors">Commands Guide</a>
         <a href="index.html#pricing" class="text-sm text-white/50 hover:text-white transition-colors">Pricing</a>
         <a href="help.html" class="text-sm text-white/50 hover:text-white transition-colors">Support</a>
       </div>
@@ -363,6 +364,26 @@
             </div>
             <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
               Check your internet connection on both your phone and PC. If your PC's connection is unstable, the relay may drop. Ensure your license key is active and hasn't expired. You can check the relay connection status in the desktop app's settings. If the relay server itself is temporarily down, the app will automatically reconnect when it comes back online.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">Why does a button show a red dot / "Trigger failed" even though the app opened?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              When a button is set to <strong>Open App</strong>, XDECK originally waited for the process to exit before acknowledging the trigger. If an app (like Chrome or VS Code) remained open for more than 5 seconds, the mobile app reached its 5-second timeout and showed a red dot. To resolve this, use <strong>Start App</strong> or update to XDECK v1.4.1+ where both <code class="text-white/60">Open App</code> and <code class="text-white/60">Start App</code> acknowledge immediately with green.
+            </div>
+          </div>
+
+          <div class="faq-item glass-card rounded-xl overflow-hidden cursor-pointer" onclick="toggleFaq(this)">
+            <div class="flex items-center justify-between p-5">
+              <span class="font-heading font-medium text-sm sm:text-base pr-4">How do I launch Google Chrome with a specific profile?</span>
+              <svg class="faq-chevron w-5 h-5 text-white/40 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="faq-answer px-5 pb-5 text-sm text-white/40 leading-relaxed">
+              Set the button Action to <strong>Start App</strong>. On Windows, set Application Path to <code class="text-accent-light font-mono">"C:\Program Files\Google\Chrome\Application\chrome.exe"</code> (with quotes) and Arguments to <code class="text-accent-light font-mono">--profile-directory="Profile 1"</code>. On macOS, use <strong>Run Command</strong> with <code class="text-accent-light font-mono">open -na "Google Chrome" --args --profile-directory="Profile 1"</code>. On Linux, use Application Path <code class="text-accent-light font-mono">google-chrome</code> with Arguments <code class="text-accent-light font-mono">--profile-directory="Profile 1"</code>. See our full <a href="commands.html" class="text-accent-light hover:underline">Commands Guide</a> for more details.
             </div>
           </div>
 
