@@ -44,7 +44,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="styles.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -68,8 +68,6 @@
     .grid-btn-icon { position: relative; z-index: 1; }
     .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
     .feature-glow { position: absolute; width: 200px; height: 200px; border-radius: 50%; filter: blur(80px); opacity: 0.15; pointer-events: none; }
-    .sr-ready .scroll-reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1); }
-    .sr-ready .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
     @keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.5); opacity: 0; } }
     .pulse-ring { animation: pulse-ring 2s ease-out infinite; }
     @keyframes float-phone { 0%, 100% { transform: translateY(0px) rotateY(-5deg); } 50% { transform: translateY(-16px) rotateY(5deg); } }
@@ -80,8 +78,7 @@
     .toast-error{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#fca5a5}
     @media (prefers-reduced-motion: reduce) {
       *, .float-phone { animation: none !important; transition: none !important; }
-      .sr-ready .scroll-reveal { opacity: 1; transform: none; }
-    }
+      }
     .hiw-track { position: relative; overflow: hidden; }
     .hiw-step { position: absolute; top: 0; left: 0; width: 100%; opacity: 0; transform: translateX(60px); transition: all 0.6s cubic-bezier(0.4,0,0.2,1); pointer-events: none; }
     .hiw-step.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
@@ -133,7 +130,7 @@
       <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-500/15 rounded-full blur-[100px]"></div>
     </div>
     <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
-      <div class="scroll-reveal">
+      <div class="">
         <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs text-white/60 mb-8">
           <span class="w-2 h-2 rounded-full bg-cta animate-pulse"></span>
           Now with Cloud Relay &mdash; control from anywhere
@@ -170,7 +167,7 @@
       </div>
 
       <!-- Phone Mockup -->
-      <div class="flex justify-center scroll-reveal float-phone">
+      <div class="flex justify-center float-phone">
         <div class="phone-mockup w-72">
           <div class="bg-dark-900 rounded-[22px] p-4">
             <div class="grid grid-cols-3 gap-2.5 mb-3">
@@ -195,55 +192,55 @@
   <!-- Features -->
   <section id="features" class="py-24 sm:py-32 px-6 relative">
     <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-20 scroll-reveal">
+      <div class="text-center mb-20">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">FEATURES</div>
         <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Everything You Need</h2>
         <p class="text-white/40 max-w-xl mx-auto text-lg">One app to control your entire PC. No limits on what you can do.</p>
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-        <div class="glass-card rounded-2xl p-8 scroll-reveal cursor-default relative overflow-hidden">
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
           <div class="feature-glow bg-accent top-0 right-0"></div>
           <div class="w-14 h-14 rounded-2xl bg-accent/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
-          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Hotkeys & Shortcuts</h3>
+          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Hotkeys &amp; Shortcuts</h3>
           <p class="text-sm text-white/40 leading-relaxed relative z-10">Trigger any keyboard shortcut. Ctrl+C, Alt+Tab, media keys &mdash; all from a single tap.</p>
         </div>
-        <div class="glass-card rounded-2xl p-8 scroll-reveal cursor-default relative overflow-hidden">
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
           <div class="feature-glow bg-green-500 top-0 right-0"></div>
           <div class="w-14 h-14 rounded-2xl bg-green-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
           <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Phone as Controller</h3>
           <p class="text-sm text-white/40 leading-relaxed relative z-10">Use your phone as a customizable Stream Deck. Portrait, landscape, any grid size.</p>
         </div>
-        <div class="glass-card rounded-2xl p-8 scroll-reveal cursor-default relative overflow-hidden">
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
           <div class="feature-glow bg-purple-500 top-0 right-0"></div>
           <div class="w-14 h-14 rounded-2xl bg-purple-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg></div>
           <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Cloud Relay</h3>
           <p class="text-sm text-white/40 leading-relaxed relative z-10">Control from anywhere. Cloud relay connects your phone to your PC over the internet.</p>
         </div>
-        <div class="glass-card rounded-2xl p-8 scroll-reveal cursor-default relative overflow-hidden">
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
           <div class="feature-glow bg-amber-500 top-0 right-0"></div>
           <div class="w-14 h-14 rounded-2xl bg-amber-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg></div>
           <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Media Controls</h3>
           <p class="text-sm text-white/40 leading-relaxed relative z-10">Play, pause, skip tracks, volume control. Works with Spotify, YouTube, any media.</p>
         </div>
-        <div class="glass-card rounded-2xl p-8 scroll-reveal cursor-default relative overflow-hidden">
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
           <div class="feature-glow bg-rose-500 top-0 right-0"></div>
           <div class="w-14 h-14 rounded-2xl bg-rose-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg></div>
           <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Start Apps with Args</h3>
           <p class="text-sm text-white/40 leading-relaxed relative z-10">Launch apps with custom arguments. Open Chrome PWAs, scripts, any executable.</p>
         </div>
-        <div class="glass-card rounded-2xl p-8 scroll-reveal cursor-default relative overflow-hidden">
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
           <div class="feature-glow bg-cyan-500 top-0 right-0"></div>
           <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z"/></svg></div>
           <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Custom Layouts</h3>
           <p class="text-sm text-white/40 leading-relaxed relative z-10">Drag to reorder, custom backgrounds, emoji or image icons, any grid size.</p>
         </div>
-        <div class="glass-card rounded-2xl p-8 scroll-reveal cursor-default relative overflow-hidden">
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
           <div class="feature-glow bg-emerald-500 top-0 right-0"></div>
           <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
-          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Keyboard & Trackpad</h3>
+          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Keyboard &amp; Trackpad</h3>
           <p class="text-sm text-white/40 leading-relaxed relative z-10">Turn your phone into a full keyboard and mouse trackpad. Type, navigate, and control your PC from anywhere.</p>
         </div>
-        <div class="glass-card rounded-2xl p-8 scroll-reveal cursor-default relative overflow-hidden">
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
           <div class="feature-glow bg-indigo-500 top-0 right-0"></div>
           <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg></div>
           <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Run Terminal Commands</h3>
@@ -258,13 +255,13 @@
   <!-- How It Works -->
   <section id="how-it-works" class="py-24 sm:py-32 px-6">
     <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-20 scroll-reveal">
+      <div class="text-center mb-20">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">HOW IT WORKS</div>
         <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Up and Running in 30 Seconds</h2>
         <p class="text-white/40 max-w-xl mx-auto text-lg">No account needed. Install, pair, and start controlling.</p>
       </div>
 
-      <div class="scroll-reveal">
+      <div class="">
         <div class="glass-card rounded-3xl p-6 sm:p-10 lg:p-14 max-w-5xl mx-auto relative overflow-hidden">
           <div class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-purple-500/5"></div>
           <div class="relative z-10">
@@ -272,15 +269,15 @@
               <div class="hiw-progress-bar" id="hiw-bar" style="width: 33%"></div>
             </div>
             <div class="flex items-center justify-between mb-10 px-4">
-              <button class="hiw-indicator flex items-center gap-2 text-sm font-semibold text-accent-light cursor-pointer" data-step="0">
+              <button type="button" class="hiw-indicator flex items-center gap-2 text-sm font-semibold text-accent-light cursor-pointer" data-step="0">
                 <span class="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-xs font-bold text-accent-light border border-accent/30">1</span>
                 <span class="hidden sm:inline">Install App</span>
               </button>
-              <button class="hiw-indicator flex items-center gap-2 text-sm font-semibold text-white/30 cursor-pointer" data-step="1">
+              <button type="button" class="hiw-indicator flex items-center gap-2 text-sm font-semibold text-white/30 cursor-pointer" data-step="1">
                 <span class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-xs font-bold text-white/30 border border-white/10">2</span>
                 <span class="hidden sm:inline">Scan &amp; Pair</span>
               </button>
-              <button class="hiw-indicator flex items-center gap-2 text-sm font-semibold text-white/30 cursor-pointer" data-step="2">
+              <button type="button" class="hiw-indicator flex items-center gap-2 text-sm font-semibold text-white/30 cursor-pointer" data-step="2">
                 <span class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-xs font-bold text-white/30 border border-white/10">3</span>
                 <span class="hidden sm:inline">Start Controlling</span>
               </button>
@@ -409,15 +406,15 @@
             </div>
 
             <div class="flex items-center justify-center gap-4 mt-8">
-              <button id="hiw-prev" class="w-10 h-10 rounded-full glass flex items-center justify-center text-white/40 hover:text-white transition-colors cursor-pointer">
+              <button type="button" id="hiw-prev" class="w-10 h-10 rounded-full glass flex items-center justify-center text-white/40 hover:text-white transition-colors cursor-pointer">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
               </button>
-              <button id="hiw-toggle" class="px-4 py-2 rounded-xl glass text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2 cursor-pointer">
+              <button type="button" id="hiw-toggle" class="px-4 py-2 rounded-xl glass text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2 cursor-pointer">
                 <svg class="w-4 h-4" id="hiw-pause-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6"/></svg>
                 <svg class="w-4 h-4 hidden" id="hiw-play-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 <span id="hiw-toggle-text">Pause</span>
               </button>
-              <button id="hiw-next" class="w-10 h-10 rounded-full glass flex items-center justify-center text-white/40 hover:text-white transition-colors cursor-pointer">
+              <button type="button" id="hiw-next" class="w-10 h-10 rounded-full glass flex items-center justify-center text-white/40 hover:text-white transition-colors cursor-pointer">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
               </button>
             </div>
@@ -431,7 +428,7 @@
 
   <!-- Pricing -->
   <section id="pricing" class="py-24 sm:py-32 px-6">
-    <div class="max-w-xl mx-auto text-center scroll-reveal">
+    <div class="max-w-xl mx-auto text-center">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">PRICING</div>
       <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Simple, Honest Pricing</h2>
       <p class="text-white/40 mb-12 text-lg">One purchase. Lifetime access. No subscriptions.</p>
@@ -446,10 +443,10 @@
         </div>
         <p class="text-white/50 mb-8">One computer and one phone. Free updates forever.</p>
         <ul class="space-y-4 mb-8">
-          <li class="flex items-center gap-3 text-sm text-white/60"><svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Unlimited buttons & pages</li>
+          <li class="flex items-center gap-3 text-sm text-white/60"><svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Unlimited buttons &amp; pages</li>
           <li class="flex items-center gap-3 text-sm text-white/60"><svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Cloud relay (use from anywhere)</li>
           <li class="flex items-center gap-3 text-sm text-white/60"><svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Hotkeys, media keys, app launcher</li>
-          <li class="flex items-center gap-3 text-sm text-white/60"><svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Custom layouts & backgrounds</li>
+          <li class="flex items-center gap-3 text-sm text-white/60"><svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Custom layouts &amp; backgrounds</li>
           <li class="flex items-center gap-3 text-sm text-white/60"><svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Free updates forever</li>
         </ul>
         <a href="#" id="buy-btn" class="btn-cta block w-full py-4 rounded-2xl text-white font-semibold text-center text-lg cursor-pointer">Get XDECK &mdash; $10</a>
@@ -461,7 +458,7 @@
 
   <!-- Download -->
   <section id="download" class="py-24 sm:py-32 px-6">
-    <div class="max-w-5xl mx-auto text-center scroll-reveal">
+    <div class="max-w-5xl mx-auto text-center">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">DOWNLOAD</div>
       <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Download XDECK</h2>
       <p class="text-white/40 mb-12 text-lg">Available for Windows, macOS, and Linux</p>
@@ -487,7 +484,7 @@
           <p class="text-xs text-white/30">Native APK</p>
         </a>
       </div>
-      <div class="mt-16 max-w-2xl mx-auto glass-card rounded-3xl p-8 text-left border border-white/5 scroll-reveal">
+      <div class="mt-16 max-w-2xl mx-auto glass-card rounded-3xl p-8 text-left border border-white/5">
         <h3 class="font-heading font-bold text-xl mb-4 text-center">Using an iPhone? Install as PWA</h3>
         <p class="text-xs text-white/40 text-center mb-6">Install the app directly via Safari:</p>
         <div class="space-y-4">
@@ -524,14 +521,14 @@
           <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Legal</h4>
           <ul class="space-y-2">
             <li><a href="privacy.html" class="text-sm text-white/30 hover:text-white transition-colors">Privacy Policy</a></li>
-            <li><a href="terms.html" class="text-sm text-white/30 hover:text-white transition-colors">Terms & Conditions</a></li>
+            <li><a href="terms.html" class="text-sm text-white/30 hover:text-white transition-colors">Terms &amp; Conditions</a></li>
           </ul>
         </div>
         <div>
           <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Support</h4>
           <ul class="space-y-2">
             <li><a href="commands.html" class="text-sm text-accent-light hover:text-white transition-colors">Commands Guide</a></li>
-            <li><a href="help.html" class="text-sm text-white/30 hover:text-white transition-colors">Help & FAQ</a></li>
+            <li><a href="help.html" class="text-sm text-white/30 hover:text-white transition-colors">Help &amp; FAQ</a></li>
             <li><a href="contact.html" class="text-sm text-white/30 hover:text-white transition-colors">Contact Us</a></li>
             <li><a href="about.html" class="text-sm text-white/30 hover:text-white transition-colors">About Us</a></li>
           </ul>
@@ -550,20 +547,6 @@
   </footer>
 
   <script>
-    document.documentElement.classList.add('sr-ready');
-
-    document.addEventListener('DOMContentLoaded', function() {
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-      document.querySelectorAll('.scroll-reveal').forEach(function(el) { observer.observe(el); });
-    });
-
     (function() {
       var current = 0, playing = true, timer;
       var steps = document.querySelectorAll('.hiw-step');

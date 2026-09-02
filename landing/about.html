@@ -39,11 +39,9 @@
     .btn-outline { border: 1px solid rgba(255,255,255,0.15); transition: all 0.3s ease; }
     .btn-outline:hover { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.1); }
     .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
-    .sr-ready .scroll-reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1); }
     @media (prefers-reduced-motion: reduce) {
       *, .float-phone { animation: none !important; transition: none !important; }
-      .sr-ready .scroll-reveal { opacity: 1; transform: none; }
-    }
+      }
   </style>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M6RQLWC2T"></script>
@@ -81,7 +79,7 @@
 
   <!-- Hero -->
   <section class="pt-24 pb-16 px-6">
-    <div class="max-w-4xl mx-auto text-center scroll-reveal">
+    <div class="max-w-4xl mx-auto text-center">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">ABOUT</div>
       <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
         Built for People Who <span class="gradient-text">Actually Build Things</span>
@@ -94,7 +92,7 @@
 
   <!-- Mission -->
   <section class="py-24 sm:py-32 px-6">
-    <div class="max-w-4xl mx-auto scroll-reveal">
+    <div class="max-w-4xl mx-auto">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">MISSION</div>
       <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-8">Our Mission</h2>
       <p class="text-white/50 text-lg leading-relaxed mb-6">
@@ -112,7 +110,7 @@
   <section class="py-24 sm:py-32 px-6">
     <div class="max-w-4xl mx-auto">
       <div class="grid lg:grid-cols-2 gap-12 items-center">
-        <div class="scroll-reveal">
+        <div class="">
           <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">OUR STORY</div>
           <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-8">How It Started</h2>
           <div class="space-y-6 text-white/50 leading-relaxed">
@@ -127,7 +125,7 @@
             </p>
           </div>
         </div>
-        <div class="flex justify-center scroll-reveal">
+        <div class="flex justify-center">
           <div class="relative">
             <!-- Decorative grid of buttons -->
             <div class="w-64 h-64 rounded-3xl glass p-6 relative overflow-hidden">
@@ -155,13 +153,13 @@
   <!-- What Makes XDECK Different -->
   <section class="py-24 sm:py-32 px-6">
     <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-20 scroll-reveal">
+      <div class="text-center mb-20">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">WHY XDECK</div>
         <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">What Makes XDECK Different</h2>
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+        <div class="glass-card rounded-2xl p-8">
           <div class="w-14 h-14 rounded-2xl bg-accent/20 flex items-center justify-center mb-6">
             <svg class="w-7 h-7 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
           </div>
@@ -169,7 +167,7 @@
           <p class="text-sm text-white/40 leading-relaxed">XDECK is built in the open. You can see the code, contribute, and trust that there are no hidden surprises.</p>
         </div>
 
-        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+        <div class="glass-card rounded-2xl p-8">
           <div class="w-14 h-14 rounded-2xl bg-green-500/20 flex items-center justify-center mb-6">
             <svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
@@ -177,7 +175,7 @@
           <p class="text-sm text-white/40 leading-relaxed">$10, once. Lifetime access. Free updates forever. No subscriptions, no credits, no BS.</p>
         </div>
 
-        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+        <div class="glass-card rounded-2xl p-8">
           <div class="w-14 h-14 rounded-2xl bg-purple-500/20 flex items-center justify-center mb-6">
             <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
           </div>
@@ -185,7 +183,7 @@
           <p class="text-sm text-white/40 leading-relaxed">Use it on your home network for zero latency, or over the internet via cloud relay. Your choice.</p>
         </div>
 
-        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+        <div class="glass-card rounded-2xl p-8">
           <div class="w-14 h-14 rounded-2xl bg-amber-500/20 flex items-center justify-center mb-6">
             <svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
           </div>
@@ -193,7 +191,7 @@
           <p class="text-sm text-white/40 leading-relaxed">Download, install, pair. No email, no signup, no cloud account. Just works.</p>
         </div>
 
-        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+        <div class="glass-card rounded-2xl p-8">
           <div class="w-14 h-14 rounded-2xl bg-rose-500/20 flex items-center justify-center mb-6">
             <svg class="w-7 h-7 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
           </div>
@@ -201,7 +199,7 @@
           <p class="text-sm text-white/40 leading-relaxed">Any grid size, custom icons, backgrounds, drag-to-reorder. Make it yours.</p>
         </div>
 
-        <div class="glass-card rounded-2xl p-8 scroll-reveal">
+        <div class="glass-card rounded-2xl p-8">
           <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 flex items-center justify-center mb-6">
             <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
           </div>
@@ -216,7 +214,7 @@
 
   <!-- Tech Stack -->
   <section class="py-24 sm:py-32 px-6">
-    <div class="max-w-4xl mx-auto scroll-reveal">
+    <div class="max-w-4xl mx-auto">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">TECHNOLOGY</div>
       <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-8">Built with Modern Tech</h2>
       <p class="text-white/50 text-lg leading-relaxed mb-10">
@@ -247,7 +245,7 @@
 
   <!-- Team -->
   <section class="py-24 sm:py-32 px-6">
-    <div class="max-w-4xl mx-auto text-center scroll-reveal">
+    <div class="max-w-4xl mx-auto text-center">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">TEAM</div>
       <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-8">Who's Behind This?</h2>
       <p class="text-white/50 text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
@@ -269,13 +267,13 @@
   <!-- Values -->
   <section class="py-24 sm:py-32 px-6">
     <div class="max-w-4xl mx-auto">
-      <div class="text-center mb-16 scroll-reveal">
+      <div class="text-center mb-16">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">VALUES</div>
         <h2 class="font-heading text-3xl sm:text-4xl font-bold mb-6">What We Stand For</h2>
       </div>
 
       <div class="space-y-6">
-        <div class="glass-card rounded-2xl p-8 flex items-start gap-6 scroll-reveal">
+        <div class="glass-card rounded-2xl p-8 flex items-start gap-6">
           <div class="w-12 h-12 rounded-2xl bg-green-500/20 flex items-center justify-center shrink-0">
             <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
           </div>
@@ -285,7 +283,7 @@
           </div>
         </div>
 
-        <div class="glass-card rounded-2xl p-8 flex items-start gap-6 scroll-reveal">
+        <div class="glass-card rounded-2xl p-8 flex items-start gap-6">
           <div class="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center shrink-0">
             <svg class="w-6 h-6 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           </div>
@@ -295,7 +293,7 @@
           </div>
         </div>
 
-        <div class="glass-card rounded-2xl p-8 flex items-start gap-6 scroll-reveal">
+        <div class="glass-card rounded-2xl p-8 flex items-start gap-6">
           <div class="w-12 h-12 rounded-2xl bg-purple-500/20 flex items-center justify-center shrink-0">
             <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
           </div>
@@ -305,7 +303,7 @@
           </div>
         </div>
 
-        <div class="glass-card rounded-2xl p-8 flex items-start gap-6 scroll-reveal">
+        <div class="glass-card rounded-2xl p-8 flex items-start gap-6">
           <div class="w-12 h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center shrink-0">
             <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
           </div>
@@ -322,7 +320,7 @@
 
   <!-- CTA -->
   <section class="py-24 sm:py-32 px-6">
-    <div class="max-w-3xl mx-auto text-center scroll-reveal">
+    <div class="max-w-3xl mx-auto text-center">
       <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Ready to Take Control?</h2>
       <p class="text-white/40 text-lg mb-10">Download XDECK for free. No account needed.</p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -396,19 +394,5 @@
     </div>
   </footer>
 
-  <script>
-    document.documentElement.classList.add('sr-ready');
-    document.addEventListener('DOMContentLoaded', () => {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-      document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
-    });
-  </script>
 </body>
 </html>

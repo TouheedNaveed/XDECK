@@ -36,7 +36,6 @@
     .btn-outline { border: 1px solid rgba(255,255,255,0.15); transition: all 0.3s ease; }
     .btn-outline:hover { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.1); }
     .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); }
-    .sr-ready .scroll-reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1); }
     .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
     .faq-item.active .faq-answer { max-height: 300px; padding-top: 16px; }
     .faq-item.active .faq-chevron { transform: rotate(180deg); }
@@ -44,7 +43,6 @@
     .faq-item.hidden { display: none; }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
-      .sr-ready .scroll-reveal { opacity: 1; transform: none; }
       .faq-answer { transition: none; }
       .faq-chevron { transition: none; }
     }
@@ -85,7 +83,7 @@
 
   <!-- Hero -->
   <section class="pt-24 pb-16 px-6">
-    <div class="max-w-4xl mx-auto text-center scroll-reveal">
+    <div class="max-w-4xl mx-auto text-center">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">SUPPORT</div>
       <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
         Help &amp; <span class="gradient-text">Support</span>
@@ -109,7 +107,7 @@
     <div class="max-w-3xl mx-auto space-y-16">
 
       <!-- Getting Started -->
-      <div class="scroll-reveal">
+      <div class="">
         <h2 class="font-heading text-xl font-bold mb-6 flex items-center gap-3">
           <span class="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center text-sm text-accent-light font-bold">1</span>
           Getting Started
@@ -170,7 +168,7 @@
       </div>
 
       <!-- Features -->
-      <div class="scroll-reveal">
+      <div class="">
         <h2 class="font-heading text-xl font-bold mb-6 flex items-center gap-3">
           <span class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center text-sm text-green-400 font-bold">2</span>
           Features
@@ -241,7 +239,7 @@
       </div>
 
       <!-- Pricing &amp; License -->
-      <div class="scroll-reveal">
+      <div class="">
         <h2 class="font-heading text-xl font-bold mb-6 flex items-center gap-3">
           <span class="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-sm text-amber-400 font-bold">3</span>
           Pricing &amp; License
@@ -302,7 +300,7 @@
       </div>
 
       <!-- Troubleshooting -->
-      <div class="scroll-reveal">
+      <div class="">
         <h2 class="font-heading text-xl font-bold mb-6 flex items-center gap-3">
           <span class="w-8 h-8 rounded-lg bg-rose-500/20 flex items-center justify-center text-sm text-rose-400 font-bold">4</span>
           Troubleshooting
@@ -383,7 +381,7 @@
       </div>
 
       <!-- Cloud Relay -->
-      <div class="scroll-reveal">
+      <div class="">
         <h2 class="font-heading text-xl font-bold mb-6 flex items-center gap-3">
           <span class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center text-sm text-purple-400 font-bold">5</span>
           Cloud Relay
@@ -440,7 +438,7 @@
 
   <!-- Download CTA -->
   <section class="py-24 sm:py-32 px-6">
-    <div class="max-w-3xl mx-auto text-center scroll-reveal">
+    <div class="max-w-3xl mx-auto text-center">
       <div class="glass-card rounded-3xl p-10 sm:p-14">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">DOWNLOAD</div>
         <h2 class="font-heading text-2xl sm:text-3xl font-bold mb-4">Ready to Get Started?</h2>
@@ -454,7 +452,7 @@
 
   <!-- Still Need Help -->
   <section class="py-24 sm:py-32 px-6">
-    <div class="max-w-3xl mx-auto text-center scroll-reveal">
+    <div class="max-w-3xl mx-auto text-center">
       <div class="glass-card rounded-3xl p-10 sm:p-14">
         <div class="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center mx-auto mb-6">
           <svg class="w-8 h-8 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
@@ -524,7 +522,6 @@
   </footer>
 
   <script>
-    document.documentElement.classList.add('sr-ready');
     // FAQ accordion toggle
     function toggleFaq(item) {
       var wasActive = item.classList.contains('active');
@@ -556,7 +553,7 @@
             allItems[i].classList.remove('hidden');
           }
           for (var j = 0; j < allCategories.length; j++) {
-            allCategories[j].closest('.scroll-reveal').style.display = '';
+            allCategories[j].closest('.faq-section').style.display = '';
           }
           return;
         }
@@ -576,7 +573,7 @@
         // Show/hide category headers based on whether they have visible items
         for (var m = 0; m < allCategories.length; m++) {
           var visibleItems = allCategories[m].querySelectorAll('.faq-item:not(.hidden)');
-          var parent = allCategories[m].closest('.scroll-reveal');
+          var parent = allCategories[m].closest('.faq-section');
           if (parent) {
             parent.style.display = visibleItems.length === 0 ? 'none' : '';
           }
@@ -584,18 +581,6 @@
       });
     }
 
-    // GSAP ScrollTrigger animations
-    document.addEventListener('DOMContentLoaded', () => {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-      document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
-    });
   </script>
 </body>
 </html>
