@@ -3,24 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="XDECK Help Center - Frequently asked questions, troubleshooting guides, setup tutorials, and support for all features.">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="author" content="XDECK">
+  <meta name="theme-color" content="#080d1a">
   <link rel="canonical" href="https://xdeck.app/help.html">
+  <link rel="alternate" hreflang="en" href="https://xdeck.app/help.html">
+  <link rel="alternate" hreflang="x-default" href="https://xdeck.app/help.html">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Help &amp; Support - XDECK">
-  <meta property="og:description" content="FAQs, troubleshooting guides, and support for all XDECK features.">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="Help Center & FAQ - XDECK Support">
+  <meta property="og:description" content="XDECK help center: setup tutorials, troubleshooting for connection, cloud relay, licensing and media keys, plus answers to frequently asked questions.">
   <meta property="og:url" content="https://xdeck.app/help.html">
   <meta property="og:site_name" content="XDECK">
-  <meta property="og:image" content="https://xdeck.app/logo.png">
+  <meta property="og:image" content="https://xdeck.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="XDECK - turn your phone into a Stream Deck">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Help &amp; Support - XDECK">
-  <meta name="twitter:description" content="FAQs, troubleshooting guides, and support for XDECK.">
-  <title>Help &amp; Support - XDECK</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <meta name="description" content="XDECK help center. Find answers to frequently asked questions about installation, features, pricing, troubleshooting, and cloud relay.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <meta name="twitter:image" content="https://xdeck.app/og-image.png">
+  <meta name="twitter:image:alt" content="XDECK - turn your phone into a Stream Deck">
+  <meta name="twitter:title" content="Help Center & FAQ - XDECK Support">
+  <meta name="twitter:description" content="XDECK help center: setup tutorials, troubleshooting for connection, cloud relay, licensing and media keys, plus answers to frequently asked questions.">
+  <title>Help Center & FAQ - XDECK Support</title>
+  <meta name="description" content="XDECK help center: setup tutorials, troubleshooting for connection, cloud relay, licensing and media keys, plus answers to frequently asked questions.">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <!-- Self-hosted variable fonts (no third-party render-blocking request) -->
+  <link rel="preload" href="fonts/xde-dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/xde-space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "https://xdeck.app/help.html#webpage",
+  "url": "https://xdeck.app/help.html",
+  "name": "XDECK Help Center",
+  "description": "Frequently asked questions and troubleshooting guides for XDECK.",
+  "isPartOf": {
+    "@id": "https://xdeck.app/#website"
+  },
+  "about": {
+    "@id": "https://xdeck.app/#software"
+  },
+  "inLanguage": "en"
+}
+  </script>
+
   <link rel="stylesheet" href="styles.min.css">
 
   <style>
@@ -47,18 +76,11 @@
       .faq-chevron { transition: none; }
     }
 
-.mobile-menu { display: none; }
-
-      .mobile-menu.open { display: block; }
-      .mobile-menu a { display: block; padding: 12px 24px; color: rgba(255,255,255,0.6); font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-      .mobile-menu a:hover { color: #fff; background: rgba(255,255,255,0.05); }
-      .mobile-menu a:last-child { border-bottom: none; }
-    }
 
     .mobile-menu { display: none; }
-    @media (max-width: 767px) {
+    @media (max-width: 899px) {
       .hamburger { display: flex; }
-      .mobile-menu { position: fixed; top: 57px; left: 0; right: 0; background: rgba(8,13,26,0.97); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.08); z-index: 49; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+      .mobile-menu { position: fixed; top: var(--nav-h, 60px); left: 0; right: 0; background: rgba(8,13,26,0.97); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.08); z-index: 49; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
       .mobile-menu.open { max-height: 500px; }
       .mobile-menu a { display: flex; align-items: center; gap: 10px; padding: 14px 24px; color: rgba(255,255,255,0.7); font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.15s, color 0.15s; }
       .mobile-menu a:last-child { border-bottom: none; }
@@ -81,7 +103,7 @@
   <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5" style="background: rgba(8,13,26,0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);">
     <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-3">
-        <img src="logo.png" alt="XDECK" class="w-8 h-8 rounded-lg" width="32" height="32">
+        <img src="logo-64.png" alt="XDECK" class="w-8 h-8 rounded-lg" width="32" height="32">
         <span class="font-heading font-bold text-lg">XDECK</span>
       </a>
       <div class="hidden md:flex items-center gap-8">
@@ -506,7 +528,7 @@
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
         <div>
           <a href="index.html" class="flex items-center gap-3 mb-4">
-            <img src="logo.png" alt="XDECK" class="w-7 h-7 rounded-md" width="28" height="28">
+            <img src="logo-64.png" alt="XDECK" class="w-7 h-7 rounded-md" width="28" height="28">
             <span class="font-heading font-bold text-lg">XDECK</span>
           </a>
           <p class="text-sm text-white/30 leading-relaxed">Turn your phone into a powerful Stream Deck. Control your PC from anywhere.</p>
@@ -539,7 +561,7 @@
       <div class="section-divider mb-8"></div>
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <img src="logo.png" alt="XDECK" class="w-5 h-5 rounded-md" width="20" height="20">
+          <img src="logo-64.png" alt="XDECK" class="w-5 h-5 rounded-md" width="20" height="20">
           <span class="text-sm text-white/30">&copy; 2026 XDECK. All rights reserved.</span>
         </div>
         <div class="flex items-center gap-4">

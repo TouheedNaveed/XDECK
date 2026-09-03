@@ -3,76 +3,85 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XDECK Commands &amp; Hotkeys Guide | All Platforms</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <meta name="description" content="Complete directory of application paths, command line arguments, multi-profile browser launch flags, system utilities, IDE commands, and hotkeys for XDECK on Windows, macOS, and Linux.">
+  <title>XDECK Commands & Hotkeys Guide | Windows, macOS, Linux</title>
+  <meta name="description" content="Complete directory of application paths, command line arguments, browser launch flags, system utilities, IDE commands and hotkeys for XDECK on Windows, macOS and Linux.">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <meta name="keywords" content="XDECK commands, stream deck commands, open chrome profile stream deck, launch app arguments windows mac linux, vs code stream deck button, hotkeys guide stream deck, terminal commands stream deck">
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="author" content="XDECK">
+  <meta name="theme-color" content="#080d1a">
   <link rel="canonical" href="https://xdeck.app/commands.html">
+  <link rel="alternate" hreflang="en" href="https://xdeck.app/commands.html">
+  <link rel="alternate" hreflang="x-default" href="https://xdeck.app/commands.html">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="XDECK App Commands &amp; Quick Launch Master Guide">
-  <meta property="og:description" content="Find exact executable paths, launch arguments, browser profiles, IDE commands, and hotkeys for your XDECK buttons across Windows, macOS, and Linux.">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="XDECK Commands & Hotkeys Guide | Windows, macOS, Linux">
+  <meta property="og:description" content="Complete directory of application paths, command line arguments, browser launch flags, system utilities, IDE commands and hotkeys for XDECK on Windows, macOS and Linux.">
   <meta property="og:url" content="https://xdeck.app/commands.html">
   <meta property="og:site_name" content="XDECK">
-  <meta property="og:image" content="https://xdeck.app/logo.png">
+  <meta property="og:image" content="https://xdeck.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="XDECK - turn your phone into a Stream Deck">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="XDECK App Commands &amp; Quick Launch Master Guide">
-  <meta name="twitter:description" content="Searchable database of application paths, browser profiles, hotkeys, and commands for XDECK.">
-  <meta name="twitter:image" content="https://xdeck.app/logo.png">
+  <meta name="twitter:title" content="XDECK Commands & Hotkeys Guide | Windows, macOS, Linux">
+  <meta name="twitter:description" content="Complete directory of application paths, command line arguments, browser launch flags, system utilities, IDE commands and hotkeys for XDECK on Windows, macOS and Linux.">
+  <meta name="twitter:image" content="https://xdeck.app/og-image.png">
 
   <!-- Schema.org JSON-LD for Rich Results &amp; AI Search -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "TechArticle",
-        "headline": "XDECK Application Paths, Launch Arguments, and Command Guide",
-        "description": "Comprehensive reference guide for configuring XDECK buttons to launch applications, specific browser profiles, developer IDEs, terminals, media players, and system hotkeys on Windows, macOS, and Linux.",
-        "url": "https://xdeck.app/commands.html",
-        "publisher": {
-          "@type": "Organization",
-          "name": "XDECK",
-          "url": "https://xdeck.app",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://xdeck.app/logo.png"
-          }
-        },
-        "about": {
-          "@type": "SoftwareApplication",
-          "name": "XDECK",
-          "operatingSystem": "Windows, macOS, Linux"
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "headline": "XDECK Application Paths, Launch Arguments, and Command Guide",
+      "description": "Comprehensive reference guide for configuring XDECK buttons to launch applications, specific browser profiles, developer IDEs, terminals, media players, and system hotkeys on Windows, macOS, and Linux.",
+      "url": "https://xdeck.app/commands.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "XDECK",
+        "url": "https://xdeck.app",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://xdeck.app/og-image.png"
         }
       },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": "How to open a specific Google Chrome profile using XDECK?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "In XDECK button settings, select Action: Start App. On Windows, set Application Path to \"C:\Program Files\Google\Chrome\Application\chrome.exe\" and Arguments to --profile-directory=\"Profile 1\". On macOS, use Run Command with: open -na \"Google Chrome\" --args --profile-directory=\"Profile 1\". On Linux, use: google-chrome --profile-directory=\"Profile 1\"."
-            }
-          },
-          {
-            "@type": "Question",
-            "name": "Why does a button show a red dot or Trigger Failed even when the app opened?",
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": "If a button is configured as Open App instead of Start App, XDECK may wait for the process to exit before acknowledging. If the application remains running for more than 5 seconds, the mobile app hits its response timeout and displays a red indicator. To resolve this, use 'Start App' with the executable path and arguments, or update to XDECK v1.4.1+."
-            }
-          }
-        ]
+      "about": {
+        "@type": "SoftwareApplication",
+        "name": "XDECK",
+        "operatingSystem": "Windows, macOS, Linux"
       }
-    ]
-  }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How to open a specific Google Chrome profile using XDECK?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In XDECK button settings, select Action: Start App. On Windows, set Application Path to \"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" and Arguments to --profile-directory=\"Profile 1\". On macOS, use Run Command with: open -na \"Google Chrome\" --args --profile-directory=\"Profile 1\". On Linux, use: google-chrome --profile-directory=\"Profile 1\"."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does a button show a red dot or Trigger Failed even when the app opened?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If a button is configured as Open App instead of Start App, XDECK may wait for the process to exit before acknowledging. If the application remains running for more than 5 seconds, the mobile app hits its response timeout and displays a red indicator. To resolve this, use 'Start App' with the executable path and arguments, or update to XDECK v1.4.1+."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <!-- Self-hosted variable fonts (no third-party render-blocking request) -->
+  <link rel="preload" href="fonts/xde-dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/xde-space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="styles.min.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -109,9 +118,9 @@
     }
 
     .mobile-menu { display: none; }
-    @media (max-width: 767px) {
+    @media (max-width: 899px) {
       .hamburger { display: flex; }
-      .mobile-menu { position: fixed; top: 57px; left: 0; right: 0; background: rgba(8,13,26,0.97); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.08); z-index: 49; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+      .mobile-menu { position: fixed; top: var(--nav-h, 60px); left: 0; right: 0; background: rgba(8,13,26,0.97); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.08); z-index: 49; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
       .mobile-menu.open { max-height: 500px; }
       .mobile-menu a { display: flex; align-items: center; gap: 10px; padding: 14px 24px; color: rgba(255,255,255,0.7); font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.15s, color 0.15s; }
       .mobile-menu a:last-child { border-bottom: none; }
@@ -134,7 +143,7 @@
   <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5" style="background: rgba(8,13,26,0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);">
     <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-3">
-        <img src="logo.png" alt="XDECK" class="w-8 h-8 rounded-lg">
+        <img src="logo-64.png" alt="XDECK" class="w-8 h-8 rounded-lg">
         <span class="font-heading font-bold text-lg">XDECK</span>
       </a>
       <div class="hidden md:flex items-center gap-8">
