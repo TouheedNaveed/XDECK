@@ -153,631 +153,6 @@
   <link rel="stylesheet" href="styles.min.css">
   <link rel="preconnect" href="https://api.github.com">
   <link rel="preconnect" href="https://xdeck-relay.onrender.com">
-</head>
-<body>
-  <a href="#main" class="skip-link">Skip to content</a>
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-  <!-- ============================ Header ============================ -->
-  <nav class="site-nav">
-    <div class="nav-inner">
-      <a href="/" class="flex items-center gap-2.5 shrink-0" aria-label="XDECK home">
-        <img src="logo-64.png" alt="XDECK logo" width="32" height="32" fetchpriority="high" decoding="async" class="w-8 h-8 rounded-lg">
-        <span class="font-heading font-bold text-lg tracking-tight">XDECK</span>
-      </a>
-
-      <div class="nav-links">
-        <a href="#features" class="nav-link">Features</a>
-        <a href="#how-it-works" class="nav-link">How It Works</a>
-        <a href="commands.html" class="nav-link">Commands Guide</a>
-        <a href="#pricing" class="nav-link">Pricing</a>
-        <a href="help.html" class="nav-link">Support</a>
-      </div>
-
-      <div class="flex items-center gap-2.5">
-        <a href="https://github.com/TouheedNaveed/XDECK" target="_blank" rel="noopener noreferrer" aria-label="XDECK on GitHub" class="hidden sm:flex items-center justify-center w-9 h-9 rounded-lg border border-white/10 text-white/50 hover:text-white hover:border-white/25 transition-colors">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-        </a>
-        <a href="#download" class="btn btn-primary btn-sm hidden xs:inline-flex sm:inline-flex">Download</a>
-        <button type="button" class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-          <svg class="w-5 h-5 text-white/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-            <path class="hamburger-bar hb-top" d="M4 7h16"/>
-            <path class="hamburger-bar hb-mid" d="M4 12h16"/>
-            <path class="hamburger-bar hb-bot" d="M4 17h16"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Mobile drawer -->
-  <div id="mobile-menu" class="mobile-menu">
-    <div>
-      <a href="#features">Features</a>
-      <a href="#how-it-works">How It Works</a>
-      <a href="commands.html">Commands Guide</a>
-      <a href="#pricing">Pricing</a>
-      <a href="help.html">Help &amp; Support</a>
-      <a href="https://github.com/TouheedNaveed/XDECK" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a href="#download" class="text-accent-light font-semibold">Download</a>
-    </div>
-  </div>
-
-  <main id="main">
-
-  <!-- ============================ HERO (Full-Bleed) ============================ -->
-  <section id="hero" class="hero-fullbleed" style="position:relative">
-    <!-- Animated gradient mesh background -->
-    <div class="hero-mesh" aria-hidden="true"></div>
-    <!-- Grid overlay -->
-    <div class="hero-grid-overlay" aria-hidden="true"></div>
-
-    <div class="shell" style="position:relative;z-index:2">
-      <div class="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-
-        <!-- Copy -->
-        <div class="lg:col-span-7 xl:col-span-7">
-          <div class="eyebrow eyebrow-cta mb-7 reveal">
-            <span class="dot dot-ring"></span>
-            <span>Now with Cloud Relay &mdash; control from anywhere</span>
-          </div>
-
-          <h1 class="font-heading font-bold text-[2.5rem] leading-[1.06] sm:text-[3.25rem] lg:text-[3.75rem] xl:text-[4.25rem] mb-6 reveal" style="animation-delay:.1s">
-            Turn your phone<br class="hidden sm:block">
-            into a <span class="gradient-text">Stream&nbsp;Deck</span>
-          </h1>
-
-          <p class="text-white/55 text-base sm:text-lg leading-relaxed max-w-[52ch] mb-9 reveal" style="animation-delay:.2s">
-            Custom buttons, hotkeys, media controls, and app launchers &mdash; all from your phone.
-            Works over WiFi, or from anywhere via cloud.
-          </p>
-
-          <div class="flex flex-col sm:flex-row gap-3 mb-10 reveal" style="animation-delay:.3s">
-            <a href="#download" class="btn btn-primary glow-pulse">Download Free</a>
-            <a href="#how-it-works" class="btn btn-ghost">See How It Works</a>
-          </div>
-
-          <!-- Trust row -->
-          <ul class="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-white/45 list-none m-0 p-0 reveal" style="animation-delay:.4s">
-            <li class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-cta shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              No account needed
-            </li>
-            <li class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-cta shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              $10 one-time
-            </li>
-            <li class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-cta shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              Open source
-            </li>
-          </ul>
-        </div>
-
-        <!-- Device: floating animation -->
-        <div class="lg:col-span-5 flex justify-center lg:justify-end">
-          <div class="relative float-anim">
-            <!-- Accent wash behind device -->
-            <div class="absolute -inset-6 -z-10 rounded-[36px] opacity-70" style="background: radial-gradient(closest-side, rgba(99,102,241,0.20), transparent 70%);"></div>
-
-            <div class="device w-[248px] sm:w-[268px]">
-              <div class="device-screen p-3 pt-6">
-                <div class="flex items-center justify-between mb-3 px-0.5">
-                  <span class="font-heading text-[10px] font-semibold tracking-widest uppercase text-white/35">Deck 1</span>
-                  <span class="flex items-center gap-1.5 text-[10px] text-cta">
-                    <span class="dot"></span>Connected
-                  </span>
-                </div>
-                <div class="deck mb-3">
-                  <div class="deck-key" data-live="on">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9"/></svg>
-                    <span class="deck-key-label">Scene</span>
-                  </div>
-                  <div class="deck-key">
-                    <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-                    <span class="deck-key-label">Prefs</span>
-                  </div>
-                  <div class="deck-key">
-                    <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg>
-                    <span class="deck-key-label">Music</span>
-                  </div>
-                  <div class="deck-key">
-                    <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                    <span class="deck-key-label">Apps</span>
-                  </div>
-                  <div class="deck-key">
-                    <svg class="w-5 h-5 text-rose-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    <span class="deck-key-label">Macro</span>
-                  </div>
-                  <div class="deck-key">
-                    <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8.111 14.048a3.94 3.94 0 010-4.096m7.778 4.096a3.94 3.94 0 000-4.096M5.657 17.657a8 8 0 010-11.314m12.686 0a8 8 0 010 11.314M12 12h.01"/></svg>
-                    <span class="deck-key-label">WiFi</span>
-                  </div>
-                </div>
-                <div class="flex items-center justify-between rounded-[10px] bg-white/[0.04] border border-white/[0.07] px-3 py-2.5">
-                  <span class="text-[10px] text-white/30 font-mono">192.168.1.24</span>
-                  <span class="kbd">Ctrl</span>
-                  <span class="kbd">Shift</span>
-                  <span class="kbd">K</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Floating status chip -->
-            <div class="hidden sm:flex absolute -left-4 bottom-14 items-center gap-2 rounded-lg bg-[#0f172a] border border-white/10 px-3 py-2 shadow-lg float-anim-delay">
-              <span class="dot"></span>
-              <span class="text-[11px] font-medium text-white/60">&lt;50ms over WiFi</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- ============================ FEATURES (Full-Width Bento) ============================ -->
-  <section id="features" class="section-full">
-    <div class="shell-wide">
-      <div class="max-w-[58ch] mb-12 md:mb-16" style="padding:0 1.5rem">
-        <p class="eyebrow mb-5 reveal">Features</p>
-        <h2 class="font-heading font-bold h-sec mb-4 reveal" style="animation-delay:.08s">Everything You Need</h2>
-        <p class="lede reveal" style="animation-delay:.15s">One app to control your entire PC. No limits on what you can do.</p>
-      </div>
-
-      <!-- Asymmetric Bento Grid -->
-      <div class="bento-grid bento-grid-4" style="margin:0 1.5rem">
-
-        <!-- Large card: 2x2 span — Hotkeys & Shortcuts -->
-        <article class="bento-card span-2x2 reveal">
-          <div class="icon-tile mb-5" style="width:48px;height:48px;border-radius:12px">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h8M8 7l2-2m-2 2l2 2m4-2l-2-2m2 2l-2 2M4 11h16v8H4z"/></svg>
-          </div>
-          <h3 class="font-heading font-semibold text-xl mb-3">Hotkeys &amp; Shortcuts</h3>
-          <p class="text-sm text-white/45 leading-relaxed mb-6 max-w-[35ch]">Trigger any keyboard shortcut. Ctrl+C, Alt+Tab, media keys &mdash; all from a single tap.</p>
-          <div class="mt-auto flex items-center gap-3">
-            <span class="kbd">Ctrl</span><span class="kbd">Shift</span><span class="kbd">K</span>
-            <span class="text-[11px] text-white/30 ml-2 font-mono">=&gt; Launch app</span>
-          </div>
-        </article>
-
-        <!-- Medium card: 2x1 — Phone as Controller -->
-        <article class="bento-card span-2x1 reveal" style="animation-delay:.12s">
-          <div class="icon-tile mb-5">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-          </div>
-          <h3 class="font-heading font-semibold text-base mb-2">Phone as Controller</h3>
-          <p class="text-sm text-white/45 leading-relaxed">Use your phone as a customizable Stream Deck. Portrait, landscape, any grid size.</p>
-        </article>
-
-        <!-- Small card: 1x1 — Cloud Relay -->
-        <article class="bento-card reveal" style="animation-delay:.19s">
-          <div class="icon-tile mb-4">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 014-4h9a4 4 0 010 8H7a4 4 0 01-4-4zm4-4V7a3 3 0 013-3"/></svg>
-          </div>
-          <h3 class="font-heading font-semibold text-base mb-2">Cloud Relay</h3>
-          <p class="text-sm text-white/45 leading-relaxed">Control from anywhere over the internet.</p>
-        </article>
-
-        <!-- Small card: 1x1 — Media Controls -->
-        <article class="bento-card reveal" style="animation-delay:.26s">
-          <div class="icon-tile mb-4">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg>
-          </div>
-          <h3 class="font-heading font-semibold text-base mb-2">Media Controls</h3>
-          <p class="text-sm text-white/45 leading-relaxed">Play, pause, skip, volume. Works with any media.</p>
-        </article>
-
-        <!-- Medium card: 2x1 — Start Apps with Args -->
-        <article class="bento-card span-2x1 reveal" style="animation-delay:.33s">
-          <div class="icon-tile mb-5">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          </div>
-          <h3 class="font-heading font-semibold text-base mb-2">Start Apps with Args</h3>
-          <p class="text-sm text-white/45 leading-relaxed">Launch apps with custom arguments. Open Chrome PWAs, scripts, any executable.</p>
-        </article>
-
-        <!-- Small card: 1x1 — Custom Layouts -->
-        <article class="bento-card reveal" style="animation-delay:.40s">
-          <div class="icon-tile mb-4">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 5h6v6H4zM14 5h6v6h-6zM4 13h6v6H4zM14 13h6v6h-6z"/></svg>
-          </div>
-          <h3 class="font-heading font-semibold text-base mb-2">Custom Layouts</h3>
-          <p class="text-sm text-white/45 leading-relaxed">Drag to reorder, backgrounds, any grid.</p>
-        </article>
-
-        <!-- Small card: 1x1 — Keyboard & Trackpad -->
-        <article class="bento-card reveal" style="animation-delay:.47s">
-          <div class="icon-tile mb-4">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 11h16v8a1 1 0 01-1 1H5a1 1 0 01-1-1v-8zM4 11l3-6h10l3 6M12 3v8"/></svg>
-          </div>
-          <h3 class="font-heading font-semibold text-base mb-2">Keyboard &amp; Trackpad</h3>
-          <p class="text-sm text-white/45 leading-relaxed">Full keyboard and mouse trackpad from your phone.</p>
-        </article>
-
-        <!-- Medium card: 2x1 — Terminal Commands -->
-        <article class="bento-card span-2x1 reveal" style="animation-delay:.54s">
-          <div class="icon-tile mb-5">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v14a1 1 0 001 1z"/></svg>
-          </div>
-          <h3 class="font-heading font-semibold text-base mb-2">Run Terminal Commands</h3>
-          <p class="text-sm text-white/45 leading-relaxed">Execute shell commands in a real terminal window. Interactive commands, sudo, scripts &mdash; all from your phone.</p>
-        </article>
-
-        <!-- CTA card: 1x1 — Browse Commands -->
-        <article class="bento-card reveal" style="animation-delay:.61s;display:flex;flex-direction:column;justify-content:center;align-items:flex-start">
-          <p class="text-sm text-white/45 leading-relaxed mb-4">Every action above is documented with ready-to-paste examples.</p>
-          <a href="commands.html" class="btn btn-ghost btn-sm">Browse the Commands Guide</a>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- ============================ HOW IT WORKS ============================ -->
-  <section id="how-it-works" class="section">
-    <div class="shell">
-      <div class="max-w-[58ch] mb-10 md:mb-14">
-        <p class="eyebrow mb-5 reveal">How It Works</p>
-        <h2 class="font-heading font-bold h-sec mb-4 reveal" style="animation-delay:.08s">Up and Running in 30 Seconds</h2>
-        <p class="lede reveal" style="animation-delay:.15s">No account needed. Install, pair, and start controlling.</p>
-      </div>
-
-      <!-- Step tabs -->
-      <div class="flex flex-wrap gap-x-7 gap-y-2 mb-8" role="tablist" aria-label="Setup steps">
-        <button type="button" class="hiw-indicator active" data-goto="0" role="tab" aria-selected="true">Install App</button>
-        <button type="button" class="hiw-indicator" data-goto="1" role="tab" aria-selected="false">Scan &amp; Pair</button>
-        <button type="button" class="hiw-indicator" data-goto="2" role="tab" aria-selected="false">Start Controlling</button>
-      </div>
-
-      <div class="hiw-progress mb-9" aria-hidden="true"><div class="hiw-progress-bar" id="hiw-bar"></div></div>
-
-      <div class="hiw-track" id="hiw-track">
-
-        <!-- Step 1 -->
-        <div class="hiw-step active" data-step="1">
-          <div class="grid md:grid-cols-2 gap-8 md:gap-14 items-center">
-            <div class="min-w-0">
-              <h3 class="font-heading text-xl sm:text-2xl font-bold mb-3 break-words">Install &amp; Run the Desktop App</h3>
-              <p class="text-white/45 leading-relaxed mb-6 text-sm sm:text-base">Download XDECK for your OS and run it. The server starts automatically and shows a QR code with your pairing code.</p>
-              <ul class="space-y-3 list-none m-0 p-0">
-                <li class="flex items-center gap-3"><span class="dot"></span><span class="text-sm text-white/50">Windows, macOS, or Linux</span></li>
-                <li class="flex items-center gap-3"><span class="dot"></span><span class="text-sm text-white/50">Starts a local server on port 8787</span></li>
-                <li class="flex items-center gap-3"><span class="dot"></span><span class="text-sm text-white/50">QR code &amp; pairing code generated</span></li>
-              </ul>
-            </div>
-            <div class="flex justify-center">
-              <!-- Desktop window mockup -->
-              <div class="w-full max-w-sm rounded-xl overflow-hidden border border-white/10 bg-[#0b1220] shadow-2xl float-anim">
-                <div class="flex items-center gap-2 px-3.5 py-2.5 border-b border-white/[0.07] bg-white/[0.03]">
-                  <span class="flex gap-1.5" aria-hidden="true"><i class="w-2 h-2 rounded-full bg-red-500/70"></i><i class="w-2 h-2 rounded-full bg-yellow-500/70"></i><i class="w-2 h-2 rounded-full bg-green-500/70"></i></span>
-                  <span class="text-[10px] text-white/30 ml-1.5 font-mono">XDECK Desktop</span>
-                </div>
-                <div class="p-5 flex items-center gap-4">
-                  <div class="w-24 h-24 shrink-0 rounded-lg bg-white p-2">
-                    <svg viewBox="0 0 100 100" class="w-full h-full" aria-hidden="true"><rect width="100" height="100" fill="white"/><rect x="8" y="8" width="26" height="26" rx="3" fill="#080d1a"/><rect x="42" y="8" width="12" height="12" rx="2" fill="#080d1a"/><rect x="62" y="14" width="26" height="26" rx="3" fill="#080d1a"/><rect x="14" y="42" width="12" height="12" rx="2" fill="#080d1a"/><rect x="38" y="46" width="24" height="24" rx="3" fill="#6366f1"/><rect x="74" y="52" width="12" height="12" rx="2" fill="#080d1a"/><rect x="10" y="66" width="22" height="22" rx="3" fill="#080d1a"/><rect x="48" y="78" width="12" height="12" rx="2" fill="#080d1a"/><rect x="70" y="72" width="20" height="20" rx="3" fill="#080d1a"/></svg>
-                  </div>
-                  <div class="min-w-0">
-                    <p class="text-[11px] uppercase tracking-widest text-white/35 mb-1.5 font-heading font-semibold">Pairing Code</p>
-                    <p class="font-mono text-2xl font-bold text-accent-light tracking-[0.18em]">7F2K</p>
-                    <p class="text-[11px] text-white/35 mt-2.5 font-mono truncate">192.168.1.15:8787</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 2 -->
-        <div class="hiw-step" data-step="2">
-          <div class="grid md:grid-cols-2 gap-8 md:gap-14 items-center">
-            <div class="min-w-0">
-              <h3 class="font-heading text-xl sm:text-2xl font-bold mb-3 break-words">Open Phone &amp; Scan the QR Code</h3>
-              <p class="text-white/45 leading-relaxed mb-6 text-sm sm:text-base">Open your phone's camera or browser. Scan the QR code on your desktop screen. Your phone connects instantly over WiFi.</p>
-              <ul class="space-y-3 list-none m-0 p-0">
-                <li class="flex items-center gap-3"><span class="dot"></span><span class="text-sm text-white/50">Works with any phone browser</span></li>
-                <li class="flex items-center gap-3"><span class="dot"></span><span class="text-sm text-white/50">Or enter IP + pairing code manually</span></li>
-                <li class="flex items-center gap-3"><span class="dot"></span><span class="text-sm text-white/50">Install as PWA for app-like experience</span></li>
-              </ul>
-            </div>
-            <div class="flex justify-center">
-              <div class="device w-[168px] sm:w-[186px]">
-                <div class="device-screen p-3 pt-6">
-                  <div class="rounded-lg bg-white/5 p-4 flex flex-col items-center mb-2">
-                    <div class="w-20 h-20 bg-white rounded-md p-1.5">
-                      <svg viewBox="0 0 100 100" class="w-full h-full" aria-hidden="true"><rect width="100" height="100" fill="white"/><rect x="8" y="8" width="26" height="26" rx="3" fill="#1E293B"/><rect x="42" y="8" width="12" height="12" rx="2" fill="#1E293B"/><rect x="62" y="14" width="26" height="26" rx="3" fill="#1E293B"/><rect x="14" y="42" width="12" height="12" rx="2" fill="#1E293B"/><rect x="38" y="46" width="24" height="24" rx="3" fill="#22C55E"/><rect x="74" y="52" width="12" height="12" rx="2" fill="#1E293B"/><rect x="10" y="66" width="22" height="22" rx="3" fill="#1E293B"/><rect x="48" y="78" width="12" height="12" rx="2" fill="#1E293B"/><rect x="70" y="72" width="20" height="20" rx="3" fill="#1E293B"/></svg>
-                    </div>
-                    <p class="text-[10px] text-green-400/80 mt-2.5 font-mono">Scanning&hellip;</p>
-                  </div>
-                  <div class="rounded-md bg-white/[0.04] py-2 text-center">
-                    <p class="text-[10px] text-white/30 font-mono">app.xdeck.app</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 3 -->
-        <div class="hiw-step" data-step="3">
-          <div class="grid md:grid-cols-2 gap-8 md:gap-14 items-center">
-            <div class="min-w-0">
-              <h3 class="font-heading text-xl sm:text-2xl font-bold mb-3 break-words">Tap &amp; It Happens Instantly</h3>
-              <p class="text-white/45 leading-relaxed mb-6 text-sm sm:text-base">Every button on your phone triggers an action on your PC in real-time. Hotkeys, media, app launches &mdash; zero latency over WiFi.</p>
-              <ul class="space-y-3 list-none m-0 p-0">
-                <li class="flex items-center gap-3"><span class="dot"></span><span class="text-sm text-white/50">Sub-50ms response over WiFi</span></li>
-                <li class="flex items-center gap-3"><span class="dot"></span><span class="text-sm text-white/50">Live button press feedback</span></li>
-                <li class="flex items-center gap-3"><span class="dot"></span><span class="text-sm text-white/50">Cloud relay for remote control</span></li>
-              </ul>
-            </div>
-            <div class="flex justify-center items-center gap-4 sm:gap-6 overflow-hidden">
-              <div class="device w-[128px] sm:w-[150px] shrink-0">
-                <div class="device-screen p-2.5 pt-5">
-                  <div class="deck" style="grid-template-columns:repeat(2,1fr)">
-                    <div class="deck-key" id="tap-btn-1"><svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3"/></svg></div>
-                    <div class="deck-key" id="tap-btn-2"><svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg></div>
-                    <div class="deck-key" id="tap-btn-3"><svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
-                    <div class="deck-key" id="tap-btn-4"><svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
-                  </div>
-                </div>
-              </div>
-              <div class="flex flex-col items-center gap-1 shrink-0" aria-hidden="true">
-                <span class="dot dot-ring"></span>
-                <span class="w-px h-14" style="background:linear-gradient(180deg,rgba(99,102,241,.6),transparent)"></span>
-                <svg class="w-4 h-4 text-accent/60" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-              </div>
-              <div class="w-40 sm:w-52 rounded-xl overflow-hidden border border-white/10 bg-[#0b1220] shrink-0">
-                <div class="flex items-center gap-2 px-3 py-2 border-b border-white/[0.07] bg-white/[0.03]">
-                  <span class="flex gap-1.5" aria-hidden="true"><i class="w-2 h-2 rounded-full bg-red-500/70"></i><i class="w-2 h-2 rounded-full bg-yellow-500/70"></i><i class="w-2 h-2 rounded-full bg-green-500/70"></i></span>
-                  <span class="text-[10px] text-white/30 ml-1 font-mono">Desktop</span>
-                </div>
-                <div class="p-4" id="desktop-action">
-                  <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-accent/15 border border-accent/25 flex items-center justify-center shrink-0">
-                      <svg class="w-4 h-4 text-accent-light" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9"/></svg>
-                    </div>
-                    <div class="min-w-0">
-                      <p class="text-[13px] font-semibold truncate">Chrome opened</p>
-                      <p class="text-[10px] text-white/35 truncate font-mono">https://web.whatsapp.com</p>
-                    </div>
-                  </div>
-                  <p class="text-[10px] text-cta mt-3 pt-3 border-t border-white/[0.06] font-mono">Triggered from phone in 42ms</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Carousel controls -->
-      <div class="flex items-center gap-3 mt-8">
-        <button type="button" id="hiw-prev" class="btn btn-ghost btn-sm" aria-label="Previous step">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-        </button>
-        <button type="button" id="hiw-next" class="btn btn-ghost btn-sm" aria-label="Next step">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-        </button>
-        <button type="button" id="hiw-toggle" class="btn btn-ghost btn-sm ml-1">
-          <svg id="hiw-pause-icon" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
-          <svg id="hiw-play-icon" class="w-3.5 h-3.5 hidden" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-          <span id="hiw-toggle-text">Pause</span>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- ============================ PRICING (Full-Width) ============================ -->
-  <section id="pricing" class="section-full">
-    <div class="shell-wide">
-      <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start" style="padding:0 1.5rem">
-        <div class="lg:col-span-5">
-          <p class="eyebrow mb-5 reveal">Pricing</p>
-          <h2 class="font-heading font-bold h-sec mb-4 reveal" style="animation-delay:.08s">Simple, Honest Pricing</h2>
-          <p class="lede mb-8 reveal" style="animation-delay:.15s">One purchase. Lifetime access. No subscriptions.</p>
-          <dl class="grid grid-cols-2 gap-px bg-white/[0.08] border border-white/[0.08] rounded-xl overflow-hidden m-0 reveal" style="animation-delay:.22s">
-            <div class="bg-[#0b1120] p-4">
-              <dt class="text-[11px] uppercase tracking-widest text-white/35 mb-1.5 font-heading font-semibold">Licence</dt>
-              <dd class="text-sm text-white/70 m-0">Lifetime, per machine</dd>
-            </div>
-            <div class="bg-[#0b1120] p-4">
-              <dt class="text-[11px] uppercase tracking-widest text-white/35 mb-1.5 font-heading font-semibold">Updates</dt>
-              <dd class="text-sm text-white/70 m-0">Included, forever</dd>
-            </div>
-            <div class="bg-[#0b1120] p-4">
-              <dt class="text-[11px] uppercase tracking-widest text-white/35 mb-1.5 font-heading font-semibold">Subscription</dt>
-              <dd class="text-sm text-white/70 m-0">None, ever</dd>
-            </div>
-            <div class="bg-[#0b1120] p-4">
-              <dt class="text-[11px] uppercase tracking-widest text-white/35 mb-1.5 font-heading font-semibold">Account</dt>
-              <dd class="text-sm text-white/70 m-0">Not required</dd>
-            </div>
-          </dl>
-        </div>
-
-        <div class="lg:col-span-7">
-          <div class="card p-7 sm:p-9 reveal" style="animation-delay:.3s">
-            <div class="flex flex-wrap items-start justify-between gap-4 mb-7">
-              <div>
-                <p class="text-[11px] uppercase tracking-widest text-accent-light font-heading font-semibold mb-2">Lifetime License</p>
-                <p class="font-heading font-bold text-[2.75rem] leading-none">
-                  $10<span class="text-base font-medium text-white/40 ml-2">one-time</span>
-                </p>
-              </div>
-              <span class="inline-flex items-center gap-1.5 rounded-full bg-cta/10 border border-cta/25 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-cta" style="animation:badge-bounce 3s ease-in-out infinite">Best Value</span>
-            </div>
-
-            <p class="text-sm text-white/45 mb-7">One computer and one phone. Free updates forever.</p>
-
-            <ul class="grid sm:grid-cols-2 gap-x-6 gap-y-3.5 mb-9 list-none m-0 p-0">
-              <li class="flex items-start gap-2.5 text-sm text-white/65">
-                <svg class="w-4 h-4 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                Unlimited buttons &amp; pages
-              </li>
-              <li class="flex items-start gap-2.5 text-sm text-white/65">
-                <svg class="w-4 h-4 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                Cloud relay (use from anywhere)
-              </li>
-              <li class="flex items-start gap-2.5 text-sm text-white/65">
-                <svg class="w-4 h-4 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                Hotkeys, media keys, app launcher
-              </li>
-              <li class="flex items-start gap-2.5 text-sm text-white/65">
-                <svg class="w-4 h-4 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                Custom layouts &amp; backgrounds
-              </li>
-              <li class="flex items-start gap-2.5 text-sm text-white/65">
-                <svg class="w-4 h-4 text-cta shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                Free updates forever
-              </li>
-            </ul>
-
-            <button type="button" id="buy-btn" class="btn btn-primary w-full sm:w-auto sm:min-w-[240px] text-base glow-pulse">Get XDECK &mdash; $10</button>
-            <p class="text-xs text-white/30 mt-4">Secure checkout. Instant delivery of your licence key.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- ============================ DOWNLOAD (Full-Width) ============================ -->
-  <section id="download" class="section">
-    <div class="shell-wide">
-      <div style="padding:0 1.5rem">
-        <div class="max-w-[58ch] mb-12">
-          <p class="eyebrow mb-5 reveal">Download</p>
-          <h2 class="font-heading font-bold h-sec mb-4 reveal" style="animation-delay:.08s">Download XDECK</h2>
-          <p class="lede reveal" style="animation-delay:.15s">Available for Windows, macOS, and Linux.</p>
-        </div>
-
-        <!-- Platform download list -->
-        <div class="border border-white/[0.08] rounded-2xl overflow-hidden mb-10 reveal" style="animation-delay:.22s">
-          <button type="button" onclick="downloadRelease('win')" class="w-full flex items-center gap-4 sm:gap-6 p-5 sm:p-6 text-left bg-[#0b1120] hover:bg-[#0e1526] transition-colors border-b border-white/[0.07] cursor-pointer group">
-            <span class="icon-tile" aria-hidden="true"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L23.25 1.5v10.299l-12.301.9M0 12.649l9.75.84V22.5L0 21m10.949-8.201L23.25 12v11.799l-12.301-1.5"/></svg></span>
-            <span class="flex-1 min-w-0">
-              <span class="block font-heading font-semibold text-base">Windows</span>
-              <span class="block text-sm text-white/40">Windows 10+</span>
-            </span>
-            <span class="text-sm text-accent-light font-semibold flex items-center gap-1.5 shrink-0">Download <svg class="w-4 h-4 transition-transform group-hover:translate-y-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg></span>
-          </button>
-
-          <button type="button" onclick="downloadRelease('mac')" class="w-full flex items-center gap-4 sm:gap-6 p-5 sm:p-6 text-left bg-[#0b1120] hover:bg-[#0e1526] transition-colors border-b border-white/[0.07] cursor-pointer group">
-            <span class="icon-tile" aria-hidden="true"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.35.05-2.35-1.32-3.19-2.54C4.17 16.6 3.2 12.64 4.9 9.98c.84-1.32 2.34-2.16 3.96-2.18 1.29-.02 2.5.87 3.29.87.79 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.39 2.85M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11"/></svg></span>
-            <span class="flex-1 min-w-0">
-              <span class="block font-heading font-semibold text-base">macOS</span>
-              <span class="block text-sm text-white/40">macOS 12+</span>
-            </span>
-            <span class="text-sm text-accent-light font-semibold flex items-center gap-1.5 shrink-0">Download <svg class="w-4 h-4 transition-transform group-hover:translate-y-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg></span>
-          </button>
-
-          <button type="button" onclick="downloadRelease('linux')" class="w-full flex items-center gap-4 sm:gap-6 p-5 sm:p-6 text-left bg-[#0b1120] hover:bg-[#0e1526] transition-colors border-b border-white/[0.07] cursor-pointer group">
-            <span class="icon-tile" aria-hidden="true"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M14.4 4L12 2 9.6 4C8.1 4.4 7 5.8 7 7.5V10c-1.7.3-3 1.8-3 3.5 0 2 1.5 3.5 3.5 3.5.5 0 1-.1 1.5-.3L12 17l3 .7c.5.2 1 .3 1.5.3 2 0 3.5-1.5 3.5-3.5 0-1.7-1.3-3.2-3-3.5V7.5c0-1.7-1.1-3.1-2.6-3.5zM9.5 14c-.8 0-1.5-.7-1.5-1.5S8.7 11 9.5 11s1.5.7 1.5 1.5S10.3 14 9.5 14zm5 0c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5z"/></svg></span>
-            <span class="flex-1 min-w-0">
-              <span class="block font-heading font-semibold text-base">Linux</span>
-              <span class="block text-sm text-white/40">.deb / .AppImage</span>
-            </span>
-            <span class="text-sm text-accent-light font-semibold flex items-center gap-1.5 shrink-0">Download <svg class="w-4 h-4 transition-transform group-hover:translate-y-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg></span>
-          </button>
-
-          <button type="button" onclick="downloadRelease('android')" class="w-full flex items-center gap-4 sm:gap-6 p-5 sm:p-6 text-left bg-[#0b1120] hover:bg-[#0e1526] transition-colors cursor-pointer group">
-            <span class="icon-tile" aria-hidden="true"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V7H6v11zM3.5 7C2.67 7 2 7.67 2 8.5v7c0 .83.67 1.5 1.5 1.5S5 16.33 5 15.5v-7C5 7.67 4.33 7 3.5 7zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zM15.53 2.16l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48C13.85 1.23 12.95 1 12 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31C6.97 3.26 6 5.01 6 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg></span>
-            <span class="flex-1 min-w-0">
-              <span class="block font-heading font-semibold text-base">Android</span>
-              <span class="block text-sm text-white/40">Native APK</span>
-            </span>
-            <span class="text-sm text-accent-light font-semibold flex items-center gap-1.5 shrink-0">Download <svg class="w-4 h-4 transition-transform group-hover:translate-y-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg></span>
-          </button>
-        </div>
-
-        <!-- iPhone / PWA path -->
-        <div class="card p-6 sm:p-8 reveal" style="animation-delay:.3s">
-          <h3 class="font-heading font-semibold text-lg mb-2">Using an iPhone? Install as PWA</h3>
-          <p class="text-sm text-white/45 mb-7">Install the app directly via Safari:</p>
-          <ol class="grid sm:grid-cols-3 gap-6 list-none m-0 p-0 counter-reset">
-            <li class="relative pl-0">
-              <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-accent/12 border border-accent/25 text-accent-light font-heading text-xs font-bold mb-3">1</span>
-              <p class="font-semibold text-sm mb-1">Open the Web App</p>
-              <p class="text-sm text-white/45 leading-relaxed">Navigate to <span class="kbd">app.xdeck.app</span> in Safari.</p>
-            </li>
-            <li>
-              <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-accent/12 border border-accent/25 text-accent-light font-heading text-xs font-bold mb-3">2</span>
-              <p class="font-semibold text-sm mb-1">Tap Share Button</p>
-              <p class="text-sm text-white/45 leading-relaxed">Tap the Safari Share icon at the bottom.</p>
-            </li>
-            <li>
-              <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-accent/12 border border-accent/25 text-accent-light font-heading text-xs font-bold mb-3">3</span>
-              <p class="font-semibold text-sm mb-1">Add to Home Screen</p>
-              <p class="text-sm text-white/45 leading-relaxed">Select <span class="font-semibold text-white/70">Add to Home Screen</span>.</p>
-            </li>
-          </ol>
-          <p class="text-sm text-white/45 mt-7 pt-6 border-t border-white/[0.07]">
-            Or open on your phone: <a href="https://app.xdeck.app" class="text-accent-light hover:underline font-medium">app.xdeck.app</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-  </main>
-
-  <!-- ============================ Footer ============================ -->
-  <footer class="border-t border-white/[0.08] pt-14 pb-10 mt-8" style="position:relative">
-    <!-- Animated gradient top border -->
-    <div class="section-divider" style="position:absolute;top:-1px;left:0;right:0" aria-hidden="true"></div>
-    <div class="shell">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10 mb-12">
-        <div class="col-span-2 md:col-span-1">
-          <a href="/" class="flex items-center gap-2.5 mb-4">
-            <img src="logo-64.png" alt="" width="28" height="28" loading="lazy" decoding="async" class="w-7 h-7 rounded-lg">
-            <span class="font-heading font-bold text-base">XDECK</span>
-          </a>
-          <p class="text-sm text-white/40 leading-relaxed max-w-[30ch]">Turn your phone into a Stream Deck. One-time $10, lifetime access.</p>
-        </div>
-        <div>
-          <h4 class="font-heading font-semibold text-xs mb-4 uppercase tracking-widest text-white/35">Product</h4>
-          <ul class="space-y-2.5 list-none m-0 p-0">
-            <li><a href="#features" class="text-sm text-white/45 hover:text-white transition-colors">Features</a></li>
-            <li><a href="#pricing" class="text-sm text-white/45 hover:text-white transition-colors">Pricing</a></li>
-            <li><a href="#download" class="text-sm text-white/45 hover:text-white transition-colors">Download</a></li>
-            <li><a href="commands.html" class="text-sm text-accent-light hover:text-white transition-colors">Commands Guide</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-heading font-semibold text-xs mb-4 uppercase tracking-widest text-white/35">Legal</h4>
-          <ul class="space-y-2.5 list-none m-0 p-0">
-            <li><a href="privacy.html" class="text-sm text-white/45 hover:text-white transition-colors">Privacy Policy</a></li>
-            <li><a href="terms.html" class="text-sm text-white/45 hover:text-white transition-colors">Terms &amp; Conditions</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-heading font-semibold text-xs mb-4 uppercase tracking-widest text-white/35">Support</h4>
-          <ul class="space-y-2.5 list-none m-0 p-0">
-            <li><a href="help.html" class="text-sm text-white/45 hover:text-white transition-colors">Help &amp; FAQ</a></li>
-            <li><a href="contact.html" class="text-sm text-white/45 hover:text-white transition-colors">Contact Us</a></li>
-            <li><a href="about.html" class="text-sm text-white/45 hover:text-white transition-colors">About Us</a></li>
-            <li><a href="https://github.com/TouheedNaveed/XDECK" target="_blank" rel="noopener noreferrer" class="text-sm text-white/45 hover:text-white transition-colors">GitHub</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="section-divider mb-8"></div>
-
-      <div class="flex flex-col-reverse sm:flex-row items-start sm:items-center justify-between gap-5">
-        <span class="text-sm text-white/30">&copy; 2026 XDECK. All rights reserved.</span>
-        <div class="flex items-center gap-2.5">
-          <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-lg border border-white/[0.08] flex items-center justify-center hover:border-white/20 transition-colors"><svg class="w-4 h-4 text-white/40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg></a>
-          <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-lg border border-white/[0.08] flex items-center justify-center hover:border-white/20 transition-colors"><svg class="w-4 h-4 text-white/40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 00-2.881z"/></svg></a>
-          <a href="#" aria-label="Twitter / X" class="w-9 h-9 rounded-lg border border-white/[0.08] flex items-center justify-center hover:border-white/20 transition-colors"><svg class="w-4 h-4 text-white/40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-        </div>
-      </div>
-    </div>
-  </footer>
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-5M6RQLWC2T"></script>
@@ -787,164 +162,555 @@
     gtag('js', new Date());
     gtag('config', 'G-5M6RQLWC2T');
   </script>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/5" style="background: rgba(8,13,26,0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <img src="logo.png" alt="XDECK" class="w-8 h-8 rounded-lg" width="32" height="32">
+        <span class="font-heading font-bold text-lg">XDECK</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="text-sm text-white/50 hover:text-white transition-colors">Features</a>
+        <a href="#how-it-works" class="text-sm text-white/50 hover:text-white transition-colors">How It Works</a>
+        <a href="commands.html" class="text-sm text-white/50 hover:text-white transition-colors">Commands Guide</a>
+        <a href="#pricing" class="text-sm text-white/50 hover:text-white transition-colors">Pricing</a>
+        <a href="help.html" class="text-sm text-white/50 hover:text-white transition-colors">Support</a>
+      </div>
+          <div class="flex items-center gap-3">
+      <button type="button" class="hamburger md:hidden flex items-center justify-center w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 transition-colors" onclick="document.getElementById('mobile-menu').classList.toggle('open')" aria-label="Menu">
+        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+        <a href="https://github.com/TouheedNaveed/XDECK" target="_blank" rel="noopener" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-sm text-white/50 hover:text-white">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+        <a href="#download" class="btn-cta px-5 py-2 rounded-xl text-sm font-semibold text-white">Download</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="mobile-menu">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="commands.html">Commands Guide</a>
+        <a href="#pricing">Pricing</a>
+        <a href="help.html">Help &amp; Support</a>
+    <a href="https://github.com/TouheedNaveed/XDECK" target="_blank" rel="noopener">
+      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      GitHub
+    </a>
+    <a href="#download" class="text-accent-light font-semibold">Download</a>
+  </div>
+
+  <!-- Hero -->
+  <section id="hero" class="min-h-screen flex items-center justify-center px-6 pt-20 pb-16 relative overflow-hidden">
+    <div class="hero-particles"></div>
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent/20 rounded-full blur-[120px]"></div>
+      <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-purple-500/15 rounded-full blur-[100px]"></div>
+    </div>
+    <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
+      <div class="">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs text-white/60 mb-8">
+          <span class="w-2 h-2 rounded-full bg-cta animate-pulse"></span>
+          Now with Cloud Relay &mdash; control from anywhere
+        </div>
+        <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] mb-6">
+          Turn Your Phone Into a
+          <span class="gradient-text">Stream Deck</span>
+        </h1>
+        <p class="text-lg sm:text-xl text-white/50 mb-10 max-w-lg leading-relaxed">
+          Custom buttons, hotkeys, media controls, and app launchers &mdash; all from your phone. Works over WiFi or from anywhere via cloud.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="#download" class="btn-cta px-8 py-4 rounded-2xl text-white font-semibold text-center text-lg cursor-pointer">
+            Download Free
+          </a>
+          <a href="#how-it-works" class="btn-outline px-8 py-4 rounded-2xl text-white/70 font-semibold hover:text-white text-center cursor-pointer">
+            See How It Works
+          </a>
+        </div>
+        <div class="flex flex-wrap items-center gap-6 mt-8 text-sm text-white/30">
+          <span class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            No account needed
+          </span>
+          <span class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            $10 one-time
+          </span>
+          <span class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-cta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            Open source
+          </span>
+        </div>
+      </div>
+
+      <!-- Phone Mockup -->
+      <div class="flex justify-center float-phone">
+        <div class="phone-mockup w-72">
+          <div class="bg-dark-900 rounded-[22px] p-4">
+            <div class="grid grid-cols-3 gap-2.5 mb-3">
+              <div class="grid-btn aspect-square flex items-center justify-center cursor-pointer"><svg class="grid-btn-icon w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9"/></svg></div>
+              <div class="grid-btn aspect-square flex items-center justify-center cursor-pointer"><svg class="grid-btn-icon w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg></div>
+              <div class="grid-btn aspect-square flex items-center justify-center cursor-pointer"><svg class="grid-btn-icon w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg></div>
+              <div class="grid-btn aspect-square flex items-center justify-center cursor-pointer"><svg class="grid-btn-icon w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
+              <div class="grid-btn aspect-square flex items-center justify-center cursor-pointer"><svg class="grid-btn-icon w-6 h-6 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+              <div class="grid-btn aspect-square flex items-center justify-center cursor-pointer"><svg class="grid-btn-icon w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z"/></svg></div>
+            </div>
+            <div class="grid grid-cols-3 gap-2.5">
+              <div class="grid-btn aspect-square flex items-center justify-center cursor-pointer"><svg class="grid-btn-icon w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+              <div class="grid-btn aspect-square flex items-center justify-center cursor-pointer"><svg class="grid-btn-icon w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></div>
+              <div class="grid-btn aspect-square flex items-center justify-center cursor-pointer"><svg class="grid-btn-icon w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="py-24 sm:py-32 px-6 relative">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-20">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">FEATURES</div>
+        <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Everything You Need</h2>
+        <p class="text-white/40 max-w-xl mx-auto text-lg">One app to control your entire PC. No limits on what you can do.</p>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
+          <div class="feature-glow bg-accent top-0 right-0"></div>
+          <div class="w-14 h-14 rounded-2xl bg-accent/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Hotkeys &amp; Shortcuts</h3>
+          <p class="text-sm text-white/40 leading-relaxed relative z-10">Trigger any keyboard shortcut. Ctrl+C, Alt+Tab, media keys &mdash; all from a single tap.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
+          <div class="feature-glow bg-green-500 top-0 right-0"></div>
+          <div class="w-14 h-14 rounded-2xl bg-green-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
+          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Phone as Controller</h3>
+          <p class="text-sm text-white/40 leading-relaxed relative z-10">Use your phone as a customizable Stream Deck. Portrait, landscape, any grid size.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
+          <div class="feature-glow bg-purple-500 top-0 right-0"></div>
+          <div class="w-14 h-14 rounded-2xl bg-purple-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg></div>
+          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Cloud Relay</h3>
+          <p class="text-sm text-white/40 leading-relaxed relative z-10">Control from anywhere. Cloud relay connects your phone to your PC over the internet.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
+          <div class="feature-glow bg-amber-500 top-0 right-0"></div>
+          <div class="w-14 h-14 rounded-2xl bg-amber-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg></div>
+          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Media Controls</h3>
+          <p class="text-sm text-white/40 leading-relaxed relative z-10">Play, pause, skip tracks, volume control. Works with Spotify, YouTube, any media.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
+          <div class="feature-glow bg-rose-500 top-0 right-0"></div>
+          <div class="w-14 h-14 rounded-2xl bg-rose-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg></div>
+          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Start Apps with Args</h3>
+          <p class="text-sm text-white/40 leading-relaxed relative z-10">Launch apps with custom arguments. Open Chrome PWAs, scripts, any executable.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
+          <div class="feature-glow bg-cyan-500 top-0 right-0"></div>
+          <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z"/></svg></div>
+          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Custom Layouts</h3>
+          <p class="text-sm text-white/40 leading-relaxed relative z-10">Drag to reorder, custom backgrounds, emoji or image icons, any grid size.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
+          <div class="feature-glow bg-emerald-500 top-0 right-0"></div>
+          <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Keyboard &amp; Trackpad</h3>
+          <p class="text-sm text-white/40 leading-relaxed relative z-10">Turn your phone into a full keyboard and mouse trackpad. Type, navigate, and control your PC from anywhere.</p>
+        </div>
+        <div class="glass-card rounded-2xl p-8 cursor-default relative overflow-hidden">
+          <div class="feature-glow bg-indigo-500 top-0 right-0"></div>
+          <div class="w-14 h-14 rounded-2xl bg-indigo-500/20 flex items-center justify-center mb-6 relative z-10"><svg class="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg></div>
+          <h3 class="font-heading font-semibold text-xl mb-3 relative z-10">Run Terminal Commands</h3>
+          <p class="text-sm text-white/40 leading-relaxed relative z-10">Execute shell commands in a real terminal window. Interactive commands, sudo prompts, scripts &mdash; all from your phone.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- How It Works -->
+  <section id="how-it-works" class="py-24 sm:py-32 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-20">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">HOW IT WORKS</div>
+        <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Up and Running in 30 Seconds</h2>
+        <p class="text-white/40 max-w-xl mx-auto text-lg">No account needed. Install, pair, and start controlling.</p>
+      </div>
+
+      <div class="">
+        <div class="glass-card rounded-3xl p-6 sm:p-10 lg:p-14 max-w-5xl mx-auto relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-purple-500/5"></div>
+          <div class="relative z-10">
+            <div class="hiw-progress mb-10">
+              <div class="hiw-progress-bar" id="hiw-bar" style="width: 33%"></div>
+            </div>
+            <div class="flex items-center justify-between mb-10 px-4">
+              <button type="button" class="hiw-indicator flex items-center gap-2 text-sm font-semibold text-accent-light cursor-pointer" data-step="0">
+                <span class="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-xs font-bold text-accent-light border border-accent/30">1</span>
+                <span class="hidden sm:inline">Install App</span>
+              </button>
+              <button type="button" class="hiw-indicator flex items-center gap-2 text-sm font-semibold text-white/30 cursor-pointer" data-step="1">
+                <span class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-xs font-bold text-white/30 border border-white/10">2</span>
+                <span class="hidden sm:inline">Scan &amp; Pair</span>
+              </button>
+              <button type="button" class="hiw-indicator flex items-center gap-2 text-sm font-semibold text-white/30 cursor-pointer" data-step="2">
+                <span class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-xs font-bold text-white/30 border border-white/10">3</span>
+                <span class="hidden sm:inline">Start Controlling</span>
+              </button>
+            </div>
+            <div class="hiw-track overflow-hidden" style="min-height: 320px;">
+              <div class="hiw-step active" data-step="0">
+                <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-center overflow-hidden">
+                  <div class="min-w-0">
+                    <h3 class="font-heading text-xl sm:text-2xl font-bold mb-3 break-words">Install &amp; Run the Desktop App</h3>
+                    <p class="text-white/40 leading-relaxed mb-6 text-sm sm:text-base">Download XDECK for your OS and run it. The server starts automatically and shows a QR code with your pairing code.</p>
+                    <div class="space-y-3">
+                      <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Windows, macOS, or Linux</span></div>
+                      <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Starts a local server on port 8787</span></div>
+                      <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">QR code &amp; pairing code generated</span></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-center overflow-hidden">
+                    <div class="w-64 sm:w-80 rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+                      <div class="bg-dark-800 px-3 py-2 flex items-center gap-2 border-b border-white/5">
+                        <div class="flex gap-1.5"><div class="w-2.5 h-2.5 rounded-full bg-red-500/70"></div><div class="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></div><div class="w-2.5 h-2.5 rounded-full bg-green-500/70"></div></div>
+                        <span class="text-[10px] text-white/30 ml-2">XDECK Desktop</span>
+                      </div>
+                      <div class="bg-dark-900 p-4">
+                        <div class="text-center mb-3">
+                          <div class="w-16 h-16 mx-auto bg-white rounded-lg p-1 flex items-center justify-center mb-2">
+                            <svg viewBox="0 0 100 100" class="w-14 h-14"><rect width="100" height="100" fill="white"/><rect x="10" y="10" width="25" height="25" rx="3" fill="#1E293B"/><rect x="40" y="10" width="25" height="25" rx="3" fill="#1E293B"/><rect x="70" y="10" width="20" height="25" rx="3" fill="#1E293B"/><rect x="10" y="40" width="25" height="25" rx="3" fill="#1E293B"/><rect x="40" y="40" width="25" height="25" rx="3" fill="#1E293B"/><rect x="70" y="40" width="20" height="25" rx="3" fill="#1E293B"/><rect x="10" y="70" width="25" height="20" rx="3" fill="#1E293B"/><rect x="40" y="70" width="25" height="20" rx="3" fill="#1E293B"/><rect x="70" y="70" width="20" height="20" rx="3" fill="#1E293B"/></svg>
+                          </div>
+                          <p class="text-xs text-white/30">Scan with your phone</p>
+                        </div>
+                        <div class="bg-dark-800 rounded-lg p-3 text-center">
+                          <p class="text-[10px] text-white/30 uppercase tracking-wider mb-1">Pairing Code</p>
+                          <p class="font-heading font-bold text-lg tracking-[0.2em]">142505</p>
+                        </div>
+                        <div class="mt-2 text-center"><span class="text-[10px] text-green-400/70">Server running on 192.168.1.15:8787</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hiw-step" data-step="1">
+                <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-center overflow-hidden">
+                  <div class="min-w-0">
+                    <h3 class="font-heading text-xl sm:text-2xl font-bold mb-3 break-words">Open Phone &amp; Scan the QR Code</h3>
+                    <p class="text-white/40 leading-relaxed mb-6 text-sm sm:text-base">Open your phone's camera or browser. Scan the QR code on your desktop screen. Your phone connects instantly over WiFi.</p>
+                    <div class="space-y-3">
+                      <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Works with any phone browser</span></div>
+                      <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Or enter IP + pairing code manually</span></div>
+                      <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Install as PWA for app-like experience</span></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-center relative overflow-hidden">
+                    <div class="relative">
+                      <div class="phone-mockup w-40 sm:w-52 relative z-10">
+                        <div class="bg-dark-900 rounded-[18px] p-3">
+                          <div class="bg-dark-800 rounded-lg p-4 text-center mb-2">
+                            <div class="w-20 h-20 mx-auto bg-white rounded-lg p-1 relative overflow-hidden mb-2">
+                              <svg viewBox="0 0 100 100" class="w-full h-full"><rect width="100" height="100" fill="white"/><rect x="10" y="10" width="25" height="25" rx="3" fill="#1E293B"/><rect x="40" y="10" width="25" height="25" rx="3" fill="#1E293B"/><rect x="70" y="10" width="20" height="25" rx="3" fill="#1E293B"/><rect x="10" y="40" width="25" height="25" rx="3" fill="#1E293B"/><rect x="40" y="40" width="25" height="25" rx="3" fill="#1E293B"/><rect x="70" y="40" width="20" height="25" rx="3" fill="#1E293B"/><rect x="10" y="70" width="25" height="20" rx="3" fill="#1E293B"/><rect x="40" y="70" width="25" height="20" rx="3" fill="#1E293B"/><rect x="70" y="70" width="20" height="20" rx="3" fill="#1E293B"/></svg>
+                              <div class="absolute inset-x-0 h-0.5 bg-green-400" style="animation: scanLine 2s ease-in-out infinite;"></div>
+                            </div>
+                            <p class="text-[10px] text-green-400/70">Scanning...</p>
+                          </div>
+                          <div class="bg-dark-800 rounded-lg p-2 text-center">
+                            <p class="text-[10px] text-white/30">app.xdeck.app</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="absolute -left-8 top-1/2 -translate-y-1/2">
+                        <div class="w-4 h-4 border-2 border-accent/40 rounded-full" style="animation: ping 1.5s infinite;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hiw-step" data-step="2">
+                <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-center overflow-hidden">
+                  <div class="min-w-0">
+                    <h3 class="font-heading text-xl sm:text-2xl font-bold mb-3 break-words">Tap &amp; It Happens Instantly</h3>
+                    <p class="text-white/40 leading-relaxed mb-6 text-sm sm:text-base">Every button on your phone triggers an action on your PC in real-time. Hotkeys, media, app launches &mdash; zero latency over WiFi.</p>
+                    <div class="space-y-3">
+                      <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Sub-50ms response over WiFi</span></div>
+                      <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Live button press feedback</span></div>
+                      <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-cta"></div><span class="text-sm text-white/50">Cloud relay for remote control</span></div>
+                    </div>
+                  </div>
+                  <div class="flex justify-center items-center gap-3 sm:gap-6 overflow-hidden">
+                    <div class="relative shrink-0">
+                      <div class="phone-mockup w-32 sm:w-44">
+                        <div class="bg-dark-900 rounded-[18px] p-2.5">
+                          <div class="grid grid-cols-2 gap-2">
+                            <div class="grid-btn aspect-square flex items-center justify-center" id="tap-btn-1"><svg class="grid-btn-icon w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3"/></svg></div>
+                            <div class="grid-btn aspect-square flex items-center justify-center" id="tap-btn-2"><svg class="grid-btn-icon w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"/></svg></div>
+                            <div class="grid-btn aspect-square flex items-center justify-center" id="tap-btn-3"><svg class="grid-btn-icon w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
+                            <div class="grid-btn aspect-square flex items-center justify-center" id="tap-btn-4"><svg class="grid-btn-icon w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex flex-col items-center gap-1">
+                      <div class="w-2 h-2 rounded-full bg-accent animate-ping"></div>
+                      <div class="w-0.5 h-16 bg-gradient-to-b from-accent/60 to-transparent"></div>
+                      <svg class="w-4 h-4 text-accent/60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </div>
+                    <div class="w-48 sm:w-64 rounded-xl overflow-hidden border border-white/10 shadow-2xl shrink-0">
+                      <div class="bg-dark-800 px-3 py-2 flex items-center gap-2 border-b border-white/5">
+                        <div class="flex gap-1.5"><div class="w-2 h-2 rounded-full bg-red-500/70"></div><div class="w-2 h-2 rounded-full bg-yellow-500/70"></div><div class="w-2 h-2 rounded-full bg-green-500/70"></div></div>
+                        <span class="text-[10px] text-white/30 ml-2">Desktop</span>
+                      </div>
+                      <div class="bg-dark-900 p-4" id="desktop-action">
+                        <div class="flex items-center gap-3">
+                          <div class="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center shrink-0">
+                            <svg class="w-5 h-5 text-accent-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3"/></svg>
+                          </div>
+                          <div>
+                            <p class="text-sm font-semibold">Chrome opened</p>
+                            <p class="text-[10px] text-white/30">https://web.whatsapp.com</p>
+                          </div>
+                        </div>
+                        <div class="mt-3 text-[10px] text-green-400/70 text-right">Triggered from phone in 42ms</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-center gap-4 mt-8">
+              <button type="button" id="hiw-prev" class="w-10 h-10 rounded-full glass flex items-center justify-center text-white/40 hover:text-white transition-colors cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+              </button>
+              <button type="button" id="hiw-toggle" class="px-4 py-2 rounded-xl glass text-sm text-white/60 hover:text-white transition-colors flex items-center gap-2 cursor-pointer">
+                <svg class="w-4 h-4" id="hiw-pause-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6"/></svg>
+                <svg class="w-4 h-4 hidden" id="hiw-play-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <span id="hiw-toggle-text">Pause</span>
+              </button>
+              <button type="button" id="hiw-next" class="w-10 h-10 rounded-full glass flex items-center justify-center text-white/40 hover:text-white transition-colors cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-24 sm:py-32 px-6">
+    <div class="max-w-xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">PRICING</div>
+      <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Simple, Honest Pricing</h2>
+      <p class="text-white/40 mb-12 text-lg">One purchase. Lifetime access. No subscriptions.</p>
+      <div class="glass-card rounded-3xl p-8 lg:p-10 glow text-left">
+        <div class="flex items-center justify-between mb-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cta/20 text-cta text-xs font-semibold">BEST VALUE</div>
+          <span class="text-xs text-white/30">Lifetime License</span>
+        </div>
+        <div class="mb-6">
+          <span class="font-heading text-6xl font-bold">$10</span>
+          <span class="text-white/40 ml-2 text-lg">one-time</span>
+        </div>
+        <p class="text-white/50 mb-8">One computer and one phone. Free updates forever.</p>
+        <ul class="space-y-4 mb-8">
+          <li class="flex items-center gap-3 text-sm text-white/60"><svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Unlimited buttons &amp; pages</li>
+          <li class="flex items-center gap-3 text-sm text-white/60"><svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Cloud relay (use from anywhere)</li>
+          <li class="flex items-center gap-3 text-sm text-white/60"><svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Hotkeys, media keys, app launcher</li>
+          <li class="flex items-center gap-3 text-sm text-white/60"><svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Custom layouts &amp; backgrounds</li>
+          <li class="flex items-center gap-3 text-sm text-white/60"><svg class="w-5 h-5 text-cta shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>Free updates forever</li>
+        </ul>
+        <a href="#" id="buy-btn" class="btn-cta block w-full py-4 rounded-2xl text-white font-semibold text-center text-lg cursor-pointer">Get XDECK &mdash; $10</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-6xl mx-auto"></div>
+
+  <!-- Download -->
+  <section id="download" class="py-24 sm:py-32 px-6">
+    <div class="max-w-5xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-white/50 mb-6">DOWNLOAD</div>
+      <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Download XDECK</h2>
+      <p class="text-white/40 mb-12 text-lg">Available for Windows, macOS, and Linux</p>
+      <div class="grid sm:grid-cols-4 gap-6">
+        <a href="javascript:void(0)" onclick="downloadRelease('win')" class="glass-card rounded-2xl p-6 text-center cursor-pointer group">
+          <svg class="w-10 h-10 mx-auto mb-3 text-white/50 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+          <h3 class="font-heading font-semibold mb-1">Windows</h3>
+          <p class="text-xs text-white/30">Windows 10+</p>
+        </a>
+        <a href="javascript:void(0)" onclick="downloadRelease('mac')" class="glass-card rounded-2xl p-6 text-center cursor-pointer group">
+          <svg class="w-10 h-10 mx-auto mb-3 text-white/50 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <h3 class="font-heading font-semibold mb-1">macOS</h3>
+          <p class="text-xs text-white/30">macOS 12+</p>
+        </a>
+        <a href="javascript:void(0)" onclick="downloadRelease('linux')" class="glass-card rounded-2xl p-6 text-center cursor-pointer group">
+          <svg class="w-10 h-10 mx-auto mb-3 text-white/50 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.156 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.368 1.884 1.43.199.025.363-.155.363-.334 0-.06-.028-.12-.043-.199-.063-.199-.127-.299-.163-.466-.04-.199.012-.535.012-.535s.07-.334.07-.667c0-.466-.07-.865-.333-1.465.535-.4.975-1.065 1.175-1.865.082-.319.149-.639.149-.968 0-.478-.095-.956-.344-1.377.463-.265.782-.798.782-1.367 0-.334-.095-.667-.299-.933.232-.465.339-.996.295-1.565-.038-.334-.265-.6-.595-.732a5.35 5.35 0 00-.546-.167 13.15 13.15 0 00-.334-.064c-.134-.025-.265-.049-.4-.069-.09-.012-.174-.023-.268-.029a4.03 4.03 0 00-.363-.018c-.143 0-.285.006-.424.022z"/></svg>
+          <h3 class="font-heading font-semibold mb-1">Linux</h3>
+          <p class="text-xs text-white/30">.deb / .AppImage</p>
+        </a>
+        <a href="javascript:void(0)" onclick="downloadRelease('android')" class="glass-card rounded-2xl p-6 text-center cursor-pointer group">
+          <svg class="w-10 h-10 mx-auto mb-3 text-white/50 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3l1.815 3.144a.54.54 0 01-.19.736.54.54 0 01-.74-.188L16.56 15.79c-1.32.57-2.77.9-4.32.9a10.5 10.5 0 01-4.33-.9l-1.85 3.203a.54.54 0 01-.738.188.54.54 0 01-.19-.736l1.816-3.144A10.15 10.15 0 012.3 11.23c-.15 0-.27-.12-.27-.27V9.75c0-.15.12-.27.27-.27H3.4A8.7 8.7 0 0111.4 3.09V1.35c0-.15.12-.27.27-.27h.66c.15 0 .27.12.27.27v1.74a8.7 8.7 0 018 6.39h1.1c.15 0 .27.12.27.27v1.21c0 .15-.12.27-.27.27H20.6a10.15 10.15 0 01-3.077 4.07zM7.34 9.17a.82.82 0 100 1.64.82.82 0 000-1.64zm8.68 0a.82.82 0 100 1.64.82.82 0 000-1.64z"/></svg>
+          <h3 class="font-heading font-semibold mb-1">Android</h3>
+          <p class="text-xs text-white/30">Native APK</p>
+        </a>
+      </div>
+      <div class="mt-16 max-w-2xl mx-auto glass-card rounded-3xl p-8 text-left border border-white/5">
+        <h3 class="font-heading font-bold text-xl mb-4 text-center">Using an iPhone? Install as PWA</h3>
+        <p class="text-xs text-white/40 text-center mb-6">Install the app directly via Safari:</p>
+        <div class="space-y-4">
+          <div class="flex items-start gap-4"><div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 text-sm font-bold text-white/60">1</div><div><p class="text-sm font-semibold text-white">Open the Web App</p><p class="text-xs text-white/40">Navigate to <a href="https://app.xdeck.app" target="_blank" class="text-purple-400 hover:underline">app.xdeck.app</a> in Safari.</p></div></div>
+          <div class="flex items-start gap-4"><div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 text-sm font-bold text-white/60">2</div><div><p class="text-sm font-semibold text-white">Tap Share Button</p><p class="text-xs text-white/40">Tap the Safari Share icon at the bottom.</p></div></div>
+          <div class="flex items-start gap-4"><div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 text-sm font-bold text-white/60">3</div><div><p class="text-sm font-semibold text-white">Add to Home Screen</p><p class="text-xs text-white/40">Select <span class="bg-white/10 px-1.5 py-0.5 rounded font-mono text-[10px] text-white">Add to Home Screen</span>.</p></div></div>
+        </div>
+      </div>
+      <div class="mt-12 glass rounded-2xl p-6 inline-block">
+        <p class="text-sm text-white/40">Or open on your phone:</p>
+        <p class="font-heading font-semibold text-lg mt-1">app.xdeck.app</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 px-6 border-t border-white/5">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div>
+          <a href="/" class="flex items-center gap-3 mb-4"><img src="logo.png" alt="XDECK" class="w-7 h-7 rounded-md" width="28" height="28"><span class="font-heading font-bold text-lg">XDECK</span></a>
+          <p class="text-sm text-white/30 leading-relaxed">Turn your phone into a powerful Stream Deck. Control your PC from anywhere.</p>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Product</h4>
+          <ul class="space-y-2">
+            <li><a href="#features" class="text-sm text-white/30 hover:text-white transition-colors">Features</a></li>
+            <li><a href="#pricing" class="text-sm text-white/30 hover:text-white transition-colors">Pricing</a></li>
+            <li><a href="#download" class="text-sm text-white/30 hover:text-white transition-colors">Download</a></li>
+            <li><a href="#how-it-works" class="text-sm text-white/30 hover:text-white transition-colors">How It Works</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Legal</h4>
+          <ul class="space-y-2">
+            <li><a href="privacy.html" class="text-sm text-white/30 hover:text-white transition-colors">Privacy Policy</a></li>
+            <li><a href="terms.html" class="text-sm text-white/30 hover:text-white transition-colors">Terms &amp; Conditions</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-heading font-semibold text-sm mb-4 text-white/50">Support</h4>
+          <ul class="space-y-2">
+            <li><a href="commands.html" class="text-sm text-accent-light hover:text-white transition-colors">Commands Guide</a></li>
+            <li><a href="help.html" class="text-sm text-white/30 hover:text-white transition-colors">Help &amp; FAQ</a></li>
+            <li><a href="contact.html" class="text-sm text-white/30 hover:text-white transition-colors">Contact Us</a></li>
+            <li><a href="about.html" class="text-sm text-white/30 hover:text-white transition-colors">About Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-divider mb-8"></div>
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <span class="text-sm text-white/30">&copy; 2026 XDECK. All rights reserved.</span>
+        <div class="flex items-center gap-4">
+          <a href="#" aria-label="Facebook" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"><svg class="w-4 h-4 text-white/40" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg></a>
+          <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"><svg class="w-4 h-4 text-white/40" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+          <a href="#" aria-label="Twitter / X" class="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors"><svg class="w-4 h-4 text-white/40" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
-    /* ---------- Mobile drawer ---------- */
-    (function () {
-      var burger = document.getElementById('hamburger');
-      var menu = document.getElementById('mobile-menu');
-      if (!burger || !menu) return;
-      function setOpen(open) {
-        menu.classList.toggle('open', open);
-        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-        burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-      }
-      burger.addEventListener('click', function () { setOpen(!menu.classList.contains('open')); });
-      menu.addEventListener('click', function (e) {
-        if (e.target.closest('a')) setOpen(false);
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') setOpen(false);
-      });
-      window.addEventListener('resize', function () {
-        if (window.innerWidth >= 900) setOpen(false);
-      });
-    })();
-
-    /* ---------- How It Works carousel ---------- */
-    (function () {
-      var steps = Array.prototype.slice.call(document.querySelectorAll('.hiw-step'));
-      var indicators = Array.prototype.slice.call(document.querySelectorAll('.hiw-indicator'));
+    (function() {
+      var current = 0, playing = true, timer;
+      var steps = document.querySelectorAll('.hiw-step');
+      var indicators = document.querySelectorAll('.hiw-indicator');
       var bar = document.getElementById('hiw-bar');
       var pauseIcon = document.getElementById('hiw-pause-icon');
       var playIcon = document.getElementById('hiw-play-icon');
       var toggleText = document.getElementById('hiw-toggle-text');
-      if (!steps.length || !bar) return;
-
-      var current = 0, playing = false, timer = null;
 
       function goTo(i) {
-        current = ((i % steps.length) + steps.length) % steps.length;
-        steps.forEach(function (s, idx) { s.classList.toggle('active', idx === current); });
-        indicators.forEach(function (ind, idx) {
-          ind.classList.toggle('active', idx === current);
-          ind.setAttribute('aria-selected', idx === current ? 'true' : 'false');
+        current = ((i % 3) + 3) % 3;
+        steps.forEach(function(s) { s.classList.remove('active'); });
+        steps[current].classList.add('active');
+        indicators.forEach(function(ind, idx) {
+          var span = ind.querySelector('span:first-child');
+          if (idx === current) {
+            ind.classList.remove('text-white/30');
+            ind.classList.add('text-accent-light');
+            span.classList.remove('bg-white/5','text-white/30','border-white/10');
+            span.classList.add('bg-accent/20','text-accent-light','border-accent/30');
+          } else {
+            ind.classList.remove('text-accent-light');
+            ind.classList.add('text-white/30');
+            span.classList.remove('bg-accent/20','text-accent-light','border-accent/30');
+            span.classList.add('bg-white/5','text-white/30','border-white/10');
+          }
         });
-        bar.style.width = (((current + 1) / steps.length) * 100) + '%';
+        bar.style.width = ((current + 1) / 3 * 100) + '%';
       }
 
       function next() { goTo(current + 1); }
+      function startAuto() { stopAuto(); timer = setInterval(next, 4000); playing = true; pauseIcon.classList.remove('hidden'); playIcon.classList.add('hidden'); toggleText.textContent = 'Pause'; }
+      function stopAuto() { clearInterval(timer); playing = false; pauseIcon.classList.add('hidden'); playIcon.classList.remove('hidden'); toggleText.textContent = 'Play'; }
 
-      function startAuto() {
-        stopAuto();
-        timer = setInterval(next, 4000);
-        playing = true;
-        if (pauseIcon) pauseIcon.classList.remove('hidden');
-        if (playIcon) playIcon.classList.add('hidden');
-        if (toggleText) toggleText.textContent = 'Pause';
-      }
+      document.getElementById('hiw-next').addEventListener('click', function() { next(); if (playing) startAuto(); });
+      document.getElementById('hiw-prev').addEventListener('click', function() { goTo(current - 1); if (playing) startAuto(); });
+      document.getElementById('hiw-toggle').addEventListener('click', function() { playing ? stopAuto() : startAuto(); });
+      indicators.forEach(function(ind) { ind.addEventListener('click', function() { goTo(+ind.dataset.step); if (playing) startAuto(); }); });
 
-      function stopAuto() {
-        clearInterval(timer);
-        timer = null;
-        playing = false;
-        if (pauseIcon) pauseIcon.classList.add('hidden');
-        if (playIcon) playIcon.classList.remove('hidden');
-        if (toggleText) toggleText.textContent = 'Play';
-      }
-
-      var prev = document.getElementById('hiw-prev');
-      var nxt = document.getElementById('hiw-next');
-      var toggle = document.getElementById('hiw-toggle');
-      if (nxt) nxt.addEventListener('click', function () { next(); if (playing) startAuto(); });
-      if (prev) prev.addEventListener('click', function () { goTo(current - 1); if (playing) startAuto(); });
-      if (toggle) toggle.addEventListener('click', function () { playing ? stopAuto() : startAuto(); });
-      indicators.forEach(function (ind, idx) {
-        ind.addEventListener('click', function () { goTo(idx); if (playing) startAuto(); });
-      });
-
-      goTo(0);
-
-      var inView = false, visible = true;
-      function sync() {
-        var should = inView && visible && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (should && !timer) startAuto();
-        else if (!should && timer) stopAuto();
-      }
-      if ('IntersectionObserver' in window) {
-        new IntersectionObserver(function (entries) {
-          inView = entries[0].isIntersecting;
-          sync();
-        }, { threshold: 0.2 }).observe(document.getElementById('hiw-track') || steps[0]);
-      } else {
-        inView = true;
-      }
-      document.addEventListener('visibilitychange', function () {
-        visible = !document.hidden;
-        sync();
-      });
-      sync();
+      startAuto();
     })();
 
-    /* ---------- Toast ---------- */
     function showToast(msg, type) {
       var t = document.getElementById('toast');
-      if (!t) return;
       t.textContent = msg;
       t.className = 'toast toast-' + (type || 'error') + ' show';
-      clearTimeout(t._hideTimer);
-      t._hideTimer = setTimeout(function () { t.classList.remove('show'); }, 4000);
+      setTimeout(function() { t.classList.remove('show'); }, 4000);
     }
 
     var RELAY_URL = (location.hostname === 'localhost' || location.protocol === 'file:') ? 'http://localhost:9000' : 'https://xdeck-relay.onrender.com';
 
-    /* ---------- Checkout ---------- */
-    var buyBtn = document.getElementById('buy-btn');
-    if (buyBtn) {
-      buyBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        var btn = e.currentTarget;
-        var original = btn.textContent;
-        btn.textContent = 'Redirecting to checkout...';
-        btn.style.pointerEvents = 'none';
-        fetch(RELAY_URL + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
-          .then(function (res) { return res.json(); })
-          .then(function (data) {
-            if (data.url) { location.href = data.url; }
-            else { showToast('Checkout failed: ' + (data.error || 'Unknown'), 'error'); btn.textContent = original; btn.style.pointerEvents = ''; }
-          })
-          .catch(function () { showToast('Could not connect to checkout.', 'error'); btn.textContent = original; btn.style.pointerEvents = ''; });
-      });
-    }
+    document.getElementById('buy-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      var btn = e.target;
+      btn.textContent = 'Redirecting to checkout...';
+      btn.style.pointerEvents = 'none';
+      fetch(RELAY_URL + '/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data.url) { location.href = data.url; }
+          else { showToast('Checkout failed: ' + (data.error || 'Unknown'), 'error'); btn.textContent = 'Get XDECK \u2014 $10'; btn.style.pointerEvents = ''; }
+        })
+        .catch(function() { showToast('Could not connect to checkout.', 'error'); btn.textContent = 'Get XDECK \u2014 $10'; btn.style.pointerEvents = ''; });
+    });
 
-    /* ---------- Release downloads ---------- */
     function downloadRelease(p) {
       fetch('https://api.github.com/repos/TouheedNaveed/XDECK/releases/latest')
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
           var a = data.assets || [];
           var f;
-          if (p === 'win') f = a.find(function (x) { return x.name.endsWith('.exe') && !x.name.includes('blockmap'); });
-          else if (p === 'mac') f = a.find(function (x) { return x.name.endsWith('.dmg'); });
-          else if (p === 'linux') f = a.find(function (x) { return x.name.endsWith('.AppImage'); });
-          else if (p === 'android') f = a.find(function (x) { return x.name.endsWith('.apk'); });
+          if (p === 'win') f = a.find(function(x) { return x.name.endsWith('.exe') && !x.name.includes('blockmap'); });
+          else if (p === 'mac') f = a.find(function(x) { return x.name.endsWith('.dmg'); });
+          else if (p === 'linux') f = a.find(function(x) { return x.name.endsWith('.AppImage'); });
+          else if (p === 'android') f = a.find(function(x) { return x.name.endsWith('.apk'); });
           if (f) location.href = f.browser_download_url;
           else showToast('Build not ready yet.', 'error');
         })
-        .catch(function () { showToast('Could not fetch release.', 'error'); });
+        .catch(function() { showToast('Could not fetch release.', 'error'); });
     }
-
-    /* ---------- Bento card hover glow tracking ---------- */
-    (function () {
-      var cards = document.querySelectorAll('.bento-card');
-      cards.forEach(function (card) {
-        card.addEventListener('mousemove', function (e) {
-          var rect = card.getBoundingClientRect();
-          card.style.setProperty('--mouse-x', ((e.clientX - rect.left) / rect.width * 100) + '%');
-          card.style.setProperty('--mouse-y', ((e.clientY - rect.top) / rect.height * 100) + '%');
-        });
-      });
-    })();
   </script>
 </body>
 </html>
